@@ -10,4 +10,4 @@ Having online Tests instead of arranging interviews saves time and efforts. The 
 ### ERD of the system
 
 So in order to make a better system we made this ERD to be middle layer between concept and the real implementation.
-![Image of ERD.](https://cdn.discordapp.com/attachments/651864590082244639/651864818948767755/ERD-UPDATE.png)
+![Image of ERD.](https://cdn.discordapp.com/attachments/309380844600950784/653272793646891107/ERDUPDATE.png)
