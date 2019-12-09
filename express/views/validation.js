@@ -10,7 +10,7 @@ function validateEmailFormat(form) {
     return true;
 }
 //Makes sure that there are no empty fields
-function validateLogin(form) {
+function checkEmptyFields(form) {
     if(form.email.value === ""){
         alert("Enter your email!");
         // form.email.focus();
@@ -22,7 +22,6 @@ function validateLogin(form) {
         return false;
     }
     return true;
-
 }
 
 
