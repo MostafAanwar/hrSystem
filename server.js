@@ -17,7 +17,7 @@ app.use("/", routes);
 app.use(express.static("views"));
 
 // create a server using port 3000
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 http.createServer(app).listen(PORT, () => {
   console.log("server is running on port " + PORT);
 });
