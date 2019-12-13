@@ -1,20 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href= "./stylesheet/style.css">
     <title>Login</title>
-    <link rel="stylesheet" href="/">
+
 </head>
 <body>
-    <div align="center" class="form">
-        <form action="/" method="POST">
-            <input type="text" placeholder="Enter your E-mail" name="hremail" required>
-            <br>
-            <input type="password" placeholder="Enter your password" name="hrpassword" required>
-            <br>
-            <button type="submit">Login</button>
-        </form>
+
+<form action="index.html" class="login-form" method="POST">
+    <h1>Login</h1>
+
+    <div class="txtb">
+        <input type="text" name="hremail" required>
+        <span data-placeholder="Username"></span>
     </div>
+
+    <div class="txtb">
+        <input type="password" name="hrpassword" required>
+        <span data-placeholder="Password"></span>
+    </div>
+
+    <input type="submit" class="logbtn" value="Login">
+
+    <div class="bottom-text">
+        Candidate? <a href="index.html">Login here</a>
+    </div>
+
+</form>
+
+<script type="text/javascript">
+    $(".txtb input").on("focus",function(){
+        $(this).addClass("focus");
+    });
+
+    $(".txtb input").on("blur",function(){
+        if($(this).val() == "")
+            $(this).removeClass("focus");
+    });
+
+</script>
 </body>
-<script src="/"></script>
+<script src="src/script.js"></script>
 </html>
