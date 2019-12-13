@@ -1,35 +1,59 @@
 let mysql = require('mysql');
+
 class Model{
-    connect() {
-            let connection = mysql.createConnection({
+    constructor (){
+        this.connection = mysql.createConnection({
             host: 'localhost',
             user: 'root',
             password: 'root',
-            database: 'hrsystem'
+            database: 'hrsystem',
+            port: 3311
         });
-        connection.connect(function (error) {
-            if (error) {
-                return console.error('error: ' + error.message);
+
+    }
+    connect() {
+         this.connection.connect(function (err) {
+            if (err) {
+                return console.error('error: ' + err.message);
             }
             console.log("Connection established!");
-            return connection;
+            return this.connection;
 
         });
+
     } // end connect
-    disconnect(connection){
-        connection.end()
+    disconnect(){
+        this.connection.end((err) =>{
+            if(err)
+                return err.message;
+        });
     }
 
-    viewHR(){
-        let connection = this.connect();
-        let query = 'SELECT * FROM hr';
-        connection.query(query,(error, results, fields) =>{
+    getAllHR(){
+        // this.connect();
+        let selectQuery = 'SELECT * FROM hr';
+        this.connection.query(selectQuery, (error, results, fields) =>{
             if(error){
-                return console.error(error.message);
+                return console.error("error: " + error.message);
             }
-            console.log(results);
+            // this.disconnect();
+            // console.log(results);
+            return results;
+
         });
-        disconnect(connection);
+
+    }
+    getAllPositions(){
+        // this.connect();
+        let selectQuery = 'SELECT * FROM position';
+         this.connection.query(selectQuery,(error, results, fields) =>{
+            if(error){
+                return console.error("error: " + error.message);
+            }
+             // this.disconnect();
+             console.log(results);
+             return results;
+        });
     }
 }
 
