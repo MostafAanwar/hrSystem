@@ -1,4 +1,4 @@
-//Makes sure email submitted follows correct format
+//Makes sure email submitted follows correct format //for sign up
 function validateEmailFormat(form) {
     var email = document.getElementById("email").value;
     var format = /^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -10,18 +10,31 @@ function validateEmailFormat(form) {
     return true;
 }
 //Makes sure that there are no empty fields
-function checkEmptyFields(form) {
-    if(form.email.value === ""){
-        alert("Enter your email!");
-        // form.email.focus();
-        return false;
+function checkEmptyFields() {
+        let username = document.forms["form"]["username"].value;
+        let password = document.forms["form"]["password"].value;
+        if (username === "" && password === "") {
+            alert("please fill the empty fields!");
+            return false;
+        }
+        if (username === "" && password !=="") {
+            alert("please enter valid username");
+            return false;
+        }
+
+        if (password === "" && username !=="") {
+            alert("please enter a password");
+            return false;
+        }
     }
-    if(form.password.value === ""){
-        alert("Enter your password!");
-        // form.email.focus();
-        return false;
-    }
-    return true;
-}
+
+$(".txtb input").on("focus",function(){
+    $(this).addClass("focus");
+}).on("blur",function(){
+    if($(this).val() === "")
+        $(this).removeClass("focus");
+});
+
+
 
 
