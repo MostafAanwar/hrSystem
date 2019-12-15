@@ -28,13 +28,31 @@ class Controller {
         });
     }
 
-    getAllUsers(req, res) {
-        let users = model.getAllUsers();
-        if (users) {
-            res.status(200).send({
-                users: users
-            });
-        }
+    getHR(req, res) {
+        model.getHR().then((response) => { //response contains returned data
+            res.contentType('json');
+            console.log(response.result);
+            res.send(response.result);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error: " + err.message);
+        });
+    }
+
+    getAllHR(req, res) {
+        console.log("controller");
+        model.getAllHR().then((response) => { //response contains returned data
+            res.contentType('json');
+            console.log(response.result);
+            res.send(response.result);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
     }
 }
 
