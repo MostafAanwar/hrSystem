@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<form action="index.html" class="login-form" method="POST">
+<form action="/" class="login-form" method="POST" onsubmit="return checkEmptyFields()">
     <h1>Login</h1>
 
     <div class="txtb">
@@ -32,17 +32,6 @@
 
 </form>
 
-<script type="text/javascript">
-    $(".txtb input").on("focus",function(){
-        $(this).addClass("focus");
-    });
-
-    $(".txtb input").on("blur",function(){
-        if($(this).val() == "")
-            $(this).removeClass("focus");
-    });
-
-</script>
 </body>
-<script src="src/script.js"></script>
+<script src="src/validation.js"></script>
 </html>
