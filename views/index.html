@@ -4,10 +4,65 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href= "./stylesheet/style.css">
+    <title>Login</title>
+    <script>
+            function validateForm() {
+                let a = document.forms["form"]["username"].value;
+                let b = document.forms["form"]["password"].value;
+                if (a === "" && b === "") {
+                    alert("please fill the empty fields!");
+                    return false;
+                }
+                if (a === "" && b !=="") {
+                    alert("please enter valid username");
+                    return false;
+                }
+
+                if (b === "" && a !=="") {
+                    alert("please enter a password");
+                    return false;
+                }
+            }
+    </script>
   </head>
   <body>
-    Hello
+
+
+  <form name="form" action="indexCandidate.html" method="post" class="login-form" onsubmit="return validateForm()">
+    <h1>Login</h1>
+
+    <div class="txtb">
+      <input id="name" type="text" name="username" class="username">
+      <span data-placeholder="Username"></span>
+    </div>
+    <div class="txtb">
+      <input id="pass" type="password" name="password" class="password">
+      <span data-placeholder="Password"></span>
+    </div>
+      <div id="validationtext"></div>
+    <input id="submit" type="submit" class="logbtn submit" value="Login" >
+    <p class="form-message"> </p>
+    <div class="bottom-text">
+      Don't have account? <a href="signup.html">Sign up</a>
+      <br>
+      HR? <a href="hrlogin.html">Login here</a>
+    </div>
+
+  </form>
+
+  <script type="text/javascript">
+      $(".txtb input").on("focus",function(){
+          $(this).addClass("focus");
+      });
+
+      $(".txtb input").on("blur",function(){
+          if($(this).val() == "")
+              $(this).removeClass("focus");
+      });
+
+  </script>
   </body>
   <script src="src/script.js"></script>
 </html>
