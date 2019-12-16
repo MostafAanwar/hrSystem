@@ -1,59 +1,65 @@
 let mysql = require('mysql');
 
-class Model{
-    constructor (){
-        this.connection = mysql.createConnection({
+class Model {
+    createConnectionPool() {
+        let connection = mysql.createConnection({
             host: 'localhost',
             user: 'root',
             password: 'root',
             database: 'hrsystem',
             port: 3311
         });
-
-    }
-    connect() {
-         this.connection.connect(function (err) {
-            if (err) {
-                return console.error('error: ' + err.message);
-            }
-            console.log("Connection established!");
-            return this.connection;
-
-        });
-
+        return connection;
     } // end connect
-    disconnect(){
-        this.connection.end((err) =>{
-            if(err)
+
+    disconnect(connection) {
+        connection.end((err) => {
+            if (err)
                 return err.message;
         });
     }
 
-    getAllHR(){
-        // this.connect();
-        let selectQuery = 'SELECT * FROM hr';
-        this.connection.query(selectQuery, (error, results, fields) =>{
-            if(error){
-                return console.error("error: " + error.message);
-            }
-            // this.disconnect();
-            // console.log(results);
-            return results;
+    queryFunction(sql, values) {
+        return new Promise(((resolve, reject) => {
+            let connection = this.createConnectionPool();
+            connection.connect(function (err) {
+                if (err) {
+                    console.log("Error: " + err.message);
+                    reject(err);
+                }
+                else {
+                    console.log("Connection established!");
+                }
+            });
+            connection.query(sql, values, (err, result) => {
+                console.log("query model");
+                console.log(result);
+                console.log(values);
+                resolve({ //return as json
+                    result: result,
+                    connection: connection
+                });
+            });
+        }));
+    }
 
-        });
+    getHR(email, password) {
+        console.log("getHRFucntion");
+        console.log(email);
+        console.log(password);
+        let sql = 'SELECT * FROM hr where email = ? AND password = ?';
+        return this.queryFunction(sql, [email, password]);
+    }
+
+    getAllHR() {
+        let sql = "SELECT * FROM hr";
+        return this.queryFunction(sql, "");
 
     }
-    getAllPositions(){
-        // this.connect();
-        let selectQuery = 'SELECT * FROM position';
-         this.connection.query(selectQuery,(error, results, fields) =>{
-            if(error){
-                return console.error("error: " + error.message);
-            }
-             // this.disconnect();
-             console.log(results);
-             return results;
-        });
+
+    viewPositions() {
+        let sql = "SELECT * FROM position";
+        return this.queryFunction(sql, "");
     }
 }
 
