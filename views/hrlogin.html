@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
-    <link rel="stylesheet" type="text/css" href= "./stylesheet/style.css">
+    <link rel="stylesheet" type="text/css" href="./stylesheet/style.css">
     <title>Login</title>
 
 </head>
 <body>
 
-<form action="index.html" class="login-form" method="POST">
+<form action="/" class="login-form" method="POST" id="my-form">
     <h1>Login</h1>
 
     <div class="txtb">
-        <input type="text" name="hremail" required>
+        <input type="text" name="username" required>
         <span data-placeholder="Username"></span>
     </div>
 
     <div class="txtb">
-        <input type="password" name="hrpassword" required>
+        <input type="password" name="password" required>
         <span data-placeholder="Password"></span>
     </div>
 
@@ -31,18 +31,6 @@
     </div>
 
 </form>
-
-<script type="text/javascript">
-    $(".txtb input").on("focus",function(){
-        $(this).addClass("focus");
-    });
-
-    $(".txtb input").on("blur",function(){
-        if($(this).val() == "")
-            $(this).removeClass("focus");
-    });
-
-</script>
 </body>
-<script src="src/script.js"></script>
+<script src="src/validation.js"></script>
 </html>

@@ -12,8 +12,8 @@ function validateEmailFormat(form) {
 
 //Makes sure that there are no empty fields
 function checkEmptyFields() {
-    let username = document.forms["form"]["username"].value;
-    let password = document.forms["form"]["password"].value;
+    let username = document.forms["my-form"]["username"].value;
+    let password = document.forms["my-form"]["password"].value;
     if (username === "" && password === "") {
         alert("please fill the empty fields!");
         return false;
