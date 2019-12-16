@@ -15,16 +15,16 @@ function checkEmptyFields() {
     let username = document.forms["my-form"]["username"].value;
     let password = document.forms["my-form"]["password"].value;
     if (username === "" && password === "") {
-        alert("please fill the empty fields!");
+        $('#validationtext').append("<p align='center'>please fill the empty fields!</p>");
         return false;
     }
     if (username === "" && password !== "") {
-        alert("please enter valid username");
+        $('#validationtext').append("<p align='center'>Username cannot be empty</p>");
         return false;
     }
 
     if (password === "" && username !== "") {
-        alert("please enter a password");
+        $('#validationtext').append("<p align='center'>Password cannot be empty</p>");
         return false;
     }
     return true;
@@ -32,6 +32,8 @@ function checkEmptyFields() {
 
 $(".txtb input").on("focus", function () {
     $(this).addClass("focus");
+    $('#validationtext').text("");
+
 }).on("blur", function () {
     if ($(this).val() === "")
         $(this).removeClass("focus");
@@ -42,14 +44,18 @@ $("#my-form").submit(function (e) {
     let initValidation = checkEmptyFields();
     if (initValidation) {
         $.ajax({
-            url: '/getHR', //url that will get data from DB
+            url: '/get-hr', //url that will get data from DB
             type: 'post',
             data: $('#my-form').serialize(), //form data
             dataType: 'json',
             success: function (res) { ///logic for checking
-                console.log(res.result);
+                if (res.length > 0) {
+                    window.location.replace('/hr-index');
+                }
+                else {
+                    $('#validationtext').append("<p align='center'>Incorrect email or password! :(</p>");
+                }
 
-                alert(res.result);
             },
             error: function (err) {
                 alert("Error:" + err.message);
