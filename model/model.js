@@ -57,6 +57,12 @@ class Model {
         let sql = "SELECT * FROM position";
         return this.queryFunction(sql, "");
     }
+    /*
+    saveCandidatePosition(pid, username) {
+        let updateQuery = "UPDATE canidate SET  WHERE username = ?";
+        return this.queryFunction(updateQuery,pid, username);
+        }
+*/
 }
 
 const mainModel = new Model();
