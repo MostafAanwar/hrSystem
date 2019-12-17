@@ -1,35 +1,3 @@
-//Makes sure email submitted follows correct format //for sign up
-function validateEmailFormat(form) {
-    var email = document.getElementById("email").value;
-    var format = /^(([^<>()[\]\\.,;:\s@]+(\.[^<>()[\]\\.,;:\s@]+)*)|(.+))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!format.test(email)) {
-        alert("Invalid email format!");
-        return false;
-        // form.email.focus();
-    }
-    return true;
-}
-
-//Makes sure that there are no empty fields
-function checkEmptyFields() {
-    let username = document.forms["my-form"]["username"].value;
-    let password = document.forms["my-form"]["password"].value;
-    if (username === "" && password === "") {
-        $('#validationtext').append("<p align='center'>please fill the empty fields!</p>");
-        return false;
-    }
-    if (username === "" && password !== "") {
-        $('#validationtext').append("<p align='center'>Username cannot be empty</p>");
-        return false;
-    }
-
-    if (password === "" && username !== "") {
-        $('#validationtext').append("<p align='center'>Password cannot be empty</p>");
-        return false;
-    }
-    return true;
-}
-
 $(".txtb input").on("focus", function () {
     $(this).addClass("focus");
     $('#validationtext').text("");
@@ -38,19 +6,51 @@ $(".txtb input").on("focus", function () {
     if ($(this).val() === "")
         $(this).removeClass("focus");
 });
+//Makes sure that there are no empty fields
+function checkEmptyFields() {
+    let username = document.forms["my-form"]["username"].value;
+    let password = document.forms["my-form"]["password"].value;
+    if (username === "" || password === "") {
+        $('#validationtext').append("<p align='center'>Cannot have empty fields!</p>");
+        return false;
+    }
 
-$("#my-form").submit(function (e) {
+    return true;
+}
+
+$('#my-form').submit(function (e) {
     e.preventDefault();
+    let pageURL = window.location.href;
+    let url = pageURL.substr(pageURL.lastIndexOf('/'));
+    console.log(url);
+    ajaxValidation(url);
+
+});
+
+function ajaxValidation(sentURL){
     let initValidation = checkEmptyFields();
+    console.log(sentURL);
+    let url = "";
+    if(sentURL === '/login-hr'){
+        url = '/get-hr';
+    }
+    else if(sentURL === '/'){
+        url = '/get-user';
+    }
     if (initValidation) {
         $.ajax({
-            url: '/get-hr', //url that will get data from DB
+            url: url, //url that will get data from DB
             type: 'post',
             data: $('#my-form').serialize(), //form data
             dataType: 'json',
             success: function (res) { ///logic for checking
                 if (res.length > 0) {
-                    window.location.replace('/hr-index');
+                    if(sentURL === '/login-hr'){
+                        window.location.replace('/hr-index');
+                    }
+                    if(sentURL === '/'){
+                        window.location.replace('/user-home')
+                    }
                 }
                 else {
                     $('#validationtext').append("<p align='center'>Incorrect email or password! :(</p>");
@@ -62,7 +62,9 @@ $("#my-form").submit(function (e) {
             }
         });
     }
-});
+
+}
+
 
 
 
