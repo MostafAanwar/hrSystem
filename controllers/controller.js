@@ -122,7 +122,21 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
+    saveCandidatePosition(req, res){
+        let username = req.body.username;
+        let pid = req.body.position;
+        model.saveCandidatePosition(pid, username).then((response) => { //response contains returned data
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error: " + err.message);
+        });
+    }
 }
 
 const mainController = new Controller();
