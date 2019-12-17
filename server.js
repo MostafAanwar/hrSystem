@@ -10,7 +10,7 @@ let cookieParser = require('cookie-parser');
 const app = express();
 app.use(cookieParser());
 app.use(cors());
-app.use(session({secret:config.sessionSecret,saveUninitialized:true, resave:true}));
+// app.use(session({secret:config.sessionSecret,saveUninitialized:true, resave:true}));
 // Configure app to user bodyParser & the routes
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
