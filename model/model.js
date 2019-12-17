@@ -40,6 +40,10 @@ class Model {
         }));
     }
 
+    getUser(email, password) {
+        let sql = 'SELECT * FROM candidate where email = ? AND password = ?';
+        return this.queryFunction(sql, [email, password]);
+    }
     getHR(email, password) {
         let sql = 'SELECT * FROM hr where email = ? AND password = ?';
         return this.queryFunction(sql, [email, password]);
