@@ -1,13 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
-  </head>
-  <body>
-    Hello
-  </body>
-  <script src="src/script.js"></script>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="./stylesheet/style.css">
+    <title>Login</title>
+</head>
+
+<body>
+
+<form name="form" action="/" method="post" class="login-form" id="my-form">
+    <h1>Login</h1>
+
+    <div class="txtb">
+        <input id="name" type="text" name="username" class="username">
+        <span data-placeholder="Username"></span>
+    </div>
+    <div class="txtb">
+        <input id="pass" type="password" name="password" class="password">
+        <span data-placeholder="Password"></span>
+    </div>
+    <div id="validationtext"></div>
+    <input id="submit" type="submit" class="logbtn submit" value="Login">
+    <p class="form-message"></p>
+    <div class="bottom-text">
+        Don't have account? <a href="/sign-up">Sign up</a>
+        <br>
+        HR? <a href="/login-hr">Login here</a>
+    </div>
+
+</form>
+</body>
+<script src="src/validation.js"></script>
 </html>

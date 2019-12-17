@@ -32,9 +32,6 @@ class Model {
                 }
             });
             connection.query(sql, values, (err, result) => {
-                console.log("query model");
-                console.log(result);
-                console.log(values);
                 resolve({ //return as json
                     result: result,
                     connection: connection
@@ -43,10 +40,11 @@ class Model {
         }));
     }
 
+    getUser(email, password) {
+        let sql = 'SELECT * FROM candidate where email = ? AND password = ?';
+        return this.queryFunction(sql, [email, password]);
+    }
     getHR(email, password) {
-        console.log("getHRFucntion");
-        console.log(email);
-        console.log(password);
         let sql = 'SELECT * FROM hr where email = ? AND password = ?';
         return this.queryFunction(sql, [email, password]);
     }
