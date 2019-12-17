@@ -1,40 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
-    <link rel="stylesheet" type="text/css" href= "./stylesheet/style.css">
+    <link rel="stylesheet" type="text/css" href="./stylesheet/style.css">
     <title>Login</title>
-  </head>
-  <body>
+</head>
 
-  <form name="form" action="indexCandidate.html" method="post" class="login-form" onsubmit="return checkEmptyFields()">
-      <h1>Login</h1>
+<body>
 
-      <div class="txtb">
-          <input id="name" type="text" name="username" class="username">
-          <span data-placeholder="Username"></span>
-      </div>
+<form name="form" action="/" method="post" class="login-form" id="my-form">
+    <h1>Login</h1>
 
-      <div class="txtb">
-          <input id="pass" type="password" name="password" class="password">
-          <span data-placeholder="Password"></span>
-      </div>
-
-      <div id="validationtext"></div>
-
-      <input id="submit" type="submit" class="logbtn submit" value="Login" >
-      <p class="form-message"> </p>
-      <div class="bottom-text">
-        Don't have account? <a href="signup.html">Sign up</a>
+    <div class="txtb">
+        <input id="name" type="text" name="username" class="username">
+        <span data-placeholder="Username"></span>
+    </div>
+    <div class="txtb">
+        <input id="pass" type="password" name="password" class="password">
+        <span data-placeholder="Password"></span>
+    </div>
+    <div id="validationtext"></div>
+    <input id="submit" type="submit" class="logbtn submit" value="Login">
+    <p class="form-message"></p>
+    <div class="bottom-text">
+        Don't have account? <a href="/sign-up">Sign up</a>
         <br>
-        HR? <a href="hrlogin.html">Login here</a>
-      </div>
+        HR? <a href="/login-hr">Login here</a>
+    </div>
 
-  </form>
-
-  </body>
-  <script src="src/validation.js"></script>
+</form>
+</body>
+<script src="src/validation.js"></script>
 </html>

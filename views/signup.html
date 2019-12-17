@@ -1,10 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Sign Up</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href="./stylesheet/style.css">
+    <title>Signup</title>
+
 </head>
 <body>
 
+<form action="/" class="login-form" method="POST" id="my-form">
+    <h1>Signup</h1>
+    <div class ='txtb'>
+        <input type="text" name="name">
+        <span data-placeholder="Name"></span>
+    </div>
+
+    <div class="txtb">
+        <input type="text" name="username">
+        <span data-placeholder="Username"></span>
+    </div>
+
+    <div class="txtb">
+        <input type="password" name="password">
+        <span data-placeholder="Password"></span>
+    </div>
+    <div class="txtb">
+        <input type="telephone" name="telephone">
+        <span data-placeholder="telephone"></span>
+    </div>
+    <input type="button" class="" value="Upload CV"> <!-- TODO CLASS NAME -->
+
+    <div id="validationtext"></div>
+    <input type="submit" class="logbtn" value="Sign Up">
+
+    <div class="bottom-text">
+        Already signed up? <a href="/">Login here</a>
+    </div>
+
+</form>
 </body>
+<script src="src/sign-validation.js"></script>
 </html>

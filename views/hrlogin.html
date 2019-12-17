@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
-    <link rel="stylesheet" type="text/css" href="./stylesheet/style.css">
+    <link rel="stylesheet" type="text/css" href= "./stylesheet/style.css">
     <title>Login</title>
 
 </head>
 <body>
 
-<form action="/" class="login-form" method="GET" id="my-form" name="form">
+<form action="/" class="login-form" method="POST" id="my-form">
     <h1>Login</h1>
 
     <div class="txtb">
@@ -23,15 +23,14 @@
         <input type="password" name="password">
         <span data-placeholder="Password"></span>
     </div>
-
+    <div id="validationtext"></div>
     <input type="submit" class="logbtn" value="Login">
 
     <div class="bottom-text">
-        Candidate? <a href="index.html">Login here</a>
+        Candidate? <a href="/">Login here</a>
     </div>
 
 </form>
-<script src="src/validation.js"></script>
 </body>
-
+<script src="src/validation.js"></script>
 </html>

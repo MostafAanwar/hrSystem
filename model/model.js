@@ -6,8 +6,8 @@ class Model {
             host: 'localhost',
             user: 'root',
             password: 'root',
-            database: 'hrsystem',
-            port: 3311
+            database: 'hrSystem',
+            port: 3306
         });
         return connection;
     } // end connect
@@ -32,8 +32,6 @@ class Model {
                 }
             });
             connection.query(sql, values, (err, result) => {
-                console.log(result);
-                console.log(values);
                 resolve({ //return as json
                     result: result,
                     connection: connection
@@ -42,18 +40,26 @@ class Model {
         }));
     }
 
+    getUser(email, password) {
+        let sql = 'SELECT * FROM candidate where email = ? AND password = ?';
+        return this.queryFunction(sql, [email, password]);
+    }
     getHR(email, password) {
         let sql = 'SELECT * FROM hr where email = ? AND password = ?';
         return this.queryFunction(sql, [email, password]);
     }
+    getAllPositions() {
+        let sql = "SELECT * FROM position";
+        return this.queryFunction(sql, "");
 
+    }
     getAllHR() {
         let sql = "SELECT * FROM hr";
         return this.queryFunction(sql, "");
 
     }
 
-    getAllPositions() {
+    viewPositions() {
         let sql = "SELECT * FROM position";
         return this.queryFunction(sql, "");
     }
