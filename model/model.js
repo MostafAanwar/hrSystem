@@ -39,27 +39,3 @@ class Model {
             });
         }));
     }
-
-    getUser(email, password) {
-        let sql = 'SELECT * FROM candidate where email = ? AND password = ?';
-        return this.queryFunction(sql, [email, password]);
-    }
-    getHR(email, password) {
-        let sql = 'SELECT * FROM hr where email = ? AND password = ?';
-        return this.queryFunction(sql, [email, password]);
-    }
-
-    getAllHR() {
-        let sql = "SELECT * FROM hr";
-        return this.queryFunction(sql, "");
-
-    }
-
-    viewPositions() {
-        let sql = "SELECT * FROM position";
-        return this.queryFunction(sql, "");
-    }
-}
-
-const mainModel = new Model();
-export default mainModel;
