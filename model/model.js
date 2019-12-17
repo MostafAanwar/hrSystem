@@ -6,8 +6,8 @@ class Model {
             host: 'localhost',
             user: 'root',
             password: 'root',
-            database: 'hrSystem',
-            port: 3306
+            database: 'hrsystem',
+            port: 3311
         });
         return connection;
     } // end connect
@@ -59,10 +59,6 @@ class Model {
 
     }
 
-    viewPositions() {
-        let sql = "SELECT * FROM position";
-        return this.queryFunction(sql, "");
-    }
 }
 
 const mainModel = new Model();
