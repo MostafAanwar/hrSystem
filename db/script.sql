@@ -88,4 +88,7 @@ create table test
   type VARCHAR(25) not null
 );
 
-
+ALTER TABLE candidate ADD PID int NULL;
+ALTER TABLE candidate
+ADD CONSTRAINT candidate_position_PID_fk
+FOREIGN KEY (PID) REFERENCES position (PID);

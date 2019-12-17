@@ -113,8 +113,7 @@ class Controller {
     getAllPositions(req, res) {
         model.getAllPositions().then((response) => {
             res.contentType('json');
-            let transform = {'<>': 'div', 'text': '${name} ${available} ${description} ${salary}'};
-            let html = json2html.transform(response.result, transform);
+            res.send(response.result);
             res.send(html);
             return response.connection; //returned on next then
         }).then((con) => {

@@ -18,4 +18,6 @@ routes.get("/positions",Controller.getAllPositions);
 routes.post("/get-hr", Controller.getHR);
 routes.post('/get-user', Controller.getUser);
 routes.get("/get-all-hr", Controller.getAllHR);
+routes.get("/sign-up", Controller.signUp);
+//routes.post('/add-user', Controller.adduser);
 export default routes;
