@@ -53,14 +53,14 @@ class Model {
 
     }
 
-    getAllPositions() {
+    getPositions() {
         let sql = "SELECT * FROM position";
         return this.queryFunction(sql, "");
     }
     /*
-    saveCandidatePosition(pid, username) {
-        let updateQuery = "UPDATE canidate SET  WHERE username = ?";
-        return this.queryFunction(updateQuery,pid, username);
+    saveCandidatePosition(positionid, username) {
+        let updateQuery = "UPDATE canidate SET positionid = ? WHERE username = ?";
+        return this.queryFunction(updateQuery,positionid, username);
         }
 */
 }

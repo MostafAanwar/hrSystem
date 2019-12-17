@@ -4,6 +4,8 @@ const routes = Router();
 routes.get("/", Controller.init);
 routes.get("/loginhr", Controller.loginHR);
 routes.get("/getHR", Controller.getHR);
+routes.get("/getAllpositions", Controller.getAllPositions);
 routes.get("/getAllHR", Controller.getAllHR);
-routes.get("/position", Controller.getPositions);
+
+
 export default routes;
