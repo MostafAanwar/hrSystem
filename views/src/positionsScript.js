@@ -9,8 +9,8 @@ fetch(url, {
 })
 .then(res =>{
     console.log(res);
-
-    let div1 = document.createElement('div');
+                                                            
+    let div1 = document.createElement('div'); 
     div1.className="limiter";
     let div2 = document.createElement('div');
     div2.className = "container-table100";
@@ -40,7 +40,7 @@ fetch(url, {
     let text4 = document.createTextNode('Description');
     let text5 = document.createTextNode('Salary');
 
-    th1.appendChild(text1);
+    th1.appendChild(text1); 
     th2.appendChild(text2);
     th3.appendChild(text3);
     th4.appendChild(text4);
@@ -56,15 +56,6 @@ fetch(url, {
     for (let i = 0 ; i < res.data.length; i++) {
         console.log(res.data.length);
         let tr = document.createElement('tr');
-        // for (let j = 0; i < res.data[i].length; j++) {
-        //
-        //     let td = document.createElement('td');
-        //     td.className = ('column' + j);
-        //     let text = document.createTextNode(res.data[i][j]);
-        //
-        //     td.appendChild(text);
-        //     tr.appendChild(td);
-        // }
         let td1 = document.createElement('td');
         td1.className = ('column1');
         let text1 = document.createTextNode(res.data[i]['PID']);
@@ -75,10 +66,10 @@ fetch(url, {
         td3.className = ('column3');
         let text3 = document.createTextNode(res.data[i]['available']);
         let td4 = document.createElement('td');
-        td2.className = ('column4');
+        td4.className = ('column4');
         let text4 = document.createTextNode(res.data[i]['description']);
         let td5 = document.createElement('td');
-        td1.className = ('column5');
+        td5.className = ('column5');
         let text5 = document.createTextNode(res.data[i]['salary']);
 
         td1.appendChild(text1);
@@ -97,7 +88,8 @@ fetch(url, {
     table.appendChild(tbody);
     div1.appendChild(div2);
     div2.appendChild(div3);
-    div2.appendChild(div4);
-    document.body.appendChild(table);
+    div3.appendChild(div4);
+    div4.appendChild(table);
+    document.body.appendChild(div1);
 
 });

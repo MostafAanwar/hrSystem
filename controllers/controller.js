@@ -2,8 +2,6 @@ import model from "../model/model.js";
 
 const Path = require("path");
 var fs = require("fs");
-const json2html = require('node-json2html');
-
 
 class Controller {
     init(req, res) {
@@ -107,7 +105,7 @@ class Controller {
         });
     }
     GetPositionPage(req, res){
-        let path = Path.join(__dirname, "../views/Table_Responsive_v1/positions.html");
+        let path = Path.join(__dirname, "../views/positions.html");
         fs.readFile(path, function (err, html) {
             if (err) {
                 throw err;

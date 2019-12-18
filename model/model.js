@@ -48,11 +48,7 @@ class Model {
         let sql = 'SELECT * FROM hr where email = ? AND password = ?';
         return this.queryFunction(sql, [email, password]);
     }
-    getAllPositions() {
-        let sql = "SELECT * FROM position";
-        return this.queryFunction(sql, "");
 
-    }
     getAllHR() {
         let sql = "SELECT * FROM hr";
         return this.queryFunction(sql, "");
