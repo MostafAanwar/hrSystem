@@ -106,13 +106,23 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
+    GetPositionPage(req, res){
+        let path = Path.join(__dirname, "../views/Table_Responsive_v1/positions.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
     viewPositions(req, res) {
         model.viewPositions().then((response) => {
             res.contentType('json');
-            let transform = {'<>': 'div', 'text': '${name} ${available} ${description} ${salary}'};
-            let html = json2html.transform(response.result, transform);
-            res.send(html);
+            res.send({
+                data: response.result
+            });
             return response.connection; //returned on next then
         }).then((con) => {
             model.disconnect(con); //TODO
