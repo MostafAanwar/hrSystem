@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import routes from "./routes/index";
 var http = require("http");
 var cors = require("cors");
+let session = require('express-session');
 let cookieParser = require('cookie-parser');
 // This line is from the Node.js HTTPS documentation.
 // var options = {};
@@ -10,7 +11,7 @@ let cookieParser = require('cookie-parser');
 const app = express();
 app.use(cookieParser());
 app.use(cors());
-// app.use(session({secret:config.sessionSecret,saveUninitialized:true, resave:true}));
+//app.use(session({secret:config.sessionSecret,saveUninitialized:true, resave:true}));
 // Configure app to user bodyParser & the routes
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

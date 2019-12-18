@@ -17,7 +17,6 @@ class Controller {
             res.end();
         });
     }
-
     loginHR(req, res) {
         let path = Path.join(__dirname, "../views/hrlogin.html");
         fs.readFile(path, function (err, html) {
@@ -29,8 +28,7 @@ class Controller {
             res.end();
         });
     }
-
-    signUp(req, res) {
+    signUp(req, res){
         let path = Path.join(__dirname, "../views/signup.html");
         fs.readFile(path, function (err, html) {
             if (err) {
@@ -41,8 +39,7 @@ class Controller {
             res.end();
         });
     }
-
-    userHomePage(req, res) {
+    userHomePage(req, res){
         let path = Path.join(__dirname, "../views/userhome.html");
         fs.readFile(path, function (err, html) {
             if (err) {
@@ -53,7 +50,6 @@ class Controller {
             res.end();
         });
     }
-
     HRHomePage(req, res) {
         let path = Path.join(__dirname, "../views/HRIndex.html");
         fs.readFile(path, function (err, html) {
@@ -65,6 +61,7 @@ class Controller {
             res.end();
         });
     }
+
 
     getUser(req, res){
         let username = req.body.username;
@@ -109,12 +106,23 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
-    getAllPositions(req, res) {
-        model.getAllPositions().then((response) => {
+    GetPositionPage(req, res){
+        let path = Path.join(__dirname, "../views/Table_Responsive_v1/positions.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+    viewPositions(req, res) {
+        model.viewPositions().then((response) => {
             res.contentType('json');
-            res.send(response.result);
-            res.send(html);
+            res.send({
+                data: response.result
+            });
             return response.connection; //returned on next then
         }).then((con) => {
             model.disconnect(con); //TODO
