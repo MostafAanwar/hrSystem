@@ -40,6 +40,7 @@ fetch(url, {
     let text4 = document.createTextNode('Description');
     let text5 = document.createTextNode('Salary');
 
+
     th1.appendChild(text1); 
     th2.appendChild(text2);
     th3.appendChild(text3);
@@ -71,17 +72,29 @@ fetch(url, {
         let td5 = document.createElement('td');
         td5.className = ('column5');
         let text5 = document.createTextNode(res.data[i]['salary']);
-
+        let editButton = document.createElement('button');
+        let editText = document.createTextNode('Edit');
+        editButton.className = ('edit');
+        editButton.id = res.data[i]['PID'];
+        let deleteButton = document.createElement('button');
+        let deleteText = document.createTextNode('Delete');
+        deleteButton.className = ('delete');
+        deleteButton.id = res.data[i]['PID'];
+        
         td1.appendChild(text1);
         td2.appendChild(text2);
         td3.appendChild(text3);
         td4.appendChild(text4);
         td5.appendChild(text5);
+        editButton.appendChild(editText); //
+        deleteButton.appendChild(deleteText);
         tr.appendChild(td1);
         tr.appendChild(td2);
         tr.appendChild(td3);
         tr.appendChild(td4);
         tr.appendChild(td5);
+        tr.appendChild(editButton); //
+        tr.appendChild(deleteButton);
         table.appendChild(tr);
         tbody.appendChild(tr);
     }
@@ -92,4 +105,30 @@ fetch(url, {
     div4.appendChild(table);
     document.body.appendChild(div1);
 
+    $(".delete").on("click",function () {
+        let PID = this.id;
+        $.ajax({
+            url: "/delete-pos",
+            type: "post",
+            data:{
+                PID: PID
+            },
+            dataType: 'json',
+            success: function (res) {
+                if(res['affectedRows'] === 1){
+                    console.log("Deletion success!")
+                    location.reload();
+                }
+            },
+            error: function (err) {
+                alert("Error:" + err.message);
+            }
+
+        })
+
+    });
+
+
 });
+
+

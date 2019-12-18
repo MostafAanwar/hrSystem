@@ -128,6 +128,21 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+    deletePosition(req, res) {
+        let PID = req.body.PID;
+        model.deletePosition(PID).then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
 
 }
 

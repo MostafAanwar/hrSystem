@@ -54,6 +54,14 @@ class Model {
         return this.queryFunction(sql, "");
 
     }
+    viewPositions() {
+        let sql = "SELECT * FROM position";
+        return this.queryFunction(sql, "");
+    }
+    deletePosition(PID){
+        let sql = "DELETE FROM position where PID = ?";
+        return this.queryFunction(sql, [PID]);
+    }
 
 }
 
