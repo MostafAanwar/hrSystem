@@ -3,18 +3,12 @@ import Controller from "../controllers/controller";
 const routes = Router();
 
 routes.get("/", Controller.init);
-routes.get("/loginhr", Controller.loginHR);
-// router.get('/loginhr', function(req , res , next){
-//     req.session.favColor = 'Red';
-//     res.send('Setting favourite color ...!');
-// });
-
-// router.get('/loginhr', function(req , res , next){
-//     res.send('Favourite Color : ' + (req.session.favColor == undefined?"NOT FOUND":req.session.favColor));
-// });
-routes.get("/homePage",Controller.HRHomePage);
-routes.get("/positionsPage",Controller.GetPositionPage);
+routes.get("/login-hr", Controller.loginHR);
+routes.get("/home-page",Controller.userHomePage);
+routes.get("/hr-index", Controller.HRHomePage);
 routes.get("/positions",Controller.viewPositions);
-routes.post("/getHR", Controller.getHR);
-routes.get("/getAllHR", Controller.getAllHR);
+routes.post("/get-hr", Controller.getHR);
+routes.post('/get-user', Controller.getUser);
+routes.get("/get-all-hr", Controller.getAllHR);
+routes.get("/sign-up", Controller.signUp);
 export default routes;
