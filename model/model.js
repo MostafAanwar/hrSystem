@@ -61,6 +61,7 @@ class Model {
         let sql = "SELECT * FROM position";
         return this.queryFunction(sql, "");
     }
+
     deletePosition(PID){
         let sql = "DELETE FROM position where PID = ?";
         return this.queryFunction(sql, [PID]);
@@ -77,6 +78,7 @@ class Model {
         let sql = 'UPDATE position SET title = ?, description = ?, available = ?, salary = ? WHERE PID = ?';
         return this.queryFunction(sql, [title , description, available, salary, PID]);
     }
+
 }
 
 const mainModel = new Model();
