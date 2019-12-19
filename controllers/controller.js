@@ -59,7 +59,17 @@ class Controller {
             res.end();
         });
     }
-
+    addPositionPage(req, res) {
+        let path = Path.join(__dirname, "../views/add-position.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
 
     getUser(req, res){
         let username = req.body.username;
@@ -132,6 +142,27 @@ class Controller {
         let PID = req.body.PID;
         model.deletePosition(PID).then((response) => {
             res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    addPosition(req, res){
+        let title = req.body.title;
+        let available = 1; //TODO Figure out checkbox value
+        let description = req.body.description;
+        let salary = req.body.salary;
+        console.log(title);
+        console.log(description);
+        console.log(salary);
+        model.addPosition(title, available, description, salary).then((response) => {
+            res.contentType('json');
+            console.log(response.result);
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
             res.send(jsonResult);

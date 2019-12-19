@@ -21,6 +21,8 @@ class Model {
 
     queryFunction(sql, values) {
         return new Promise(((resolve, reject) => {
+            console.log(sql);
+            console.log(values);
             let connection = this.createConnectionPool();
             connection.connect(function (err) {
                 if (err) {
@@ -32,6 +34,9 @@ class Model {
                 }
             });
             connection.query(sql, values, (err, result) => {
+                if(err){
+                    console.log(err.message);
+                }
                 resolve({ //return as json
                     result: result,
                     connection: connection
@@ -61,6 +66,10 @@ class Model {
     deletePosition(PID){
         let sql = "DELETE FROM position where PID = ?";
         return this.queryFunction(sql, [PID]);
+    }
+    addPosition(title, available, description, salary){
+        let sql = "INSERT INTO position (title, available, description, salary) VALUES (?, ?, ?, ?)";
+        return this.queryFunction(sql, [title, available, description, salary]);
     }
 
 }

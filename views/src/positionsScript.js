@@ -116,7 +116,7 @@ fetch(url, {
             dataType: 'json',
             success: function (res) {
                 if(res['affectedRows'] === 1){
-                    console.log("Deletion success!")
+                    console.log("Deletion success!");
                     location.reload();
                 }
             },
@@ -126,6 +126,11 @@ fetch(url, {
 
         })
 
+    });
+
+    $('#add').on('click', function () {
+
+        window.location.replace('/add-pos-page');
     });
 
 
