@@ -21,8 +21,6 @@ class Model {
 
     queryFunction(sql, values) {
         return new Promise(((resolve, reject) => {
-            console.log(sql);
-            console.log(values);
             let connection = this.createConnectionPool();
             connection.connect(function (err) {
                 if (err) {
@@ -70,6 +68,14 @@ class Model {
     addPosition(title, available, description, salary) {
         let sql = "INSERT INTO position VALUES (''" + ", '" + title + "', '" + available + "','" + description + "','" + salary + "')";
         return this.queryFunction(sql, "");
+    }
+    getPosition(PID){
+        let sql = "SELECT * FROM position WHERE PID = ?";
+        return this.queryFunction(sql, [PID]);
+    }
+    editPosition(PID, title, available, description, salary){
+        let sql = 'UPDATE position SET title = ?, description = ?, available = ?, salary = ? WHERE PID = ?';
+        return this.queryFunction(sql, [title , description, available, salary, PID]);
     }
 }
 
