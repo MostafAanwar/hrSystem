@@ -67,11 +67,10 @@ class Model {
         let sql = "DELETE FROM position where PID = ?";
         return this.queryFunction(sql, [PID]);
     }
-    addPosition(title, available, description, salary){
-        let sql = "INSERT INTO position (title, available, description, salary) VALUES (?, ?, ?, ?)";
-        return this.queryFunction(sql, [title, available, description, salary]);
+    addPosition(title, available, description, salary) {
+        let sql = "INSERT INTO position VALUES (''" + ", '" + title + "', '" + available + "','" + description + "','" + salary + "')";
+        return this.queryFunction(sql, "");
     }
-
 }
 
 const mainModel = new Model();
