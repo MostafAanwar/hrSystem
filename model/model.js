@@ -71,6 +71,14 @@ class Model {
         let sql = "INSERT INTO position VALUES (''" + ", '" + title + "', '" + available + "','" + description + "','" + salary + "')";
         return this.queryFunction(sql, "");
     }
+    savePosition(PID,username){
+        let sql = "UPDATE canidate SET PID = ? WHERE username = ? ";
+        return this.queryFunction(sql, [PID,username]);
+    }
+    viewPositionCand() {
+        let sql = "SELECT PID, name, description, salary  FROM position where available = 1";
+        return this.queryFunction(sql, "");
+    }
 }
 
 const mainModel = new Model();

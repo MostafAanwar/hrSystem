@@ -173,8 +173,45 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
-
+    applyPosition(req, res) {
+        let PID = req.body.PID;
+        let username = req.body.username;
+        model.savePosition(PID,username).then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    viewPositionCand(req, res) {
+        model.viewPositionCand().then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    GetPosCandPage(req, res){
+        let path = Path.join(__dirname, "../views/PositionsCand.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
 }
 
 const mainController = new Controller();

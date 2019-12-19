@@ -15,4 +15,8 @@ routes.get("/sign-up", Controller.signUp);
 routes.post("/delete-pos",Controller.deletePosition);
 routes.get("/add-pos-page", Controller.addPositionPage);
 routes.post("/add-pos", Controller.addPosition);
+routes.post("/apply-pos", Controller.applyPosition);
+routes.get("/position-cand",Controller.viewPositionCand);
+routes.get("/get-position-cand", Controller.GetPosCandPage);
+
 export default routes;
