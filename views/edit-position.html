@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Edit Position</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
-    <title>Add Position</title>
 </head>
 <body>
-<form action="/" method="POST" id="new-pos-form">
+<form action="/" method="POST" id="edit-pos-form">
     <h1>Add new</h1>
 
     Position Title: <input type="text" name="title" id="title">
@@ -20,10 +20,8 @@
 
     Available? <input type="checkbox" name="available" value="1" id="available">
     <br>
-
-    <div id="validationtext"></div>
-    <input type="submit" value="Add Position">
+    <input type="submit" value="Save">
 </form>
-    <script src="src/add-pos-script.js"></script>
+<script src="src/edit-pos-script.js"></script>
 </body>
 </html>

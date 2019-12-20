@@ -62,7 +62,7 @@ fetch(url, {
         let text1 = document.createTextNode(res.data[i]['PID']);
         let td2 = document.createElement('td');
         td2.className = ('column2');
-        let text2 = document.createTextNode(res.data[i]['name']);
+        let text2 = document.createTextNode(res.data[i]['title']);
         let td3 = document.createElement('td');
         td3.className = ('column3');
         let text3 = document.createTextNode(res.data[i]['available']);
@@ -129,10 +129,13 @@ fetch(url, {
     });
 
     $('#add').on('click', function () {
-
         window.location.replace('/add-pos-page');
     });
 
+    $('.edit').on('click',  function () {
+        let PID = this.id;
+        window.location.replace('/edit-pos-page?id=' + PID);
+    });
 
 });
 
