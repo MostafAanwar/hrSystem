@@ -77,6 +77,26 @@ class Model {
         let sql = 'UPDATE position SET title = ?, description = ?, available = ?, salary = ? WHERE PID = ?';
         return this.queryFunction(sql, [title , description, available, salary, PID]);
     }
+    getRegisterees(){
+        let sql = "SELECT * FROM candidate where approved is null";
+        return this.queryFunction(sql, "");
+    }
+    alterApproval(str, len){
+        let regex = RegExp('"([\\w@.]*)":"([01])"','g');
+        let array;
+        let email = [];
+        let values = [];
+        while ((array = regex.exec(str)) !== null) {
+            email.push(array[1]);
+            values.push(array[2]);
+        }
+        let sql = 'UPDATE candidate SET approved = ? WHERE email = ?';
+        let res;
+        for(let i = 0; i< len; i++ ){
+            res = this.queryFunction(sql, [values[i], email[i]]);
+        }
+        return res;
+    }
 }
 
 const mainModel = new Model();

@@ -59,6 +59,17 @@ class Controller {
             res.end();
         });
     }
+    GetPositionPage(req, res){
+        let path = Path.join(__dirname, "../views/positions.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
     addPositionPage(req, res) {
         let path = Path.join(__dirname, "../views/add-position.html");
         fs.readFile(path, function (err, html) {
@@ -81,6 +92,19 @@ class Controller {
             res.end();
         });
     }
+    getRegistereePage(req,res){
+        let path = Path.join(__dirname, "../views/registerees-page.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+
+
     getUser(req, res){
         let username = req.body.username;
         let password = req.body.password;
@@ -123,17 +147,6 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    GetPositionPage(req, res){
-        let path = Path.join(__dirname, "../views/positions.html");
-        fs.readFile(path, function (err, html) {
-            if (err) {
-                throw err;
-            }
-            res.writeHeader(200, {"Content-Type": "text/html"});
-            res.write(html);
-            res.end();
-        });
-    }
     viewPositions(req, res) {
         model.viewPositions().then((response) => {
             res.contentType('json');
@@ -171,7 +184,6 @@ class Controller {
         let salary = req.body.salary;
         model.addPosition(title, available, description, salary).then((response) => {
             res.contentType('json');
-            console.log(response.result);
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
             res.send(jsonResult);
@@ -210,7 +222,6 @@ class Controller {
         }
         model.editPosition(PID, title, available, description, salary).then((response) => {
             res.contentType('json');
-            console.log(response.result);
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
             res.send(jsonResult);
@@ -250,6 +261,34 @@ class Controller {
                 console.log(info);
                 transporter.close();
             }
+        });
+    }
+    getRegisterees(req,res){
+        model.getRegisterees().then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    alterApproval(req,res){
+        let len = Object.keys(req.body).length;
+        let str = JSON.stringify(req.body);
+        model.alterApproval(str, len).then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
         });
     }
 
