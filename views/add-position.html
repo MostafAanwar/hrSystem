@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
+    <title>Add Position</title>
+</head>
+<body>
+<form action="/" method="POST" id="new-pos-form">
+    <h1>Add new</h1>
+
+    Position Title: <input type="text" name="title" id="title">
+    <br>
+
+    Description: <textarea name="description" id="description" ></textarea>
+    <br>
+
+    Salary: <input type="text" name="salary" id="salary">
+    <br>
+
+    Available? <input type="checkbox" name="available" value="1" id="available">
+    <br>
+
+    <div id="validationtext"></div>
+    <input type="submit" value="Add Position">
+</form>
+    <script src="src/add-pos-script.js"></script>
+</body>
+</html>

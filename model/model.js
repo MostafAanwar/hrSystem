@@ -32,6 +32,9 @@ class Model {
                 }
             });
             connection.query(sql, values, (err, result) => {
+                if(err){
+                    console.log(err.message);
+                }
                 resolve({ //return as json
                     result: result,
                     connection: connection
@@ -48,11 +51,7 @@ class Model {
         let sql = 'SELECT * FROM hr where email = ? AND password = ?';
         return this.queryFunction(sql, [email, password]);
     }
-    getAllPositions() {
-        let sql = "SELECT * FROM position";
-        return this.queryFunction(sql, "");
 
-    }
     getAllHR() {
         let sql = "SELECT * FROM hr";
         return this.queryFunction(sql, "");
@@ -61,6 +60,23 @@ class Model {
     viewPositions() {
         let sql = "SELECT * FROM position";
         return this.queryFunction(sql, "");
+    }
+
+    deletePosition(PID){
+        let sql = "DELETE FROM position where PID = ?";
+        return this.queryFunction(sql, [PID]);
+    }
+    addPosition(title, available, description, salary) {
+        let sql = "INSERT INTO position VALUES (''" + ", '" + title + "', '" + available + "','" + description + "','" + salary + "')";
+        return this.queryFunction(sql, "");
+    }
+    getPosition(PID){
+        let sql = "SELECT * FROM position WHERE PID = ?";
+        return this.queryFunction(sql, [PID]);
+    }
+    editPosition(PID, title, available, description, salary){
+        let sql = 'UPDATE position SET title = ?, description = ?, available = ?, salary = ? WHERE PID = ?';
+        return this.queryFunction(sql, [title , description, available, salary, PID]);
     }
 
 }
