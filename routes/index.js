@@ -18,4 +18,5 @@ routes.post("/add-pos", Controller.addPosition);
 routes.post("/get-pos", Controller.getPosition);
 routes.get("/edit-pos-page", Controller.editPositionPage);
 routes.post("/edit-pos", Controller.editPosition);
+routes.get("/send-mail", Controller.sendEmail);
 export default routes;

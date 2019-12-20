@@ -1,5 +1,5 @@
 import model from "../model/model.js";
-
+const nodemailer = require("nodemailer");
 const Path = require("path");
 var fs = require("fs");
 
@@ -111,7 +111,6 @@ class Controller {
             return console.error("Error: " + err.message);
         });
     }
-
     getAllHR(req, res) {
         model.getAllHR().then((response) => { //response contains returned data
             res.contentType('json');
@@ -183,7 +182,6 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
     getPosition(req, res) {
         let PID = req.body.PID;
         model.getPosition(PID).then((response) => {
@@ -223,9 +221,41 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+    sendEmail(req, res){
+
+        let transporter = nodemailer.createTransport({
+            host: "smtp.gmail.com",
+            port: 465,
+            secure: true,
+            auth:{
+                user: 'exam.mailer19@gmail.com',
+                pass: 'ctSp<~t4LQ}`_E-)'
+            }
+        });
+        let message = {
+            from: 'exam.mailer19@gmail.com',
+            to: 'linamuhab@gmail.com',
+            subject: "Examination Link",
+            html: "<p>Please follow the link below to take your exam.</p>" +
+                "<p>Clicking the link will not automatically start your exam.</p>" +
+                "Click <a href='http://localhost:3000/'>here</a> to take your exam"
+        };
+        transporter.sendMail(message, function (err, info) {
+            if(err){
+                console.log(err);
+                transporter.close();
+            }
+            else {
+                console.log("Message sent!");
+                console.log(info);
+                transporter.close();
+            }
+        });
+    }
 
 
 }
 
 const mainController = new Controller();
 export default mainController;
+
