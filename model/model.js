@@ -110,7 +110,7 @@ class Model {
         return this.queryFunction(sql, [QID]);
     }
     getFAnswers(QID){
-        let sql = "SELECT * FROM answer where QID = ? AND correct = 0 ORDER BY RAND() LIMIT 2";
+        let sql = "SELECT * FROM answer where QID = ? AND correct = 0 ORDER BY RAND() LIMIT 3";
         return this.queryFunction(sql, [QID]);
     }
     saveAnswer(AID,QID,email){
@@ -120,6 +120,10 @@ class Model {
     saveTestScore(C_email,TID,test_score){
         let sql = 'UPDATE candidate_exam SET test_score = ? WHERE (TID = ? AND C_email = ?)';
         return this.queryFunction(sql, [test_score, TID, C_email]);
+    }
+    saveTotalScore(C_email,test_score){
+        let sql = 'UPDATE candidate SET score = score + ? WHERE email = ?';
+        return this.queryFunction(sql,[test_score, C_email]);
     }
 }
 

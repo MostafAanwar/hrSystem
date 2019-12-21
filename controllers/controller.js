@@ -5,6 +5,12 @@ var fs = require("fs");
 
 class Controller {
     init(req, res) {
+        if(req.session.username){
+            res.redirect('/home-page');
+        }
+        if(req.session.name){
+            res.redirect('/hr-index');
+        }
         let path = Path.join(__dirname, "../views/index.html");
         fs.readFile(path, function (err, html) {
             if (err) {
@@ -86,11 +92,13 @@ class Controller {
     }
     getUser(req, res) {
         let username = req.body.username;
+        req.session.username = req.body.username;
         let password = req.body.password;
         model.getUser(username, password).then((response) => { //response contains returned data
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
+            req.session.email = jsonResult['email'];
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
@@ -101,11 +109,13 @@ class Controller {
     }
     getHR(req, res) {
         let username = req.body.username;
+        req.session.name = req.body.username;
         let password = req.body.password;
         model.getHR(username, password).then((response) => { //response contains returned data
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
+            req.session.email = req.body.email;
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
@@ -405,6 +415,8 @@ class Controller {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
+            model.saveTotalScore(C_email,test_score).then((response1) =>{
+            });
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
