@@ -21,6 +21,8 @@ class Model {
 
     queryFunction(sql, values) {
         return new Promise(((resolve, reject) => {
+            console.log(sql);
+            console.log(values);
             let connection = this.createConnectionPool();
             connection.connect(function (err) {
                 if (err) {
@@ -88,6 +90,37 @@ class Model {
         return this.queryFunction(sql, [title , description, available, salary, PID]);
     }
 
+    viewTests(){
+        let candidateEmail ="habibaesmail@yahoo.com"; // get Email from LINK of exam
+        let sql = "SELECT TID from candidate_exam where (C_email = ? AND test_score IS NULL)";
+        return this.queryFunction(sql, [candidateEmail]);
+    }
+    getQuestions(TID){
+        let sql = "SELECT * FROM question where TID = ? ORDER BY RAND() LIMIT 5";
+        let que = this.queryFunction(sql, [TID]);
+        return que;
+    }
+    getTestType(TID){
+        let sql = "SELECT type FROM test where TID = ?";
+        let type = this.queryFunction(sql, [TID]);
+        return type;
+    }
+    getCAnswer(QID){
+        let sql = "SELECT * FROM answer where QID = ? AND correct = 1 ORDER BY RAND() LIMIT 1";
+        return this.queryFunction(sql, [QID]);
+    }
+    getFAnswers(QID){
+        let sql = "SELECT * FROM answer where QID = ? AND correct = 0 ORDER BY RAND() LIMIT 2";
+        return this.queryFunction(sql, [QID]);
+    }
+    saveAnswer(AID,QID,email){
+        let sql = "INSERT INTO candidate_answer VALUES ('" + email + "','" + QID + "','" + AID + "')";
+        return this.queryFunction(sql, "");
+    }
+    saveTestScore(C_email,TID,test_score){
+        let sql = 'UPDATE candidate_exam SET test_score = ? WHERE (TID = ? AND C_email = ?)';
+        return this.queryFunction(sql, [test_score, TID, C_email]);
+    }
 }
 
 const mainModel = new Model();
