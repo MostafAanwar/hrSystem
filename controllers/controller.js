@@ -2,7 +2,8 @@ import model from "../model/model.js";
 const nodemailer = require("nodemailer");
 const Path = require("path");
 var fs = require("fs");
-
+var http = require('http');
+var mime = require('mime');
 class Controller {
     init(req, res) {
         let path = Path.join(__dirname, "../views/index.html");
@@ -103,7 +104,25 @@ class Controller {
             res.end();
         });
     }
+    viewCV(req, res){
+        let reqURL = req.url;
+        let relPath = reqURL.substr(reqURL.lastIndexOf('=') + 1);
+        let fileName = relPath.substr(relPath.lastIndexOf('/') + 1);
+        let path = Path.join(__dirname, "../" + relPath);
 
+        if(path.indexOf('%20') >= 0){
+            path = decodeURIComponent(path);
+        }
+
+        console.log(path);
+        let mimetype = mime.lookup(fileName);
+        res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+        res.setHeader('Content-type', mimetype);
+        res.download(path,fileName, function (err) {
+            if(err) console.log(err.message);
+
+        });
+    }
 
     getUser(req, res){
         let username = req.body.username;
@@ -291,6 +310,20 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+    getApplicants(req, res){
+        model.getApplicants().then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
 
 
 }

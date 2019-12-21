@@ -32,12 +32,15 @@ fetch(url, {
         th4.className = ('column4');
         let th5 = document.createElement('th');
         th5.className = ('column5');
+        let th6 = document.createElement('th');
+        th6.className = ('column6');
 
         let text1 = document.createTextNode('Email');
         let text2 = document.createTextNode('Name');
         let text3 = document.createTextNode('Telephone');
         let text4 = document.createTextNode("Approve");
         let text5 = document.createTextNode("Reject");
+        let text6 = document.createTextNode("CV");
 
 
         th1.appendChild(text1);
@@ -45,12 +48,14 @@ fetch(url, {
         th3.appendChild(text3);
         th4.appendChild(text4);
         th5.appendChild(text5);
+        th6.appendChild(text6);
 
         tr.appendChild(th1);
         tr.appendChild(th2);
         tr.appendChild(th3);
         tr.appendChild(th4);
         tr.appendChild(th5);
+        tr.appendChild(th6);
 
         thead.appendChild(tr);
         table.appendChild(thead);
@@ -76,35 +81,45 @@ fetch(url, {
             let text3 = document.createTextNode(res.data[i]['telephone']);
 
 
-            let cvButton = document.createElement('button');
-            let cvText = document.createTextNode('View CV');
-            cvButton.className = ('cv');
-            cvButton.id = res.data[i]['email'];
-
+            // let cvButton = document.createElement('input');
+            // cvButton.setAttribute('type', 'button');
+            // cvButton.setAttribute('value', "View");
+            // cvButton.className = ('cv');
+            // cvButton.name = (res.data[i]['cv']);
+            // cvButton.id = res.data[i]['email'];
+            let cvLink = document.createElement('a');
+            cvLink.id = (res.data[i]['cv']);
+            let url = res.data[i]['cv'];
+            cvLink.setAttribute('href', '/get-cv?file=' + url);
+            cvLink.setAttribute('download', '');
+            cvLink.innerHTML = "View";
+            cvLink.className = ('cv');
+            document.body.appendChild(cvLink);
             let approve = document.createElement('input');
             approve.setAttribute('type', 'radio');
             approve.setAttribute('value', '1',);
-            approve.setAttribute('name',res.data[i]['email']);
+            approve.setAttribute('name', res.data[i]['email']);
             approve.setAttribute('id', 'approve');
 
             let reject = document.createElement('input');
             reject.setAttribute('type', 'radio');
             reject.setAttribute('value', '0');
-            reject.setAttribute('name',res.data[i]['email']);
+            reject.setAttribute('name', res.data[i]['email']);
             reject.setAttribute('id', 'reject');
 
             td1.appendChild(text1);
             td2.appendChild(text2);
             td3.appendChild(text3);
 
-            cvButton.appendChild(cvText);
+
             tr.appendChild(td1);
             tr.appendChild(td2);
             tr.appendChild(td3);
 
+
             tr.appendChild(approve);
             tr.appendChild(reject);
-
+            tr.appendChild(cvLink);
             table.appendChild(tr);
             tbody.appendChild(tr);
         }
@@ -112,6 +127,7 @@ fetch(url, {
         saveBtn.setAttribute('type', 'submit');
         saveBtn.setAttribute('value', 'Save');
         tbody.appendChild(saveBtn);
+
 
         table.appendChild(tbody);
         div1.appendChild(div2);
@@ -121,8 +137,8 @@ fetch(url, {
         form.appendChild(table);
 
         document.body.appendChild(div1);
-        if(res.data.length === 0){
-            saveBtn.setAttribute("disabled","true");
+        if (res.data.length === 0) {
+            saveBtn.setAttribute("disabled", "true");
         }
         $(document).ready(function () {
 
@@ -141,7 +157,7 @@ fetch(url, {
                     data: $('#reg-form').serialize(), //form data
                     dataType: 'json',
                     success: function (res) { ///logic for checking
-                        if(res['affectedRows'] >= 1){
+                        if (res['affectedRows'] >= 1) {
                             console.log("Success!");
                             window.location.replace('/hr-index');
                         }
@@ -155,5 +171,8 @@ fetch(url, {
         }); //end on ready
 
     });
+// });
+
+
 
 
