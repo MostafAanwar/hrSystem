@@ -92,7 +92,7 @@ class Model {
 
     viewTests(){
         let candidateEmail ="habibaesmail@yahoo.com"; // get Email from LINK of exam
-        let sql = "SELECT TID from candidate_exam where (C_email = ? AND test_score IS NULL)";
+        let sql = "SELECT * from candidate_exam where (C_email = ? AND test_score IS NULL)";
         return this.queryFunction(sql, [candidateEmail]);
     }
     getQuestions(TID){
