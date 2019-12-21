@@ -8,7 +8,7 @@ routes.get("/login-hr", Controller.loginHR);
 routes.get("/sign-up", Controller.signUp);
 routes.get("/home-page",Controller.userHomePage);
 routes.get("/hr-index", Controller.HRHomePage);
-routes.get("/get-positions", Controller.GetPositionPage); //TODO change it to get-positions page and find all instances of that link and change it
+routes.get("/get-positions", Controller.GetPositionPage);
 routes.get("/add-pos-page", Controller.addPositionPage);
 routes.get("/edit-pos-page", Controller.editPositionPage);
 routes.get("/registerees-page", Controller.getRegistereePage);
