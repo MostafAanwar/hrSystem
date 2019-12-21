@@ -102,6 +102,10 @@ class Model {
         let sql = 'SELECT * FROM candidate WHERE approved = "1"';
         return this.queryFunction(sql, "");
     }
+    getTestTypes(){
+        let sql = "SELECT type FROM test";
+        return this.queryFunction(sql, "");
+    }
 }
 
 const mainModel = new Model();

@@ -298,7 +298,19 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
+    getTestTypes(req, res){
+        model.getTestTypes().then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
 
     sendEmail(req, res){
 

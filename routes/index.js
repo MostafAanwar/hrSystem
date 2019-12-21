@@ -29,6 +29,7 @@ routes.post("/edit-pos", Controller.editPosition);
 routes.get("/get-reg", Controller.getRegisterees);
 routes.post("/alter-approval", Controller.alterApproval);
 routes.get("/get-app", Controller.getApplicants);
+routes.get("/get-test-types", Controller.getTestTypes);
 
 //functions
 routes.get("/send-mail", Controller.sendEmail);
