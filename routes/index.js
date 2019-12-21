@@ -15,6 +15,9 @@ routes.get("/registerees-page", Controller.getRegistereePage);
 routes.get('/applicants-page', Controller.getApplicantPage);
 routes.get("/create-exam-page", Controller.getCreateExamPage);
 
+routes.get("/get-exam", Controller.getExamPage);
+routes.get("/view-test", Controller.viewTestPage);
+routes.get("/success", Controller.viewEndPage);
 
 
 //Data
@@ -29,13 +32,25 @@ routes.get("/position-cand",Controller.viewPositionCand);
 routes.get("/get-position-cand", Controller.GetPosCandPage);
 routes.post("/get-pos", Controller.getPosition);
 routes.post("/edit-pos", Controller.editPosition);
+
 routes.get("/get-reg", Controller.getRegisterees);
 routes.post("/alter-approval", Controller.alterApproval);
 routes.get("/get-app", Controller.getApplicants);
+routes.post("/exam", Controller.viewTests);
+routes.post("/test-type", Controller.getTestType);
+routes.post("/test-page" ,Controller.getQuestions);
+routes.post("/test-page-c-answer", Controller.getCAnswer);
+routes.post("/test-page-f-answers", Controller.getFAnswers);
+routes.post("/save-answer", Controller.saveAnswer);
+routes.post("/save-score", Controller.saveTestScore);
+
+
 
 //functions
 routes.get("/send-mail", Controller.sendEmail);
 routes.get("/get-cv", Controller.viewCV);
+
+
 
 
 

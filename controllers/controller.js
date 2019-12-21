@@ -378,7 +378,7 @@ class Controller {
         });
         let message = {
             from: 'exam.mailer19@gmail.com',
-            to: 'linamuhab@gmail.com',
+            to: '', //TODO get user/hr email
             subject: "Examination Link",
             html: "<p>Please follow the link below to take your exam.</p>" +
                 "<p>Clicking the link will not automatically start your exam.</p>" +
@@ -396,6 +396,7 @@ class Controller {
             }
         });
     }
+
     viewCV(req, res){
         let reqURL = req.url;
         let relPath = reqURL.substr(reqURL.lastIndexOf('=') + 1);
@@ -416,8 +417,159 @@ class Controller {
         });
     }
 
-    
 
+    getExamPage(req, res) {
+        let path = Path.join(__dirname, "../views/exam-page.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+    viewTests(req,res){
+        model.viewTests().then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    getQuestions(req, res){
+        let test_id = req.body.TID;
+        console.log(test_id);
+        console.log("testing");
+        model.getQuestions(test_id).then((response) => {
+            console.log(response.result);
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error: " + err.message);
+        });
+    }
+    getTestType(req,res){
+            let test_id = req.body.TID;
+            console.log(test_id);
+            console.log("testing");
+            model.getTestType(test_id).then((response) => {
+                console.log(response.result);
+                res.contentType('json');
+                let stringResult = JSON.stringify(response.result);
+                let jsonResult = JSON.parse(stringResult);
+                res.send(jsonResult);
+                return response.connection; //returned on next then
+            }).then((con) => {
+                model.disconnect(con);
+            }).catch((err) => {
+                return console.error("Error: " + err.message);
+            });
+    }
+
+    getCAnswer(req, res){
+        let qid = req.body.QID;
+        model.getCAnswer(qid).then((response) => { //response contains returned data
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            console.log("anssss")
+            console.log(jsonResult)
+            res.send(jsonResult);
+            return response.connection;
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error: " + err.message);
+        });
+    }
+    getFAnswers(req, res){
+        let qid = req.body.QID;
+        model.getFAnswers(qid).then((response) => { //response contains returned data
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            console.log("anssss")
+            console.log(jsonResult)
+            res.send(jsonResult);
+            return response.connection;
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error: " + err.message);
+        });
+    }
+    viewTestPage(req,res) {
+
+        let path = Path.join(__dirname, "../views/test.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+    saveAnswer(req,res){
+        let AID = req.body.AID;
+        let QID = req.body.QID;
+        let email = req.body.email;
+        console.log("testing");
+        model.saveAnswer(AID,QID,email).then((response) => {
+            console.log(response.result);
+            console.log("GWA");
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error: " + err.message);
+        });
+    }
+    saveTestScore(req,res){
+        let C_email = req.body.email;
+        let TID = req.body.TID;
+        let test_score = req.body.test_score;
+        console.log("testing");
+        model.saveTestScore(C_email,TID,test_score).then((response) => {
+            console.log(response.result);
+            console.log("GWA");
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error: " + err.message);
+        });
+    }
+    viewEndPage(req,res){
+        let path = Path.join(__dirname, "../views/thank-you.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
 }
 const mainController = new Controller();
 export default mainController;
