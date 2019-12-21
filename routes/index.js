@@ -12,10 +12,12 @@ routes.get("/get-positions", Controller.GetPositionPage); //TODO change it to ge
 routes.get("/add-pos-page", Controller.addPositionPage);
 routes.get("/edit-pos-page", Controller.editPositionPage);
 routes.get("/registerees-page", Controller.getRegistereePage);
+routes.get('/applicants-page', Controller.getApplicantPage);
+routes.get("/create-exam-page", Controller.getCreateExamPage);
 
 
 
-//Data/functions
+//Data
 routes.get("/positions",Controller.viewPositions);
 routes.post("/get-hr", Controller.getHR);
 routes.post('/get-user', Controller.getUser);
@@ -26,5 +28,10 @@ routes.post("/get-pos", Controller.getPosition);
 routes.post("/edit-pos", Controller.editPosition);
 routes.get("/get-reg", Controller.getRegisterees);
 routes.post("/alter-approval", Controller.alterApproval);
+routes.get("/get-app", Controller.getApplicants);
+
+//functions
 routes.get("/send-mail", Controller.sendEmail);
+routes.get("/get-cv", Controller.viewCV);
+
 export default routes;

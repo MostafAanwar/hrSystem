@@ -104,25 +104,29 @@ class Controller {
             res.end();
         });
     }
-    viewCV(req, res){
-        let reqURL = req.url;
-        let relPath = reqURL.substr(reqURL.lastIndexOf('=') + 1);
-        let fileName = relPath.substr(relPath.lastIndexOf('/') + 1);
-        let path = Path.join(__dirname, "../" + relPath);
-
-        if(path.indexOf('%20') >= 0){
-            path = decodeURIComponent(path);
-        }
-
-        console.log(path);
-        let mimetype = mime.lookup(fileName);
-        res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
-        res.setHeader('Content-type', mimetype);
-        res.download(path,fileName, function (err) {
-            if(err) console.log(err.message);
-
+    getApplicantPage(req, res){
+        let path = Path.join(__dirname, "../views/applicants-page.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
         });
     }
+    getCreateExamPage(req, res){
+        let path = Path.join(__dirname, "../views/create-exam-page.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+
 
     getUser(req, res){
         let username = req.body.username;
@@ -251,6 +255,51 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+
+    getRegisterees(req,res){
+        model.getRegisterees().then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    alterApproval(req,res){
+        console.log("hi");
+        let len = Object.keys(req.body).length;
+        let str = JSON.stringify(req.body);
+        model.alterApproval(str, len).then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    getApplicants(req, res){
+        model.getApplicants().then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
+
     sendEmail(req, res){
 
         let transporter = nodemailer.createTransport({
@@ -282,47 +331,26 @@ class Controller {
             }
         });
     }
-    getRegisterees(req,res){
-        model.getRegisterees().then((response) => {
-            res.contentType('json');
-            res.send({
-                data: response.result
-            });
-            return response.connection; //returned on next then
-        }).then((con) => {
-            model.disconnect(con); //TODO
-        }).catch((err) => {
-            return console.error("Error! " + err.message);
+    viewCV(req, res){
+        let reqURL = req.url;
+        let relPath = reqURL.substr(reqURL.lastIndexOf('=') + 1);
+        let fileName = relPath.substr(relPath.lastIndexOf('/') + 1);
+        let path = Path.join(__dirname, "../" + relPath);
+
+        if(path.indexOf('%20') >= 0){
+            path = decodeURIComponent(path);
+        }
+
+        console.log(path);
+        let mimetype = mime.lookup(fileName);
+        res.setHeader('Content-disposition', 'attachment; filename=' + fileName);
+        res.setHeader('Content-type', mimetype);
+        res.download(path,fileName, function (err) {
+            if(err) console.log(err.message);
+
         });
     }
-    alterApproval(req,res){
-        let len = Object.keys(req.body).length;
-        let str = JSON.stringify(req.body);
-        model.alterApproval(str, len).then((response) => {
-            res.contentType('json');
-            res.send({
-                data: response.result
-            });
-            return response.connection; //returned on next then
-        }).then((con) => {
-            model.disconnect(con); //TODO
-        }).catch((err) => {
-            return console.error("Error! " + err.message);
-        });
-    }
-    getApplicants(req, res){
-        model.getApplicants().then((response) => {
-            res.contentType('json');
-            let stringResult = JSON.stringify(response.result);
-            let jsonResult = JSON.parse(stringResult);
-            res.send(jsonResult);
-            return response.connection; //returned on next then
-        }).then((con) => {
-            model.disconnect(con); //TODO
-        }).catch((err) => {
-            return console.error("Error! " + err.message);
-        });
-    }
+
 
 
 

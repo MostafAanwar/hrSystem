@@ -97,6 +97,10 @@ class Model {
         }
         return res;
     }
+    getApplicants(){
+        let sql = 'SELECT * FROM candidate WHERE approved = "1"';
+        return this.queryFunction(sql, "");
+    }
 }
 
 const mainModel = new Model();
