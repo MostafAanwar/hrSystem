@@ -90,8 +90,34 @@ class Model {
         return this.queryFunction(sql, [title , description, available, salary, PID]);
     }
 
+    getRegisterees(){
+        let sql = "SELECT * FROM candidate where approved is null";
+        return this.queryFunction(sql, "");
+    }
+    alterApproval(str, len){
+        let regex = RegExp('"([\\w@.]*)":"([01])"','g');
+        let array;
+        let email = [];
+        let values = [];
+        while ((array = regex.exec(str)) !== null) {
+            email.push(array[1]);
+            values.push(array[2]);
+        }
+        let sql = 'UPDATE candidate SET approved = ? WHERE email = ?';
+        let res;
+        for(let i = 0; i< len; i++ ){
+            res = this.queryFunction(sql, [values[i], email[i]]);
+        }
+        return res;
+    }
+    getApplicants(){
+        let sql = 'SELECT * FROM candidate WHERE approved = "1"';
+        return this.queryFunction(sql, "");
+    }
+
+
     viewTests(){
-        let candidateEmail ="habibaesmail@yahoo.com"; // get Email from LINK of exam
+        let candidateEmail ="habibaesmail@yahoo.com"; // TODO get Email from LINK of exam
         let sql = "SELECT * from candidate_exam where (C_email = ? AND test_score IS NULL)";
         return this.queryFunction(sql, [candidateEmail]);
     }
@@ -110,7 +136,7 @@ class Model {
         return this.queryFunction(sql, [QID]);
     }
     getFAnswers(QID){
-        let sql = "SELECT * FROM answer where QID = ? AND correct = 0 ORDER BY RAND() LIMIT 2";
+        let sql = "SELECT * FROM answer where QID = ? AND correct = 0 ORDER BY RAND() LIMIT 3";
         return this.queryFunction(sql, [QID]);
     }
     saveAnswer(AID,QID,email){
@@ -121,6 +147,7 @@ class Model {
         let sql = 'UPDATE candidate_exam SET test_score = ? WHERE (TID = ? AND C_email = ?)';
         return this.queryFunction(sql, [test_score, TID, C_email]);
     }
+
 }
 
 const mainModel = new Model();
