@@ -34,4 +34,8 @@ routes.get("/get-app", Controller.getApplicants);
 routes.get("/send-mail", Controller.sendEmail);
 routes.get("/get-cv", Controller.viewCV);
 
+
+
 export default routes;
+
+
