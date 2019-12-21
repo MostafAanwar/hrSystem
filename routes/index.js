@@ -24,6 +24,9 @@ routes.post('/get-user', Controller.getUser);
 routes.get("/get-all-hr", Controller.getAllHR);
 routes.post("/delete-pos",Controller.deletePosition);
 routes.post("/add-pos", Controller.addPosition);
+routes.post("/apply-pos", Controller.applyPosition);
+routes.get("/position-cand",Controller.viewPositionCand);
+routes.get("/get-position-cand", Controller.GetPosCandPage);
 routes.post("/get-pos", Controller.getPosition);
 routes.post("/edit-pos", Controller.editPosition);
 routes.get("/get-reg", Controller.getRegisterees);
@@ -37,5 +40,3 @@ routes.get("/get-cv", Controller.viewCV);
 
 
 export default routes;
-
-
