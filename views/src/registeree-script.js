@@ -81,12 +81,6 @@ fetch(url, {
             let text3 = document.createTextNode(res.data[i]['telephone']);
 
 
-            // let cvButton = document.createElement('input');
-            // cvButton.setAttribute('type', 'button');
-            // cvButton.setAttribute('value', "View");
-            // cvButton.className = ('cv');
-            // cvButton.name = (res.data[i]['cv']);
-            // cvButton.id = res.data[i]['email'];
             let cvLink = document.createElement('a');
             cvLink.id = (res.data[i]['cv']);
             let url = res.data[i]['cv'];
@@ -157,7 +151,7 @@ fetch(url, {
                     data: $('#reg-form').serialize(), //form data
                     dataType: 'json',
                     success: function (res) { ///logic for checking
-                        if (res['affectedRows'] >= 1) {
+                        if (res.data['affectedRows'] >= 1) {
                             console.log("Success!");
                             window.location.replace('/hr-index');
                         }

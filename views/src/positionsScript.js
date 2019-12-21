@@ -128,7 +128,7 @@ fetch(url, {
                         alert("Error:" + err.message);
                     }
 
-                })
+                });
 
             });
 
