@@ -49,7 +49,7 @@ function ajaxValidation(sentURL){
                         window.location.replace('/hr-index');
                     }
                     if(sentURL === '/'){
-                        window.location.replace('/user-home')
+                        window.location.replace('/home-page')
                     }
                 }
                 else {
