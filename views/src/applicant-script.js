@@ -130,7 +130,7 @@ fetch(url, {
 
             $('.create-exam').on('click', function () {
                 let email = this.id;
-                window.location.replace('/create-exam-page?email =' + email);
+                window.location.replace('/create-exam-page?email=' + email);
             });
 
 

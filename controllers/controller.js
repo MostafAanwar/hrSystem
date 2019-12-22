@@ -197,7 +197,6 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    
     viewPositions(req, res) {
         model.viewPositions().then((response) => {
             res.contentType('json');
@@ -211,7 +210,6 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
     getPosition(req, res) {
         let PID = req.body.PID;
         model.getPosition(PID).then((response) => {
@@ -240,7 +238,6 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
     editPosition(req, res) {
         let PID = req.body.PID;
         let title = req.body.title;
@@ -267,7 +264,6 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
     addPosition(req, res) {
         let title = req.body.title;
         let available = req.body.available;
@@ -289,8 +285,6 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
-
     applyPosition(req, res) {
         let PID = req.body.PID;
         let username = req.body.username;
@@ -306,7 +300,6 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
     viewPositionCand(req, res) {
         model.viewPositionCand().then((response) => {
             res.contentType('json');
@@ -315,12 +308,11 @@ class Controller {
             });
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
     }
-
     getRegisterees(req,res){
         model.getRegisterees().then((response) => {
             res.contentType('json');
@@ -335,7 +327,6 @@ class Controller {
         });
     }
     alterApproval(req,res){
-        console.log("hi");
         let len = Object.keys(req.body).length;
         let str = JSON.stringify(req.body);
         model.alterApproval(str, len).then((response) => {
@@ -376,9 +367,28 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+    createExam(req, res){
+        let email = req.body.email;
+        let checkbox = req.body.checkbox;
+        let sequence = req.body.sequence;
+        let deadline = req.body.deadline;
+        sequence = sequence.filter(item => item);
+        model.createExam(checkbox, sequence, email,deadline).then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+            mainController.sendEmail(email);
 
-    sendEmail(req, res){
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
 
+    sendEmail(destination){
         let transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,
@@ -390,12 +400,13 @@ class Controller {
         });
         let message = {
             from: 'exam.mailer19@gmail.com',
-            to: '', //TODO get user/hr email
+            to: destination, //TODO get user/hr email
             subject: "Examination Link",
             html: "<p>Please follow the link below to take your exam.</p>" +
                 "<p>Clicking the link will not automatically start your exam.</p>" +
-                "Click <a href='http://localhost:3000/'>here</a> to take your exam"
+                "Click <a href='http://localhost:3000/get-exam'>here</a> to take your exam"
         };
+        console.log("mess" + message);
         transporter.sendMail(message, function (err, info) {
             if(err){
                 console.log(err);
@@ -408,7 +419,6 @@ class Controller {
             }
         });
     }
-
     viewCV(req, res){
         let reqURL = req.url;
         let relPath = reqURL.substr(reqURL.lastIndexOf('=') + 1);

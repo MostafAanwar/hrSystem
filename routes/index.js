@@ -18,7 +18,7 @@ routes.get("/create-exam-page", Controller.getCreateExamPage);
 routes.get("/get-exam", Controller.getExamPage);
 routes.get("/view-test", Controller.viewTestPage);
 routes.get("/success", Controller.viewEndPage);
-
+routes.get("/get-position-cand", Controller.GetPosCandPage);
 
 //Data
 routes.get("/positions",Controller.viewPositions);
@@ -29,7 +29,7 @@ routes.post("/delete-pos",Controller.deletePosition);
 routes.post("/add-pos", Controller.addPosition);
 routes.post("/apply-pos", Controller.applyPosition);
 routes.get("/position-cand",Controller.viewPositionCand);
-routes.get("/get-position-cand", Controller.GetPosCandPage);
+
 routes.post("/get-pos", Controller.getPosition);
 routes.post("/edit-pos", Controller.editPosition);
 
@@ -45,6 +45,7 @@ routes.post("/test-page-c-answer", Controller.getCAnswer);
 routes.post("/test-page-f-answers", Controller.getFAnswers);
 routes.post("/save-answer", Controller.saveAnswer);
 routes.post("/save-score", Controller.saveTestScore);
+routes.post("/create-exam", Controller.createExam);
 
 
 

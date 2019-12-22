@@ -18,7 +18,7 @@ fetch(url, {
                 console.log(a.sequence > b.sequence);
                 if (a.sequence > b.sequence) return 1;
                 else return -1;
-            })
+            });
             console.log(res.data);
         }
         for (let i = 0; i < res.data.length; i++) {
