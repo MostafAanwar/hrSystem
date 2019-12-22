@@ -1,9 +1,10 @@
 import model from "../model/model.js";
 const nodemailer = require("nodemailer");
 const Path = require("path");
-var fs = require("fs");
-var http = require('http');
-var mime = require('mime');
+let fs = require("fs");
+let http = require('http');
+let mime = require('mime');
+
 class Controller {
     init(req, res) {
         let path = Path.join(__dirname, "../views/index.html");
@@ -156,9 +157,23 @@ class Controller {
   
   
     getUser(req, res) {
-        let username = req.body.username;
+        let email = req.body.email;
         let password = req.body.password;
-        model.getUser(username, password).then((response) => { //response contains returned data
+        model.getUser(email, password).then((response) => { //response contains returned data
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error: " + err.message);
+        });
+    }
+    isSignedUp(req, res) {
+        let email = req.body.email;
+        model.isSignedUp(email).then((response) => { //response contains returned data
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
@@ -171,9 +186,9 @@ class Controller {
         });
     }
     getHR(req, res) {
-        let username = req.body.username;
+        let email = req.body.email;
         let password = req.body.password;
-        model.getHR(username, password).then((response) => { //response contains returned data
+        model.getHR(email, password).then((response) => { //response contains returned data
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
@@ -197,7 +212,6 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    
     viewPositions(req, res) {
         model.viewPositions().then((response) => {
             res.contentType('json');
@@ -211,7 +225,6 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
     getPosition(req, res) {
         let PID = req.body.PID;
         model.getPosition(PID).then((response) => {
@@ -240,7 +253,6 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
     editPosition(req, res) {
         let PID = req.body.PID;
         let title = req.body.title;
@@ -267,7 +279,6 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
     addPosition(req, res) {
         let title = req.body.title;
         let available = req.body.available;
@@ -289,12 +300,10 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
-
     applyPosition(req, res) {
         let PID = req.body.PID;
-        let username = req.body.username;
-        model.savePosition(PID, username).then((response) => {
+        let email = req.body.email;
+        model.savePosition(PID, email).then((response) => {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
@@ -306,7 +315,6 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-
     viewPositionCand(req, res) {
         model.viewPositionCand().then((response) => {
             res.contentType('json');
@@ -315,12 +323,11 @@ class Controller {
             });
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
     }
-
     getRegisterees(req,res){
         model.getRegisterees().then((response) => {
             res.contentType('json');
@@ -335,7 +342,6 @@ class Controller {
         });
     }
     alterApproval(req,res){
-        console.log("hi");
         let len = Object.keys(req.body).length;
         let str = JSON.stringify(req.body);
         model.alterApproval(str, len).then((response) => {
@@ -363,10 +369,80 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+    getTestTypes(req, res){
+        model.getTestTypes().then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    createExam(req, res){
+        let email = req.body.email;
+        let checkbox = req.body.checkbox;
+        let sequence = req.body.sequence;
+        let deadline = req.body.deadline;
+        sequence = sequence.filter(item => item);
+        model.createExam(checkbox, sequence, email,deadline).then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+            mainController.sendEmail(email);
 
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    addUser(req, res){
+        let email = req.body.email;
+        let name = req.body.name;
+        let password = req.body.password;
+        let telephone = req.body.telephone;
+        console.log("this si stwh");
+        if(telephone.length == 0){
+            console.log("hi");
+            telephone = "-";
+        }
+        model.addUser(email, name, password, telephone).then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    addCVPath(req, res){
+        let fileName = req.body.filename;
+        let path = 'CV/' + fileName;
+        console.log(path);
+        let email = req.body.email;
+        model.addCVPath(path, email).then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
 
-    sendEmail(req, res){
-
+    sendEmail(destination){
         let transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,
@@ -378,12 +454,13 @@ class Controller {
         });
         let message = {
             from: 'exam.mailer19@gmail.com',
-            to: '', //TODO get user/hr email
+            to: destination, //TODO get user/hr email
             subject: "Examination Link",
             html: "<p>Please follow the link below to take your exam.</p>" +
                 "<p>Clicking the link will not automatically start your exam.</p>" +
-                "Click <a href='http://localhost:3000/'>here</a> to take your exam"
+                "Click <a href='http://localhost:3000/get-exam'>here</a> to take your exam"
         };
+        console.log("mess" + message);
         transporter.sendMail(message, function (err, info) {
             if(err){
                 console.log(err);
@@ -396,7 +473,6 @@ class Controller {
             }
         });
     }
-
     viewCV(req, res){
         let reqURL = req.url;
         let relPath = reqURL.substr(reqURL.lastIndexOf('=') + 1);
@@ -416,6 +492,36 @@ class Controller {
 
         });
     }
+    uploadCV(req,res){
+        try {
+            if(!req.files) {
+                res.send({
+                    status: false,
+                    message: 'No file uploaded'
+                });
+            } else {
+                //Use the name of the input field (i.e. "upload") to retrieve the uploaded file
+                let upload = req.files.upload;
+
+                //Use the mv() method to place the file in upload directory (i.e. "uploads")
+                upload.mv('./CV/' + upload.name);
+
+                //send response
+                res.send({
+                    status: true,
+                    message: 'File is uploaded',
+                    data: {
+                        name: upload.name,
+                        mimetype: upload.mimetype,
+                        size: upload.size
+                    }
+                });
+            }
+        } catch (err) {
+            res.status(500).send(err);
+        }
+    }
+
 
 
     getExamPage(req, res) {

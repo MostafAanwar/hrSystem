@@ -73,11 +73,11 @@ class Model {
         return this.queryFunction(sql, "");
     }
     savePosition(PID,username){
-        let sql = "UPDATE canidate SET PID = ? WHERE username = ? ";
+        let sql = "UPDATE candidate SET PID = ? WHERE username = ? ";
         return this.queryFunction(sql, [PID,username]);
     }
     viewPositionCand() {
-        let sql = "SELECT PID, name, description, salary  FROM position where available = 1";
+        let sql = "SELECT PID, title, description, salary  FROM position where available = '1'";
         return this.queryFunction(sql, "");
     }
 
@@ -111,8 +111,26 @@ class Model {
         return res;
     }
     getApplicants(){
-        let sql = 'SELECT * FROM candidate WHERE approved = "1"';
+        let sql = "SELECT email, username, telephone, cv, position.title FROM candidate INNER JOIN position ON candidate.PID = position.PID WHERE approved = '1'";
+            // 'SELECT * FROM candidate WHERE approved = "1"';
         return this.queryFunction(sql, "");
+    }
+
+    addUser(email, name, password, telephone){
+        let sql = "INSERT INTO candidate VALUES ('" + email + "', '" + name + "', '" + telephone + "', '" + "" + "', '" + "" +  "', '" + password + "', '" + "" + "', '"  + "" + "')";
+        return this.queryFunction(sql, "");
+    }
+    getTestTypes(){
+        let sql = "SELECT * FROM test";
+        return this.queryFunction(sql, "");
+    }
+    isSignedUp(email){
+        let sql = "SELECT * FROM candidate WHERE email = ?";
+        return this.queryFunction(sql, [email]);
+    }
+    addCVPath(path, email){
+        let sql = 'UPDATE candidate SET cv = ? WHERE email = ?';
+        return this.queryFunction(sql, [path, email]);
     }
 
 
@@ -146,6 +164,26 @@ class Model {
     saveTestScore(C_email,TID,test_score){
         let sql = 'UPDATE candidate_exam SET test_score = ? WHERE (TID = ? AND C_email = ?)';
         return this.queryFunction(sql, [test_score, TID, C_email]);
+    }
+    createExam(checkbox, sequence, email,deadline){
+        let res ;
+        let len = checkbox.length;
+        console.log(sequence);
+        let sql;
+        let isEmpty;
+        if(sequence.length === 0){
+            isEmpty = true;
+        }
+        for(let i = 0; i< len; i++ ){
+            if(isEmpty){
+                sql = "INSERT INTO candidate_exam VALUES ('" + email + "', '" + "" + "', '" + deadline + "','" + checkbox[i] + "','" + "')";
+            }
+            else{
+                sql = "INSERT INTO candidate_exam VALUES ('" + email + "', '" + "" + "', '" + deadline + "','" + checkbox[i] + "','" + sequence[i] + "')";
+            }
+            res = this.queryFunction(sql, "");
+        }
+        return res;
     }
 
 }
