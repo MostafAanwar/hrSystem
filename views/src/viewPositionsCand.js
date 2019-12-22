@@ -4,34 +4,34 @@ fetch(url, {
     mode: "cors",
     method: "GET"
 })
-    .then(res =>{
+    .then(res => {
         return res.json()
     })
-    .then(res =>{
-        console.log();
+    .then(res => {
+        console.log(res);
 
         let div1 = document.createElement('div');
-        div1.className="limiter";
+        div1.className = "limiter";
         let div2 = document.createElement('div');
         div2.className = "container-table100";
         let div3 = document.createElement('div');
         div3.className = "wrap-table100";
         let div4 = document.createElement('div');
-        div4.className="table100";
+        div4.className = "table100";
 
 
         let table = document.createElement('table');
         let thead = document.createElement('thead');
         let tr = document.createElement('tr');
-        tr.className=("table100-head");
+        tr.className = ("table100-head");
 
 
         let th1 = document.createElement('th');
-        th1.className= ('column1');
+        th1.className = ('column1');
         let th2 = document.createElement('th');
-        th2.className= ('column2');
+        th2.className = ('column2');
         let th3 = document.createElement('th');
-        th3.className= ('column3');
+        th3.className = ('column3');
 
         // let text1 = document.createTextNode('Position ID');
         let text1 = document.createTextNode('Name');
@@ -49,21 +49,21 @@ fetch(url, {
         thead.appendChild(tr);
         table.appendChild(thead);
         let tbody = document.createElement('tbody');
-        for (let i = 0 ; i < res.data.length; i++) {
+        for (let i = 0; i < res.data.length; i++) {
             console.log(res.data.length);
             let tr = document.createElement('tr');
 
 
             let td2 = document.createElement('td');
             td2.className = ('column2');
-            let text2 = document.createTextNode(res.data[i]['name']);
+            let text2 = document.createTextNode(res.data[i]['Title']);
             let td4 = document.createElement('td');
             td4.className = ('column4');
             let text4 = document.createTextNode(res.data[i]['description']);
             let td5 = document.createElement('td');
             td5.className = ('column5');
             let text5 = document.createTextNode(res.data[i]['salary']);
-             let applyButton = document.createElement('button');
+            let applyButton = document.createElement('button');
             let applyText = document.createTextNode('Apply');
             applyButton.className = ('apply');
             applyButton.id = res.data[i]['PID'];
@@ -89,31 +89,29 @@ fetch(url, {
         //div4.appendChild(table);
         document.body.appendChild(div1);
 
+        $(document).ready(function () {
+            $('.apply').on('click', function () {
+                let PID = this.id;
+                console.log(PID);
+                $.ajax({
+                    url: "/apply-pos",
+                    type: "post",
+                    data: {
+                        PID: PID
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.data['affectedRows'] === 1) {
+                            console.log("Deletion success!");
+                            location.reload();
+                        }
+                    },
+                    error: function (err) {
+                        alert("Error:" + err.message);
+                    }
 
+                });
+
+            });
+        });
     });
-
-
-
-$(".apply").on("click",function () {
-    let PID = this.id;
-    console.log(id);
-    $.ajax({
-        url: "/apply-pos",
-        type: "post",
-        data:{
-            PID: PID
-        },
-        dataType: 'json',
-        success: function (res) {
-            if(res['affectedRows'] === 1){
-                console.log("Deletion success!");
-                location.reload();
-            }
-        },
-        error: function (err) {
-            alert("Error:" + err.message);
-        }
-
-    })
-
-});
