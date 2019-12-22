@@ -1,9 +1,10 @@
 import model from "../model/model.js";
 const nodemailer = require("nodemailer");
 const Path = require("path");
-var fs = require("fs");
-var http = require('http');
-var mime = require('mime');
+let fs = require("fs");
+let http = require('http');
+let mime = require('mime');
+
 class Controller {
     init(req, res) {
         let path = Path.join(__dirname, "../views/index.html");
@@ -156,9 +157,23 @@ class Controller {
   
   
     getUser(req, res) {
-        let username = req.body.username;
+        let username = req.body.email;
         let password = req.body.password;
         model.getUser(username, password).then((response) => { //response contains returned data
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error: " + err.message);
+        });
+    }
+    isSignedUp(req, res) {
+        let email = req.body.email;
+        model.isSignedUp(email).then((response) => { //response contains returned data
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
@@ -387,6 +402,45 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+    addUser(req, res){
+        let email = req.body.email;
+        let name = req.body.name;
+        let password = req.body.password;
+        let telephone = req.body.telephone;
+        console.log("this si stwh");
+        if(telephone.length == 0){
+            console.log("hi");
+            telephone = "-";
+        }
+        model.addUser(email, name, password, telephone).then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    addCVPath(req, res){
+        let fileName = req.body.filename;
+        let path = 'CV/' + fileName;
+        console.log(path);
+        let email = req.body.email;
+        model.addCVPath(path, email).then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
 
     sendEmail(destination){
         let transporter = nodemailer.createTransport({
@@ -438,6 +492,36 @@ class Controller {
 
         });
     }
+    uploadCV(req,res){
+        try {
+            if(!req.files) {
+                res.send({
+                    status: false,
+                    message: 'No file uploaded'
+                });
+            } else {
+                //Use the name of the input field (i.e. "upload") to retrieve the uploaded file
+                let upload = req.files.upload;
+
+                //Use the mv() method to place the file in upload directory (i.e. "uploads")
+                upload.mv('./CV/' + upload.name);
+
+                //send response
+                res.send({
+                    status: true,
+                    message: 'File is uploaded',
+                    data: {
+                        name: upload.name,
+                        mimetype: upload.mimetype,
+                        size: upload.size
+                    }
+                });
+            }
+        } catch (err) {
+            res.status(500).send(err);
+        }
+    }
+
 
 
     getExamPage(req, res) {

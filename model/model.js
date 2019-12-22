@@ -73,7 +73,7 @@ class Model {
         return this.queryFunction(sql, "");
     }
     savePosition(PID,username){
-        let sql = "UPDATE canidate SET PID = ? WHERE username = ? ";
+        let sql = "UPDATE candidate SET PID = ? WHERE username = ? ";
         return this.queryFunction(sql, [PID,username]);
     }
     viewPositionCand() {
@@ -115,9 +115,21 @@ class Model {
         return this.queryFunction(sql, "");
     }
 
+    addUser(email, name, password, telephone){
+        let sql = "INSERT INTO candidate VALUES ('" + email + "', '" + name + "', '" + telephone + "', '" + "" + "', '" + "" +  "', '" + password + "', '" + "" + "', '"  + "" + "')";
+        return this.queryFunction(sql, "");
+    }
     getTestTypes(){
         let sql = "SELECT * FROM test";
         return this.queryFunction(sql, "");
+    }
+    isSignedUp(email){
+        let sql = "SELECT * FROM candidate WHERE email = ?";
+        return this.queryFunction(sql, [email]);
+    }
+    addCVPath(path, email){
+        let sql = 'UPDATE candidate SET cv = ? WHERE email = ?';
+        return this.queryFunction(sql, [path, email]);
     }
 
 

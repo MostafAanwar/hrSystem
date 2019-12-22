@@ -46,12 +46,15 @@ routes.post("/test-page-f-answers", Controller.getFAnswers);
 routes.post("/save-answer", Controller.saveAnswer);
 routes.post("/save-score", Controller.saveTestScore);
 routes.post("/create-exam", Controller.createExam);
-
+routes.post("/add-user", Controller.addUser);
+routes.post("/user-exist", Controller.isSignedUp);
 
 
 //functions
 routes.get("/send-mail", Controller.sendEmail);
 routes.get("/get-cv", Controller.viewCV);
+routes.post("/upload-cv", Controller.uploadCV);
+routes.post("/add-cv-path", Controller.addCVPath)
 
 
 export default routes;
