@@ -157,9 +157,9 @@ class Controller {
   
   
     getUser(req, res) {
-        let username = req.body.email;
+        let email = req.body.email;
         let password = req.body.password;
-        model.getUser(username, password).then((response) => { //response contains returned data
+        model.getUser(email, password).then((response) => { //response contains returned data
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
@@ -186,9 +186,9 @@ class Controller {
         });
     }
     getHR(req, res) {
-        let username = req.body.username;
+        let email = req.body.email;
         let password = req.body.password;
-        model.getHR(username, password).then((response) => { //response contains returned data
+        model.getHR(email, password).then((response) => { //response contains returned data
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
@@ -302,8 +302,8 @@ class Controller {
     }
     applyPosition(req, res) {
         let PID = req.body.PID;
-        let username = req.body.username;
-        model.savePosition(PID, username).then((response) => {
+        let email = req.body.email;
+        model.savePosition(PID, email).then((response) => {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
