@@ -17,3 +17,9 @@ ALTER TABLE answer MODIFY correct boolean;
 
 
 ALTER TABLE candidate ALTER COLUMN approved SET DEFAULT null ;
+
+
+ALTER TABLE candidate_exam MODIFY deadline date NOT NULL;
+
+
+ALTER TABLE candidate_exam ALTER COLUMN sequence SET DEFAULT null;
