@@ -3,16 +3,20 @@
     <title>Positions</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href= "./stylesheet/view.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
 
 </head>
 <body>
 <p align="right">Welcome, HR</p>
-<a href="/hr-index">
-    <button>Home</button>
-</a>
-<button id="add">Add</button>
-<input type="text" placeholder="Search.." id="search">
+<form>
+    <input type="search" id= "search" placeholder="Search a position">
+</form>
+
+<br>
+<button onclick="window.location.href='/hr-index'" class="crudbtn" >Home</button>
+<button id= "add" onclick="window.location.href='/add-position'" class="crudbtn" >Add</button>
+
 <script src="src/positionsScript.js"></script>
 
 </body>

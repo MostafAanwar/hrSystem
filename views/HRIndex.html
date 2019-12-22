@@ -5,33 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" href= "./stylesheet/hrstyle.css">
     <title>Home Page</title>
 </head>
 <body>
-<a href="/get-positions">
-    <button id="Position" class="float-left submit-button" > View Positions </button>
-</a>
-<br><br>
-
-<a href="/registerees-page">
-    <button id="" class="float-left submit-button" > View Registerees </button>
-</a>
-<br><br>
+    <button onclick="window.location.href='/'" id="logout">logout</button>
+<div class="container">
+    <button onclick="window.location.href='/get-positions'" class="btn submit-button">View Positions</button>
+    <button onclick="window.location.href='/registerees-page'" class="btn submit-button">View Registerees</button>
 <!--TODO APPLICATANTS PAGE-->
-<a href="/applicants-page">
-    <button id="" class="float-left submit-button" > View Applicants </button>
-</a>
-<br><br>
-
+    <button onclick="window.location.href='/applicants-page'" class="btn submit-button">View Applicants</button>
 <!--TODO EXAMINEES PAGE-->
-<a href="/">
-    <button id="" class="float-left submit-button" > View Examinees </button>
-</a>
-<br><br>
+    <button onclick="window.location.href='/'" class="btn submit-button">View Examinees</button>
 <!--TODO TESTS PAGE-->
-<a href="/tests">
-    <button id="" class="float-left submit-button"> View Tests </button>
-</a>
+    <button onclick="window.location.href='/tests'" class="btn submit-button">View Tests</button>
+</div>
 <script src="src/hr-home.js"></script>
 </body>
 </html>
