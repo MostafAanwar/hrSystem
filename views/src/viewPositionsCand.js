@@ -34,7 +34,7 @@ fetch(url, {
         th3.className = ('column3');
 
         // let text1 = document.createTextNode('Position ID');
-        let text1 = document.createTextNode('Name');
+        let text1 = document.createTextNode('Title');
         // let text3 = document.createTextNode('Availability');
         let text2 = document.createTextNode('Description');
         let text3 = document.createTextNode('Salary');
@@ -53,10 +53,9 @@ fetch(url, {
             console.log(res.data.length);
             let tr = document.createElement('tr');
 
-
             let td2 = document.createElement('td');
             td2.className = ('column2');
-            let text2 = document.createTextNode(res.data[i]['Title']);
+            let text2 = document.createTextNode(res.data[i]['title']);
             let td4 = document.createElement('td');
             td4.className = ('column4');
             let text4 = document.createTextNode(res.data[i]['description']);
@@ -67,6 +66,7 @@ fetch(url, {
             let applyText = document.createTextNode('Apply');
             applyButton.className = ('apply');
             applyButton.id = res.data[i]['PID'];
+
             td2.appendChild(text2);
             td4.appendChild(text4);
             td5.appendChild(text5);
