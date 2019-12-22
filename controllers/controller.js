@@ -158,9 +158,6 @@ class Controller {
         });
     }
 
-  
-  
-  
     getUser(req, res) {
         let username = req.body.username;
         req.session.username = req.body.username;
