@@ -111,7 +111,8 @@ class Model {
         return res;
     }
     getApplicants(){
-        let sql = 'SELECT * FROM candidate WHERE approved = "1"';
+        let sql = "SELECT email, username, telephone, cv, position.title FROM candidate INNER JOIN position ON candidate.PID = position.PID WHERE approved = '1'";
+            // 'SELECT * FROM candidate WHERE approved = "1"';
         return this.queryFunction(sql, "");
     }
 
