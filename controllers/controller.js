@@ -160,13 +160,13 @@ class Controller {
 
     getUser(req, res) {
         let username = req.body.username;
-        req.session.username = req.body.username;
+        req.session.email = req.body.username;
         let password = req.body.password;
         model.getUser(username, password).then((response) => { //response contains returned data
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
-            req.session.email = jsonResult['email'];
+            req.session.username = jsonResult[0]['username'];
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
@@ -177,13 +177,13 @@ class Controller {
     }
     getHR(req, res) {
         let username = req.body.username;
-        req.session.name = req.body.username;
+        req.session.email = req.body.username;
         let password = req.body.password;
         model.getHR(username, password).then((response) => { //response contains returned data
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
-            req.session.email = req.body.email;
+            req.session.name = jsonResult[0]['name'];
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
