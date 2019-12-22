@@ -8,9 +8,9 @@ $(".txtb input").on("focus", function () {
 });
 //Makes sure that there are no empty fields
 function checkEmptyFields() {
-    let username = document.forms["my-form"]["username"].value;
+    let email = document.forms["my-form"]["email"].value;
     let password = document.forms["my-form"]["password"].value;
-    if (username === "" || password === "") {
+    if (email === "" || password === "") {
         $('#validationtext').append("<p align='center'>Cannot have empty fields!</p>");
         return false;
     }
@@ -49,7 +49,7 @@ function ajaxValidation(sentURL){
                         window.location.replace('/hr-index');
                     }
                     if(sentURL === '/'){
-                        window.location.replace('/user-home')
+                        window.location.replace('/home-page')
                     }
                 }
                 else {
