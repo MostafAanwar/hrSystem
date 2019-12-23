@@ -20,6 +20,7 @@ routes.get("/get-exam", Controller.getExamPage);
 routes.get("/view-test", Controller.viewTestPage);
 routes.get("/success", Controller.viewEndPage);
 routes.get("/tests", Controller.viewAllTestsPage);
+routes.get("/test-details", Controller.viewDetailsPage);
 
 //Data
 routes.post("/session", Controller.getSession);
@@ -41,8 +42,9 @@ routes.get("/get-app", Controller.getApplicants);
 routes.get("/view-examinees", Controller.getExaminees);
 routes.post("/exam", Controller.viewTests);
 routes.get("/all-tests", Controller.getAllTests);
-routes.get("/test-details", Controller.getDetailedTests);
-routes.get("/delete-test", Controller.deleteTest);
+routes.post("/delete-test", Controller.deleteTest);
+routes.post("/get-all-questions", Controller.getAllQuestions);
+routes.post("/get-all-answers", Controller.getAllAnswers);
 routes.post("/test-type", Controller.getTestType);
 routes.post("/test-page" ,Controller.getQuestions);
 routes.post("/test-page-c-answer", Controller.getCAnswer);

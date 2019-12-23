@@ -63,8 +63,8 @@ fetch(url, {
             deleteButton.id = res.data[i]['TID'];
             let detailsButton = document.createElement('button');
             let detailsText = document.createTextNode('Details');
-            deleteButton.className = ('details');
-            deleteButton.id = res.data[i]['TID'];
+            detailsButton.className = ('details');
+            detailsButton.id = res.data[i]['TID'];
 
             td1.appendChild(text1);
             td2.appendChild(text2);

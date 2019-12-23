@@ -96,6 +96,19 @@ class Controller {
             res.end();
         });
     }
+    viewDetailsPage(req,res){
+        let path = Path.join(__dirname, "../views/test-details.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+
+
     addPositionPage(req, res) {
         let path = Path.join(__dirname, "../views/add-position.html");
         fs.readFile(path, function (err, html) {
@@ -242,6 +255,34 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+    getAllQuestions(req, res) {
+        let TID = req.body.TID;
+        model.getAllQuestions(TID).then((response) => { //response contains returned data
+            res.contentType('json');
+            console.log(response.result);
+            res.send(response.result);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    getAllAnswers(req, res) {
+        let QID = req.body.QID;
+        model.getAllAnswers(QID).then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
     
     viewPositions(req, res) {
         model.viewPositions().then((response) => {
@@ -545,6 +586,7 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+
     getQuestions(req, res){
         let test_id = req.body.TID;
         console.log(test_id);

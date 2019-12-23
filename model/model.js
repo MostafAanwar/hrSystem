@@ -88,7 +88,6 @@ class Model {
         let sql = 'UPDATE position SET title = ?, description = ?, available = ?, salary = ? WHERE PID = ?';
         return this.queryFunction(sql, [title , description, available, salary, PID]);
     }
-
     getRegisterees(){
         let sql = "SELECT * FROM candidate where approved is null";
         return this.queryFunction(sql, "");
@@ -155,11 +154,7 @@ class Model {
         return this.queryFunction(sql, "");
     }
     deleteTest(TID){
-        let sql = "DELETE FROM test,answer,question\n" +
-            "USING test JOIN answer JOIN question\n" +
-            "WHERE test.TID = question.TID\n" +
-            "  AND question.QID = answer.QID\n" +
-            "  AND test.TID = ?";
+        let sql = "DELETE FROM test,answer,question USING test JOIN answer JOIN question WHERE test.TID = question.TID AND question.QID = answer.QID AND test.TID = ?";
         return this.queryFunction(sql, [TID]);
     }
     getTestType(TID){
