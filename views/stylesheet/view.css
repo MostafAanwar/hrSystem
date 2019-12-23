@@ -73,10 +73,28 @@ button{
     background-color: #3498db;
     border-color: white;
 }
-table{
-    border-collapse: collapse;
-}
 
 tr{
-    border: solid 2px green;
+    border: solid 2px white;
+}
+input[type=button]{
+    color: white;
+    background-color: #3498db;
+    border-color: white;
+}
+
+table{
+    border: none; border-collapse: collapse;
+}
+
+table th{
+    border-left: 1px solid #fff;
+}
+
+table td{
+    border-left: 1px solid #fff;
+}
+
+table td:first-child{
+    border-left: none;
 }

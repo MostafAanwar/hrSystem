@@ -17,6 +17,7 @@ body{
     background-image: linear-gradient(to left, rgb(101, 2, 67), rgb(29, 5, 122), rgb(101, 2, 67));
 }
 
+
 .btn:hover{
     background-position: right;
 }
@@ -30,8 +31,8 @@ body{
     text-align: center;
 }
 #logout{
-    color: white;
     border-color: white;
-    background-color: #181A1B;
     float: left;
+    color: white;
+    background-color: #3498db;
 }
