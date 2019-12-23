@@ -7,10 +7,10 @@ let mime = require('mime');
 
 class Controller {
     init(req, res) {
-        if(req.session.username){
+        if (req.session.username) {
             res.redirect('/home-page');
         }
-        if(req.session.name){
+        if (req.session.name) {
             res.redirect('/hr-index');
         }
         let path = Path.join(__dirname, "../views/index.html");
@@ -23,7 +23,8 @@ class Controller {
             res.end();
         });
     }
-    getSession(req,res){
+
+    getSession(req, res) {
         res.contentType('json');
         let stringResult = JSON.stringify(req.session);
         let jsonResult = JSON.parse(stringResult);
@@ -75,18 +76,8 @@ class Controller {
             res.end();
         });
     }
-    GetPositionPage(req, res){
-        let path = Path.join(__dirname, "../views/positions.html");
-        fs.readFile(path, function (err, html) {
-            if (err) {
-                throw err;
-            }
-            res.writeHeader(200, {"Content-Type": "text/html"});
-            res.write(html);
-            res.end();
-        });
-    }
-    viewAllTestsPage(req,res){
+
+    viewAllTestsPage(req, res) {
         let path = Path.join(__dirname, "../views/all-tests.html");
         fs.readFile(path, function (err, html) {
             if (err) {
@@ -108,8 +99,32 @@ class Controller {
             res.end();
         });
     }
+
+    addTestPage(req, res) {
+        let path = Path.join(__dirname, "../views/add-test-page.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
     editPositionPage(req, res) {
         let path = Path.join(__dirname, "../views/edit-position.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+
+    editTestPage(req, res) {
+        let path = Path.join(__dirname, "../views/edit-test-page.html");
         fs.readFile(path, function (err, html) {
             if (err) {
                 throw err;
@@ -152,7 +167,8 @@ class Controller {
             res.end();
         });
     }
-    getReportPage(req,res){
+
+    getReportPage(req, res) {
         let path = Path.join(__dirname, "../views/report.html");
         fs.readFile(path, function (err, html) {
             if (err) {
@@ -185,6 +201,7 @@ class Controller {
             res.end();
         });
     }
+
     getExamineesPage(req, res) {
         let path = Path.join(__dirname, "../views/examinees-page.html");
         fs.readFile(path, function (err, html) {
@@ -260,7 +277,7 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    
+
     viewPositions(req, res) {
         model.viewPositions().then((response) => {
             res.contentType('json');
@@ -318,7 +335,26 @@ class Controller {
         }
         model.editPosition(PID, title, available, description, salary).then((response) => {
             res.contentType('json');
-            console.log(response.result);
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
+    editTestType(req, res) {
+        let TID = req.body.TID;
+        let type = req.body.type;
+        console.log(TID);
+        console.log(type);
+
+        model.editTestType(TID, type).then((response) => {
+            res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
             res.send(jsonResult);
@@ -348,6 +384,22 @@ class Controller {
             return response.connection; //returned on next then
         }).then((con) => {
             model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
+    addTest(req, res) {
+        let type = req.body.type;
+        console.log(type);
+        model.addTest(type).then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -425,7 +477,8 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    getExaminees(req, res){
+
+    getExaminees(req, res) {
         model.getExaminees().then((response) => {
             res.contentType('json');
             res.send({
@@ -433,14 +486,14 @@ class Controller {
             });
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
     }
-    getDetailedTests(req,res){
+
+    getDetailedTests(req, res) {
         let C_email = req.body.email;
-        console.log("testing");
         model.getDetailedTests(C_email).then((response) => {
             console.log(response.result);
             res.contentType('json');
@@ -633,7 +686,8 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    getAllTests(req,res){
+
+    getAllTests(req, res) {
         model.getAllTests().then((response) => {
             res.contentType('json');
             res.send({
@@ -641,13 +695,13 @@ class Controller {
             });
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
     }
 
-    deleteTest(req,res){
+    deleteTest(req, res) {
         let TID = req.body.TID;
         model.deleteTest(TID).then((response) => {
             res.contentType('json');
@@ -656,7 +710,7 @@ class Controller {
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -702,8 +756,8 @@ class Controller {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
-            console.log("anssss")
-            console.log(jsonResult)
+            console.log("anssss");
+            console.log(jsonResult);
             res.send(jsonResult);
             return response.connection;
         }).then((con) => {
@@ -718,8 +772,8 @@ class Controller {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
-            console.log("anssss")
-            console.log(jsonResult)
+            console.log("anssss");
+            console.log(jsonResult);
             res.send(jsonResult);
             return response.connection;
         }).then((con) => {
@@ -729,7 +783,6 @@ class Controller {
         });
     }
     viewTestPage(req,res) {
-
         let path = Path.join(__dirname, "../views/test.html");
         fs.readFile(path, function (err, html) {
             if (err) {
@@ -770,7 +823,7 @@ class Controller {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
-            model.saveTotalScore(C_email,test_score).then((response1) =>{
+            model.saveTotalScore(C_email, test_score).then((response1) => {
             });
             res.send(jsonResult);
             return response.connection; //returned on next then

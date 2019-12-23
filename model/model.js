@@ -72,6 +72,11 @@ class Model {
         let sql = "INSERT INTO position VALUES (''" + ", '" + title + "', '" + available + "','" + description + "','" + salary + "')";
         return this.queryFunction(sql, "");
     }
+
+    addTest(type) {
+        let sql = "INSERT INTO test VALUES (''" + ", '" + type + "')";
+        return this.queryFunction(sql, "");
+    }
     savePosition(PID,username){
         let sql = "UPDATE candidate SET PID = ? WHERE username = ? ";
         return this.queryFunction(sql, [PID,username]);
@@ -88,6 +93,11 @@ class Model {
     editPosition(PID, title, available, description, salary){
         let sql = 'UPDATE position SET title = ?, description = ?, available = ?, salary = ? WHERE PID = ?';
         return this.queryFunction(sql, [title , description, available, salary, PID]);
+    }
+
+    editTestType(TID, type) {
+        let sql = 'UPDATE test SET type = ? WHERE TID = ?';
+        return this.queryFunction(sql, [type, TID]);
     }
 
     getRegisterees(){
@@ -134,11 +144,12 @@ class Model {
     }
 
 
-    getExaminees(){
-        let sql = 'SELECT email,username,telephone,score,title FROM candidate INNER JOIN position ON candidate.PID = position.PID WHERE email NOT IN ( SELECT C_email FROM candidate_exam WHERE test_score IS NULL)group by email'
-        return this.queryFunction(sql,"");
+    getExaminees() {
+        let sql = 'SELECT email,username,telephone,score,title FROM candidate INNER JOIN position ON candidate.PID = position.PID WHERE email NOT IN ( SELECT C_email FROM candidate_exam WHERE test_score IS NULL)group by email';
+        return this.queryFunction(sql, "");
     }
-    getDetailedTests(C_email){
+
+    getDetailedTests(C_email) {
         let sql = 'SELECT C_email,test.type,test_score,question.text,answer.textA\n' +
             'FROM   test\n' +
             '       INNER JOIN candidate_exam\n' +
@@ -148,13 +159,13 @@ class Model {
             '                    ON candidate_answer.QID = question.QID\n' +
             '       INNER JOIN answer\n' +
             '\n' +
-            'where C_email = ?' +
+            'where C_email = ? ' +
             'and test.TID = question.TID\n' +
             'and answer.QID = question.QID\n' +
             'and answer.AID = candidate_answer.AID\n' +
             'and candidate_answer.email = C_email\n' +
             'group by question.text';
-        return this.queryFunction(sql,[C_email]);
+        return this.queryFunction(sql, [C_email]);
     }
     viewTests(){
         let candidateEmail ="habibaesmail@yahoo.com"; // TODO get Email from LINK of exam
@@ -163,19 +174,20 @@ class Model {
     }
     getQuestions(TID){
         let sql = "SELECT * FROM question where TID = ? ORDER BY RAND() LIMIT 5";
-        let que = this.queryFunction(sql, [TID]);
-        return que;
+        return this.queryFunction(sql, [TID]);
     }
-    getAllQuestions(TID){
+
+    getAllQuestions(TID) {
         let sql = "SELECT * FROM question where TID = ?";
-        let que = this.queryFunction(sql, [TID]);
-        return que;
+        return this.queryFunction(sql, [TID]);
     }
-    getAllTests(){
+
+    getAllTests() {
         let sql = "SELECT * FROM test";
         return this.queryFunction(sql, "");
     }
-    deleteTest(TID){
+
+    deleteTest(TID) {
         let sql = "DELETE FROM test,answer,question\n" +
             "USING test JOIN answer JOIN question\n" +
             "WHERE test.TID = question.TID\n" +
@@ -185,8 +197,7 @@ class Model {
     }
     getTestType(TID){
         let sql = "SELECT type FROM test where TID = ?";
-        let type = this.queryFunction(sql, [TID]);
-        return type;
+        return this.queryFunction(sql, [TID]);
     }
     getCAnswer(QID){
         let sql = "SELECT * FROM answer where QID = ? AND correct = 1 ORDER BY RAND() LIMIT 1";
@@ -196,7 +207,8 @@ class Model {
         let sql = "SELECT * FROM answer where QID = ? AND correct = 0 ORDER BY RAND() LIMIT 3";
         return this.queryFunction(sql, [QID]);
     }
-    getAllAnswers(QID){
+
+    getAllAnswers(QID) {
         let sql = "SELECT * FROM answer where QID = ?";
         return this.queryFunction(sql, [QID]);
     }
@@ -227,10 +239,6 @@ class Model {
             res = this.queryFunction(sql, "");
         }
         return res;
-    }
-    saveTotalScore(C_email,test_score){
-        let sql = 'UPDATE candidate SET score = score + ? WHERE email = ?';
-        return this.queryFunction(sql,[test_score, C_email]);
     }
 
 }
