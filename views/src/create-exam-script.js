@@ -37,10 +37,13 @@ fetch(url, {
             form.appendChild(sequence);
             form.appendChild(br);
         }
+
+
         let date = document.createElement('input');
         date.setAttribute('type','date');
         date.name = "deadline";
         date.id = 'deadline';
+
 
         let dateLabel = document.createElement('label');
         dateLabel.htmlFor = date;
@@ -59,6 +62,13 @@ fetch(url, {
         document.body.appendChild(saveBtn);
 
         $(document).ready(function () {
+            $('#deadline').on('change', function () {
+                let today = new Date(Date.now()).toLocaleDateString();
+                let datePicked = document.getElementById('deadline').value;
+                if(Date.parse(today) > Date.parse(datePicked)){
+                    alert('Please select a correct date');
+                }
+            });
             $('#save').on('click', function () {
                 let checkboxCounter = 0;
                 let sequenceCounter = 0;
@@ -124,9 +134,7 @@ fetch(url, {
                     },
                     dataType: 'json',
                     success: function (res) {
-                        if (res['affectedRows'] === 1) {
-                            console.log("Deletion success!");
-                            $('#' + PID + '').remove();
+                        if (res.data['affectedRows'] === 1) {
                         }
                     },
                     error: function (err) {
