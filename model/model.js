@@ -53,7 +53,6 @@ class Model {
         let sql = 'SELECT * FROM hr where email = ? AND password = ?';
         return this.queryFunction(sql, [email, password]);
     }
-
     getAllHR() {
         let sql = "SELECT * FROM hr";
         return this.queryFunction(sql, "");
@@ -114,8 +113,28 @@ class Model {
         let sql = 'SELECT * FROM candidate WHERE approved = "1"';
         return this.queryFunction(sql, "");
     }
-
-
+    getExaminees(){
+        let sql = 'SELECT email,username,telephone,score,title FROM candidate INNER JOIN position ON candidate.PID = position.PID WHERE email NOT IN ( SELECT C_email FROM candidate_exam WHERE test_score IS NULL)group by email'
+        return this.queryFunction(sql,"");
+    }
+    getDetailedTests(C_email){
+        let sql = 'SELECT C_email,test.type,test_score,question.text,answer.textA\n' +
+            'FROM   test\n' +
+            '       INNER JOIN candidate_exam\n' +
+            '         ON candidate_exam.TID = test.TID\n' +
+            '       INNER JOIN question\n' +
+            '                  INNER JOIN candidate_answer\n' +
+            '                    ON candidate_answer.QID = question.QID\n' +
+            '       INNER JOIN answer\n' +
+            '\n' +
+            'where C_email = ?' +
+            'and test.TID = question.TID\n' +
+            'and answer.QID = question.QID\n' +
+            'and answer.AID = candidate_answer.AID\n' +
+            'and candidate_answer.email = C_email\n' +
+            'group by question.text';
+        return this.queryFunction(sql,[C_email]);
+    }
     viewTests(){
         let candidateEmail ="habibaesmail@yahoo.com"; // TODO get Email from LINK of exam
         let sql = "SELECT * from candidate_exam where (C_email = ? AND test_score IS NULL)";

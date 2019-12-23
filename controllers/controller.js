@@ -22,7 +22,12 @@ class Controller {
             res.end();
         });
     }
-
+    getSession(req,res){
+        res.contentType('json');
+        let stringResult = JSON.stringify(req.session);
+        let jsonResult = JSON.parse(stringResult);
+        res.send(jsonResult);
+    }
     loginHR(req, res) {
         let path = Path.join(__dirname, "../views/hrlogin.html");
         fs.readFile(path, function (err, html) {
@@ -135,6 +140,17 @@ class Controller {
             res.end();
         });
     }
+    getReportPage(req,res){
+        let path = Path.join(__dirname, "../views/report.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
     GetPosCandPage(req, res) {
         let path = Path.join(__dirname, "../views/PositionsCand.html");
         fs.readFile(path, function (err, html) {
@@ -148,6 +164,17 @@ class Controller {
     }
     GetPositionPage(req, res) {
         let path = Path.join(__dirname, "../views/positions.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+    getExamineesPage(req, res) {
+        let path = Path.join(__dirname, "../views/examinees-page.html");
         fs.readFile(path, function (err, html) {
             if (err) {
                 throw err;
@@ -370,6 +397,36 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+    getExaminees(req, res){
+        model.getExaminees().then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    getDetailedTests(req,res){
+        let C_email = req.body.email;
+        console.log("testing");
+        model.getDetailedTests(C_email).then((response) => {
+            console.log(response.result);
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error: " + err.message);
+        });
+    }
+
 
 
     sendEmail(req, res){

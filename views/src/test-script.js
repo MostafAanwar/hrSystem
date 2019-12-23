@@ -42,7 +42,7 @@ $.ajax({
                             console.log(res2);
                             let ansArrayText = [];
                             let ansArrayID =[];
-                            ansArrayText.push(res2[0]["text"]);
+                            ansArrayText.push(res2[0]["textA"]);
                             ansArrayID.push(res2[0]["AID"]);
                             cAns.push(res2[0]["AID"]);
                             $.ajax({
@@ -55,7 +55,7 @@ $.ajax({
                                 dataType: 'json',
                                 success: function (res3) {
                                     for (let j = 0; j < res3.length; ++j) {
-                                        ansArrayText.push(res3[j]["text"]);
+                                        ansArrayText.push(res3[j]["textA"]);
                                         ansArrayID.push(res3[j]["AID"]);
                                     }
                                     console.log(ansArrayText);
