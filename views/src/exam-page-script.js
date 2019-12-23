@@ -1,3 +1,17 @@
+let sessionUrl = "http://localhost:3000/session";
+
+fetch(sessionUrl, {
+    mode: "cors",
+    method: "POST"
+})
+    .then(res => {
+        return res.json()
+    })
+    .then(res => {
+        let welcomeMessage = "Welcome " + res['name'];
+        document.getElementById("head").innerHTML = welcomeMessage;
+    });
+
 let url = "http://localhost:3000/exam";
 
 fetch(url, {
@@ -12,7 +26,7 @@ fetch(url, {
             window.location.replace('/success');
         }
         if(res.data[0]['sequence'] != null){
-            res.data.sort(function(a,b){
+            res.data.sort(function(a, b){
                 console.log(a.sequence);
                 console.log(b.sequence);
                 console.log(a.sequence > b.sequence);
@@ -22,29 +36,29 @@ fetch(url, {
             console.log(res.data);
         }
         for (let i = 0; i < res.data.length; i++) {
-                $.ajax({
-                    url: "/test-type",
-                    type: "post",
-                    data: {
-                        TID: res.data[i]['TID']
-                    },
-                    async: false,
-                    dataType: 'json',
-                    success: function (res2) {
-                        console.log(res2);
-                        let buttons = document.createElement('button');
-                        let buttonText = document.createTextNode(res2[0]['type']);
-                        buttons.className = ('button');
-                        buttons.id = res.data[i]['TID'];
-                        console.log(res.data[i]['TID']);
-                        buttons.appendChild(buttonText);
-                        document.body.appendChild(buttons);
-                    },
-                    error: function (err) {
-                        alert("Error:" + err.message);
-                    }
-                });
-                if(res.data[i]['sequence'] != null)
+            $.ajax({
+                url: "/test-type",
+                type: "post",
+                data: {
+                    TID: res.data[i]['TID']
+                },
+                async: false,
+                dataType: 'json',
+                success: function (res2) {
+                    console.log(res2);
+                    let buttons = document.createElement('button');
+                    let buttonText = document.createTextNode(res2[0]['type']);
+                    buttons.className = ('button');
+                    buttons.id = res.data[i]['TID'];
+                    console.log(res.data[i]['TID']);
+                    buttons.appendChild(buttonText);
+                    document.body.appendChild(buttons);
+                },
+                error: function (err) {
+                    alert("Error:" + err.message);
+                }
+            });
+            if(res.data[i]['sequence'] != null)
                 break;
         }
         $(".button").on("click", function () {

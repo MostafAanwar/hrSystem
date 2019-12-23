@@ -14,13 +14,16 @@ routes.get("/edit-pos-page", Controller.editPositionPage);
 routes.get("/registerees-page", Controller.getRegistereePage);
 routes.get('/applicants-page', Controller.getApplicantPage);
 routes.get("/create-exam-page", Controller.getCreateExamPage);
-
+routes.get("/examinees-page", Controller.getExamineesPage);
+routes.get("/report-page",Controller.getReportPage);
 routes.get("/get-exam", Controller.getExamPage);
 routes.get("/view-test", Controller.viewTestPage);
 routes.get("/success", Controller.viewEndPage);
+routes.get("/tests", Controller.viewAllTestsPage);
 routes.get("/get-position-cand", Controller.GetPosCandPage);
 
 //Data
+routes.post("/session", Controller.getSession);
 routes.get("/positions",Controller.viewPositions);
 routes.post("/get-hr", Controller.getHR);
 routes.post('/get-user', Controller.getUser);
@@ -32,13 +35,17 @@ routes.get("/position-cand",Controller.viewPositionCand);
 
 routes.post("/get-pos", Controller.getPosition);
 routes.post("/edit-pos", Controller.editPosition);
-
+routes.post("/detailed-tests", Controller.getDetailedTests);
 routes.get("/get-reg", Controller.getRegisterees);
 routes.post("/alter-approval", Controller.alterApproval);
 routes.get("/get-app", Controller.getApplicants);
 routes.get("/get-test-types", Controller.getTestTypes);
 
+routes.get("/view-examinees", Controller.getExaminees);
 routes.post("/exam", Controller.viewTests);
+routes.get("/all-tests", Controller.getAllTests);
+routes.get("/test-details", Controller.getDetailedTests);
+routes.get("/delete-test", Controller.deleteTest);
 routes.post("/test-type", Controller.getTestType);
 routes.post("/test-page" ,Controller.getQuestions);
 routes.post("/test-page-c-answer", Controller.getCAnswer);

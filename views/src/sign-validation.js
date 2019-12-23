@@ -41,10 +41,7 @@ $("#my-form").submit(function (e) {
             data: $('#my-form').serialize(), //form data
             dataType: 'json',
             success: function (res) {///logic for checking
-                console.log("ressponee: ");
-                console.log(res);
                 if (res.length == 0) {
-                    console.log("heyebs");
                     $.ajax({
                             url: "/add-user",
                             type: 'post',
@@ -74,6 +71,7 @@ $("#my-form").submit(function (e) {
                                             dataType: 'json',
                                             success: function () {
                                                 console.log("congrats");
+                                                window.location.replace('/');
                                             },
                                             error: function () {
 

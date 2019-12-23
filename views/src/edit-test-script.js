@@ -12,22 +12,19 @@ fetch(sessionUrl, {
         document.getElementById("head").innerHTML = welcomeMessage;
     });
 
-$(document).ready( function () {
+$(document).ready(function () {
     let pageURL = window.location.href;
-    let PID = pageURL.substr(pageURL.lastIndexOf('=') + 1);
+    let TID = pageURL.substr(pageURL.lastIndexOf('=') + 1);
     $.ajax({
-        url: "/get-pos",
+        url: "/test-type",
         type: "post",
-        data:{
-            PID: PID
+        data: {
+            TID: TID
         },
         dataType: 'json',
         success: function (res) {
             if (res[0] !== "") {
-                $('#title').val(res[0]['title']);
-                $('#description').val(res[0]['description']);
-                $('#salary').val(res[0]['salary']);
-                $('#available').prop("checked", res[0]['available']);
+                $('#type').val(res[0]['type']);
             }
         },
         error: function (err) {
@@ -37,25 +34,22 @@ $(document).ready( function () {
     })
 });
 
-$("#edit-pos-form").submit(function (e) {
+$("#edit-test-form").submit(function (e) {
     let pageURL = window.location.href;
-    let PID = pageURL.substr(pageURL.lastIndexOf('=') + 1);
+    let TID = pageURL.substr(pageURL.lastIndexOf('=') + 1);
     e.preventDefault();
     $.ajax({
-        url: "/edit-pos", //url that will get data from DB
+        url: "/edit-test", //url that will get data from DB
         type: 'post',
         data: {
-            PID: PID,
-            title: $('#title').val(),
-            description:$('#description').val() ,
-            available: $('#available').prop('checked'),
-            salary: $('#salary').val()
+            TID: TID,
+            type: $('#type').val(),
         }, //form data
         dataType: 'json',
         success: function (res) { ///logic for checking
-            if(res['affectedRows'] === 1){
-                console.log("Succesfully edited position " + PID);
-                window.location.replace('/get-positions');
+            if (res['affectedRows'] === 1) {
+                console.log("Succesfully edited test " + TID);
+                window.location.replace('/tests');
             }
         },
         error: function (err) {

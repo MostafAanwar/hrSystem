@@ -1,3 +1,17 @@
+let sessionUrl = "http://localhost:3000/session";
+
+fetch(sessionUrl, {
+    mode: "cors",
+    method: "POST"
+})
+    .then(res => {
+        return res.json()
+    })
+    .then(res => {
+        let welcomeMessage = "Welcome " + res['name'];
+        document.getElementById("head").innerHTML = welcomeMessage;
+    });
+
 let url = "http://localhost:3000/get-app";
 
 fetch(url, {
@@ -43,7 +57,6 @@ fetch(url, {
         let text3 = document.createTextNode('Telephone');
         let text4 = document.createTextNode("Position");
         let text5 = document.createTextNode("CV");
-
 
 
         th1.appendChild(text1);

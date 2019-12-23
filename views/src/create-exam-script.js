@@ -1,3 +1,17 @@
+let sessionUrl = "http://localhost:3000/session";
+
+fetch(sessionUrl, {
+    mode: "cors",
+    method: "POST"
+})
+    .then(res => {
+        return res.json()
+    })
+    .then(res => {
+        let welcomeMessage = "Welcome " + res['name'];
+        document.getElementById("head").innerHTML = welcomeMessage;
+    });
+
 let url = "http://localhost:3000/get-test-types";
 
 fetch(url, {
@@ -40,7 +54,7 @@ fetch(url, {
 
 
         let date = document.createElement('input');
-        date.setAttribute('type','date');
+        date.setAttribute('type', 'date');
         date.name = "deadline";
         date.id = 'deadline';
 
@@ -51,7 +65,6 @@ fetch(url, {
 
         form.appendChild(dateLabel);
         form.appendChild(date);
-
 
 
         document.body.appendChild(div1);
@@ -65,7 +78,7 @@ fetch(url, {
             $('#deadline').on('change', function () {
                 let today = new Date(Date.now()).toLocaleDateString();
                 let datePicked = document.getElementById('deadline').value;
-                if(Date.parse(today) > Date.parse(datePicked)){
+                if (Date.parse(today) > Date.parse(datePicked)) {
                     alert('Please select a correct date');
                 }
             });
