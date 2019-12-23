@@ -145,6 +145,23 @@ class Model {
         let que = this.queryFunction(sql, [TID]);
         return que;
     }
+    getAllQuestions(TID){
+        let sql = "SELECT * FROM question where TID = ?";
+        let que = this.queryFunction(sql, [TID]);
+        return que;
+    }
+    getAllTests(){
+        let sql = "SELECT * FROM test";
+        return this.queryFunction(sql, "");
+    }
+    deleteTest(TID){
+        let sql = "DELETE FROM test,answer,question\n" +
+            "USING test JOIN answer JOIN question\n" +
+            "WHERE test.TID = question.TID\n" +
+            "  AND question.QID = answer.QID\n" +
+            "  AND test.TID = ?";
+        return this.queryFunction(sql, [TID]);
+    }
     getTestType(TID){
         let sql = "SELECT type FROM test where TID = ?";
         let type = this.queryFunction(sql, [TID]);
@@ -156,6 +173,10 @@ class Model {
     }
     getFAnswers(QID){
         let sql = "SELECT * FROM answer where QID = ? AND correct = 0 ORDER BY RAND() LIMIT 3";
+        return this.queryFunction(sql, [QID]);
+    }
+    getAllAnswers(QID){
+        let sql = "SELECT * FROM answer where QID = ?";
         return this.queryFunction(sql, [QID]);
     }
     saveAnswer(AID,QID,email){
@@ -170,6 +191,7 @@ class Model {
         let sql = 'UPDATE candidate SET score = score + ? WHERE email = ?';
         return this.queryFunction(sql,[test_score, C_email]);
     }
+
 }
 
 const mainModel = new Model();
