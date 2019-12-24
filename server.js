@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({ extended: true})); //CHANGED VALUE
 
 app.use(cookieParser());
 app.use(cors());
-//app.use(session({secret:config.sessionSecret,saveUninitialized:true, resave:true}));
+app.use(session({secret: 'sessionID'}));
 // Configure app to user bodyParser & the routes
 
 app.use("/", routes);

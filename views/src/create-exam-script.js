@@ -1,3 +1,17 @@
+let sessionUrl = "http://localhost:3000/session";
+
+fetch(sessionUrl, {
+    mode: "cors",
+    method: "POST"
+})
+    .then(res => {
+        return res.json()
+    })
+    .then(res => {
+        let welcomeMessage = "Welcome " + res['name'];
+        document.getElementById("head").innerHTML = welcomeMessage;
+    });
+
 let url = "http://localhost:3000/get-test-types";
 
 fetch(url, {
@@ -37,10 +51,13 @@ fetch(url, {
             form.appendChild(sequence);
             form.appendChild(br);
         }
+
+
         let date = document.createElement('input');
-        date.setAttribute('type','date');
+        date.setAttribute('type', 'date');
         date.name = "deadline";
         date.id = 'deadline';
+
 
         let dateLabel = document.createElement('label');
         dateLabel.htmlFor = date;
@@ -48,7 +65,6 @@ fetch(url, {
 
         form.appendChild(dateLabel);
         form.appendChild(date);
-
 
 
         document.body.appendChild(div1);
@@ -59,6 +75,13 @@ fetch(url, {
         document.body.appendChild(saveBtn);
 
         $(document).ready(function () {
+            $('#deadline').on('change', function () {
+                let today = new Date(Date.now()).toLocaleDateString();
+                let datePicked = document.getElementById('deadline').value;
+                if (Date.parse(today) > Date.parse(datePicked)) {
+                    alert('Please select a correct date');
+                }
+            });
             $('#save').on('click', function () {
                 let checkboxCounter = 0;
                 let sequenceCounter = 0;
@@ -98,8 +121,7 @@ fetch(url, {
                             dataType: 'json',
                             success: function (res) {
                                 if (res.data['affectedRows'] === 1) {
-                                    window.location.replace('/home-page'); //TODO change home page view to dynamically match user status
-
+                                    window.location.replace('/hr-index'); //TODO change home page view to dynamically match user status
                                 }
                             },
                             error: function (err) {
@@ -124,9 +146,7 @@ fetch(url, {
                     },
                     dataType: 'json',
                     success: function (res) {
-                        if (res['affectedRows'] === 1) {
-                            console.log("Deletion success!");
-                            $('#' + PID + '').remove();
+                        if (res.data['affectedRows'] === 1) {
                         }
                     },
                     error: function (err) {

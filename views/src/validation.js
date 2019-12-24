@@ -22,7 +22,7 @@ $('#my-form').submit(function (e) {
     e.preventDefault();
     let pageURL = window.location.href;
     let url = pageURL.substr(pageURL.lastIndexOf('/'));
-    console.log(url);
+    console.log("my urk: " + url);
     ajaxValidation(url);
 
 });
@@ -34,9 +34,10 @@ function ajaxValidation(sentURL){
     if(sentURL === '/login-hr'){
         url = '/get-hr';
     }
-    else if(sentURL === '/'){
+    else if (sentURL === '/' || sentURL.includes('redirect')) {
         url = '/get-user';
     }
+
     if (initValidation) {
         $.ajax({
             url: url, //url that will get data from DB
@@ -49,7 +50,10 @@ function ajaxValidation(sentURL){
                         window.location.replace('/hr-index');
                     }
                     if(sentURL === '/'){
-                        window.location.replace('/home-page')
+                        window.location.replace('/home-page');
+                    }
+                    else if (sentURL.includes('redirect')) {
+                        window.location.replace('/get-exam');
                     }
                 }
                 else {

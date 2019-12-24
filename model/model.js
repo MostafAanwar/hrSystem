@@ -72,9 +72,15 @@ class Model {
         let sql = "INSERT INTO position VALUES (''" + ", '" + title + "', '" + available + "','" + description + "','" + salary + "')";
         return this.queryFunction(sql, "");
     }
-    savePosition(PID,username){
-        let sql = "UPDATE candidate SET PID = ? WHERE username = ? ";
-        return this.queryFunction(sql, [PID,username]);
+
+    addTest(type) {
+        let sql = "INSERT INTO test VALUES (''" + ", '" + type + "')";
+        return this.queryFunction(sql, "");
+    }
+
+    savePosition(PID, email) {
+        let sql = "UPDATE candidate SET PID = ? WHERE email = ? ";
+        return this.queryFunction(sql, [PID, email]);
     }
     viewPositionCand() {
         let sql = "SELECT PID, title, description, salary  FROM position where available = '1'";
@@ -90,19 +96,25 @@ class Model {
         return this.queryFunction(sql, [title , description, available, salary, PID]);
     }
 
+    editTestType(TID, type) {
+        let sql = 'UPDATE test SET type = ? WHERE TID = ?';
+        return this.queryFunction(sql, [type, TID]);
+    }
+
     getRegisterees(){
         let sql = "SELECT * FROM candidate where approved is null";
         return this.queryFunction(sql, "");
     }
-    alterApproval(str, len){
-        let regex = RegExp('"([\\w@.]*)":"([01])"','g');
-        let array;
-        let email = [];
-        let values = [];
-        while ((array = regex.exec(str)) !== null) {
-            email.push(array[1]);
-            values.push(array[2]);
-        }
+
+    alterApproval(email, values, len) {
+        // let regex = RegExp('"([\\w@.]*)":"([01])"','g');
+        // let array;
+        // let email = [];
+        // let values = [];
+        // while ((array = regex.exec(str)) !== null) {
+        //     email.push(array[1]);
+        //     values.push(array[2]);
+        // }
         let sql = 'UPDATE candidate SET approved = ? WHERE email = ?';
         let res;
         for(let i = 0; i< len; i++ ){
@@ -134,20 +146,61 @@ class Model {
     }
 
 
-    viewTests(){
-        let candidateEmail ="habibaesmail@yahoo.com"; // TODO get Email from LINK of exam
+    getExaminees() {
+        let sql = 'SELECT email,username,telephone,score,title FROM candidate INNER JOIN position ON candidate.PID = position.PID WHERE email NOT IN ( SELECT C_email FROM candidate_exam WHERE test_score IS NULL)group by email';
+        return this.queryFunction(sql, "");
+    }
+
+    getDetailedTests(C_email) {
+        let sql = 'SELECT C_email,test.type,test_score,question.text,answer.textA\n' +
+            'FROM   test\n' +
+            '       INNER JOIN candidate_exam\n' +
+            '         ON candidate_exam.TID = test.TID\n' +
+            '       INNER JOIN question\n' +
+            '                  INNER JOIN candidate_answer\n' +
+            '                    ON candidate_answer.QID = question.QID\n' +
+            '       INNER JOIN answer\n' +
+            '\n' +
+            'where C_email = ? ' +
+            'and test.TID = question.TID\n' +
+            'and answer.QID = question.QID\n' +
+            'and answer.AID = candidate_answer.AID\n' +
+            'and candidate_answer.email = C_email\n' +
+            'group by question.text';
+        return this.queryFunction(sql, [C_email]);
+    }
+
+    viewTests(candidateEmail) {
+        // let candidateEmail ="habibaesmail@yahoo.com"; // TODO get Email from LINK of exam
         let sql = "SELECT * from candidate_exam where (C_email = ? AND test_score IS NULL)";
         return this.queryFunction(sql, [candidateEmail]);
     }
     getQuestions(TID){
         let sql = "SELECT * FROM question where TID = ? ORDER BY RAND() LIMIT 5";
-        let que = this.queryFunction(sql, [TID]);
-        return que;
+        return this.queryFunction(sql, [TID]);
+    }
+
+    getAllQuestions(TID) {
+        let sql = "SELECT * FROM question where TID = ?";
+        return this.queryFunction(sql, [TID]);
+    }
+
+    getAllTests() {
+        let sql = "SELECT * FROM test";
+        return this.queryFunction(sql, "");
+    }
+
+    deleteTest(TID) {
+        let sql = "DELETE FROM test,answer,question\n" +
+            "USING test JOIN answer JOIN question\n" +
+            "WHERE test.TID = question.TID\n" +
+            "  AND question.QID = answer.QID\n" +
+            "  AND test.TID = ?";
+        return this.queryFunction(sql, [TID]);
     }
     getTestType(TID){
         let sql = "SELECT type FROM test where TID = ?";
-        let type = this.queryFunction(sql, [TID]);
-        return type;
+        return this.queryFunction(sql, [TID]);
     }
     getCAnswer(QID){
         let sql = "SELECT * FROM answer where QID = ? AND correct = 1 ORDER BY RAND() LIMIT 1";
@@ -155,6 +208,11 @@ class Model {
     }
     getFAnswers(QID){
         let sql = "SELECT * FROM answer where QID = ? AND correct = 0 ORDER BY RAND() LIMIT 3";
+        return this.queryFunction(sql, [QID]);
+    }
+
+    getAllAnswers(QID) {
+        let sql = "SELECT * FROM answer where QID = ?";
         return this.queryFunction(sql, [QID]);
     }
     saveAnswer(AID,QID,email){
@@ -165,7 +223,8 @@ class Model {
         let sql = 'UPDATE candidate_exam SET test_score = ? WHERE (TID = ? AND C_email = ?)';
         return this.queryFunction(sql, [test_score, TID, C_email]);
     }
-    createExam(checkbox, sequence, email,deadline){
+
+    createExam(checkbox, sequence, email, deadline, HRMail) {
         let res ;
         let len = checkbox.length;
         console.log(sequence);
@@ -176,10 +235,10 @@ class Model {
         }
         for(let i = 0; i< len; i++ ){
             if(isEmpty){
-                sql = "INSERT INTO candidate_exam VALUES ('" + email + "', '" + "" + "', '" + deadline + "','" + checkbox[i] + "','" + "')";
+                sql = "INSERT INTO candidate_exam VALUES ('" + email + "', '" + "" + "', '" + deadline + "','" + checkbox[i] + "','" + HRMail + "','" + "')";
             }
             else{
-                sql = "INSERT INTO candidate_exam VALUES ('" + email + "', '" + "" + "', '" + deadline + "','" + checkbox[i] + "','" + sequence[i] + "')";
+                sql = "INSERT INTO candidate_exam VALUES ('" + email + "', '" + "" + "', '" + deadline + "','" + checkbox[i] + "','" + sequence[i] + HRMail + "','" + "')";
             }
             res = this.queryFunction(sql, "");
         }
