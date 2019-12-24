@@ -260,6 +260,7 @@ class Controller {
             return console.error("Error: " + err.message);
         });
     }
+
     getHR(req, res) {
         let email = req.body.email;
         req.session.email = req.body.username;
@@ -585,6 +586,22 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+
+    isApplied(req, res) {
+        let email = req.session.email;
+        model.isApplied(email).then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
     createExam(req, res){
         let email = req.body.email;
         let checkbox = req.body.checkbox;

@@ -65,7 +65,7 @@ routes.post("/create-exam", Controller.createExam);
 routes.post("/add-user", Controller.addUser);
 routes.post("/user-exist", Controller.isSignedUp);
 routes.post("/add-test", Controller.addTest);
-
+routes.post('/is-applied', Controller.isApplied);
 
 //functions
 routes.get("/send-mail", Controller.sendEmail);

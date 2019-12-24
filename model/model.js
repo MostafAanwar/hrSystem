@@ -222,6 +222,11 @@ class Model {
         let sql = 'UPDATE candidate_exam SET test_score = ? WHERE (TID = ? AND C_email = ?)';
         return this.queryFunction(sql, [test_score, TID, C_email]);
     }
+
+    isApplied(email) {
+        let sql = 'SELECT PID FROM candidate WHERE email = ?';
+        return this.queryFunction(sql, [email]);
+    }
     saveTotalScore(C_email,test_score){
         let sql = 'UPDATE candidate SET score = score + ? WHERE email = ?';
         return this.queryFunction(sql,[test_score, C_email]);
