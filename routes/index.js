@@ -45,6 +45,7 @@ routes.get("/all-tests", Controller.getAllTests);
 routes.post("/delete-test", Controller.deleteTest);
 routes.post("/get-all-questions", Controller.getAllQuestions);
 routes.post("/get-all-answers", Controller.getAllAnswers);
+routes.post("/add-question-page", Controller.addQuestionPage);
 routes.post("/test-type", Controller.getTestType);
 routes.post("/test-page" ,Controller.getQuestions);
 routes.post("/test-page-c-answer", Controller.getCAnswer);

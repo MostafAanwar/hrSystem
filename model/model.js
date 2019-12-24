@@ -134,8 +134,7 @@ class Model {
             'group by question.text';
         return this.queryFunction(sql,[C_email]);
     }
-    viewTests(){
-        let candidateEmail ="habibaesmail@yahoo.com"; // TODO get Email from LINK of exam
+    viewTests(candidateEmail){
         let sql = "SELECT * from candidate_exam where (C_email = ? AND test_score IS NULL)";
         return this.queryFunction(sql, [candidateEmail]);
     }

@@ -546,7 +546,7 @@ class Controller {
         });
     }
     viewTests(req,res){
-        model.viewTests().then((response) => {
+        model.viewTests(req.session.email).then((response) => {
             res.contentType('json');
             res.send({
                 data: response.result
@@ -584,6 +584,17 @@ class Controller {
             model.disconnect(con); //TODO
         }).catch((err) => {
             return console.error("Error! " + err.message);
+        });
+    }
+    addQuestionPage(req,res){
+        let path = Path.join(__dirname, "../views/question-add-page.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
         });
     }
 

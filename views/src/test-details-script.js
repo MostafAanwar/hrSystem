@@ -122,12 +122,12 @@ $.ajax({
             });
 
             $('#addQ').on('click', function () {
-                window.location.replace('/add-pos-page');
+                window.location.replace('/add-question-page');
             });
 
             $('.editQ').on('click', function () {
                 let PID = this.id;
-                window.location.replace('/edit-question-page?id=' + PID);
+                window.location.replace('/edit-question-page?id=' + QID);
             });
             $(".deleteA").on("click", function () {
                 let QID = this.id;
