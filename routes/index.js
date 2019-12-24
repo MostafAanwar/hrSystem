@@ -3,7 +3,7 @@ import Controller from "../controllers/controller";
 const routes = Router();
 
 //Page links
-routes.get("/", Controller.init);
+routes.post("/", Controller.init);
 routes.get("/login-hr", Controller.loginHR);
 routes.get("/sign-up", Controller.signUp);
 routes.get("/home-page",Controller.userHomePage);

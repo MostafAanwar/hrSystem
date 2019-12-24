@@ -18,9 +18,9 @@ class Controller {
             if (err) {
                 throw err;
             }
-            res.writeHeader(200, {"Content-Type": "text/html"});
-            res.write(html);
-            res.end();
+            // res.writeHeader(200, {"Content-Type": "text/html"});
+            // res.write(html);
+            // res.end();
         });
     }
 
@@ -28,6 +28,7 @@ class Controller {
         res.contentType('json');
         let stringResult = JSON.stringify(req.session);
         let jsonResult = JSON.parse(stringResult);
+        console.log("json res: " + jsonResult);
         res.send(jsonResult);
     }
     loginHR(req, res) {
@@ -219,12 +220,13 @@ class Controller {
   
     getUser(req, res) {
         let email = req.body.email;
-        req.session.email = req.body.username;
+        req.session.email = email;
         let password = req.body.password;
         model.getUser(email, password).then((response) => { //response contains returned data
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
+            req.session.username = jsonResult[0]['username'];
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
@@ -315,7 +317,7 @@ class Controller {
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -383,7 +385,7 @@ class Controller {
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -416,7 +418,7 @@ class Controller {
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -444,7 +446,7 @@ class Controller {
             });
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -459,7 +461,7 @@ class Controller {
             });
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -472,7 +474,7 @@ class Controller {
             });
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -516,7 +518,7 @@ class Controller {
             });
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -526,8 +528,9 @@ class Controller {
         let checkbox = req.body.checkbox;
         let sequence = req.body.sequence;
         let deadline = req.body.deadline;
+        let HRMail = req.session.email;
         sequence = sequence.filter(item => item);
-        model.createExam(checkbox, sequence, email,deadline).then((response) => {
+        model.createExam(checkbox, sequence, email, deadline, HRMail).then((response) => {
             res.contentType('json');
             res.send({
                 data: response.result
@@ -535,7 +538,10 @@ class Controller {
             return response.connection; //returned on next then
         }).then((con) => {
             model.disconnect(con);
-            mainController.sendEmail(email);
+            let msg = "<p>Please follow the link below to take your exam.</p>" +
+                "<p>Clicking the link will not automatically start your exam.</p>" +
+                "Click <a href='http://localhost:3000/get-exam'>here</a> to take your exam";
+            mainController.sendEmail(email, msg);
 
         }).catch((err) => {
             return console.error("Error! " + err.message);
@@ -579,7 +585,7 @@ class Controller {
         });
     }
 
-    sendEmail(destination){
+    sendEmail(destination, msg) {
         let transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,
@@ -593,9 +599,10 @@ class Controller {
             from: 'exam.mailer19@gmail.com',
             to: destination, //TODO get user/hr email
             subject: "Examination Link",
-            html: "<p>Please follow the link below to take your exam.</p>" +
-                "<p>Clicking the link will not automatically start your exam.</p>" +
-                "Click <a href='http://localhost:3000/get-exam'>here</a> to take your exam"
+            html: msg,
+            // html: "<p>Please follow the link below to take your exam.</p>" +
+            //     "<p>Clicking the link will not automatically start your exam.</p>" +
+            //     "Click <a href='http://localhost:3000/get-exam'>here</a> to take your exam"
         };
         console.log("mess" + message);
         transporter.sendMail(message, function (err, info) {
@@ -674,14 +681,15 @@ class Controller {
         });
     }
     viewTests(req,res){
-        model.viewTests().then((response) => {
+        let email = req.session.email;
+        model.viewTests(email).then((response) => {
             res.contentType('json');
             res.send({
                 data: response.result
             });
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });

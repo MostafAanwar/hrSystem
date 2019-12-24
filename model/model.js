@@ -167,8 +167,9 @@ class Model {
             'group by question.text';
         return this.queryFunction(sql, [C_email]);
     }
-    viewTests(){
-        let candidateEmail ="habibaesmail@yahoo.com"; // TODO get Email from LINK of exam
+
+    viewTests(candidateEmail) {
+        // let candidateEmail ="habibaesmail@yahoo.com"; // TODO get Email from LINK of exam
         let sql = "SELECT * from candidate_exam where (C_email = ? AND test_score IS NULL)";
         return this.queryFunction(sql, [candidateEmail]);
     }
@@ -220,7 +221,8 @@ class Model {
         let sql = 'UPDATE candidate_exam SET test_score = ? WHERE (TID = ? AND C_email = ?)';
         return this.queryFunction(sql, [test_score, TID, C_email]);
     }
-    createExam(checkbox, sequence, email,deadline){
+
+    createExam(checkbox, sequence, email, deadline, HRMail) {
         let res ;
         let len = checkbox.length;
         console.log(sequence);
@@ -231,10 +233,10 @@ class Model {
         }
         for(let i = 0; i< len; i++ ){
             if(isEmpty){
-                sql = "INSERT INTO candidate_exam VALUES ('" + email + "', '" + "" + "', '" + deadline + "','" + checkbox[i] + "','" + "')";
+                sql = "INSERT INTO candidate_exam VALUES ('" + email + "', '" + "" + "', '" + deadline + "','" + checkbox[i] + "','" + HRMail + "','" + "')";
             }
             else{
-                sql = "INSERT INTO candidate_exam VALUES ('" + email + "', '" + "" + "', '" + deadline + "','" + checkbox[i] + "','" + sequence[i] + "')";
+                sql = "INSERT INTO candidate_exam VALUES ('" + email + "', '" + "" + "', '" + deadline + "','" + checkbox[i] + "','" + sequence[i] + HRMail + "','" + "')";
             }
             res = this.queryFunction(sql, "");
         }

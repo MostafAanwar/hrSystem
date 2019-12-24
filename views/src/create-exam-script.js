@@ -121,8 +121,7 @@ fetch(url, {
                             dataType: 'json',
                             success: function (res) {
                                 if (res.data['affectedRows'] === 1) {
-                                    window.location.replace('/home-page'); //TODO change home page view to dynamically match user status
-
+                                    window.location.replace('/hr-index'); //TODO change home page view to dynamically match user status
                                 }
                             },
                             error: function (err) {

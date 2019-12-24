@@ -5,11 +5,26 @@ fetch(sessionUrl, {
     method: "POST"
 })
     .then(res => {
-        return res.json()
+        console.log("dd");
+        console.log(res);
+        return res.json();
     })
     .then(res => {
-        let welcomeMessage = "Welcome " + res['name'];
-        document.getElementById("head").innerHTML = welcomeMessage;
+        console.log('ddd');
+        console.log(res);
+        console.log(res['username']);
+        if (res['username']) {
+            let welcomeMessage = "Welcome " + res['username'];
+            document.getElementById("head").innerHTML = welcomeMessage;
+        }
+        else {
+            let url_string = window.location.href;
+            let redirectPage = url_string.substr(url_string.lastIndexOf('/') + 1);
+            console.log(url_string);
+            console.log("red " + redirectPage);
+            window.location.replace('/?redirect=' + redirectPage);
+        }
+        // return res
     });
 
 let url = "http://localhost:3000/exam";
@@ -18,15 +33,15 @@ fetch(url, {
     mode: "cors",
     method: "POST"
 })
-    .then(res =>{
+    .then(res => {
         return res.json()
     })
     .then(res => {
-        if(res.data.length == 0){
+        if (res.data.length == 0) {
             window.location.replace('/success');
         }
-        if(res.data[0]['sequence'] != null){
-            res.data.sort(function(a, b){
+        if (res.data[0]['sequence'] != null) {
+            res.data.sort(function (a, b) {
                 console.log(a.sequence);
                 console.log(b.sequence);
                 console.log(a.sequence > b.sequence);
@@ -58,7 +73,7 @@ fetch(url, {
                     alert("Error:" + err.message);
                 }
             });
-            if(res.data[i]['sequence'] != null)
+            if (res.data[i]['sequence'] != null)
                 break;
         }
         $(".button").on("click", function () {
