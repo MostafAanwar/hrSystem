@@ -87,6 +87,7 @@ fetch(url, {
                 let sequenceCounter = 0;
                 let match = [];
                 let previousID;
+                let isArranged = [];
                 $('#exam-form').find('input').each(function () {
                     if ($(this).is(':checkbox')) {
                         if ($(this).prop('checked')) {
@@ -96,6 +97,7 @@ fetch(url, {
                     }
                     if ($(this).attr('type') === 'number') {
                         if ($(this).val()) {
+                            isArranged.push($(this).val());
                             match.push($(this)[0].id === previousID);
                             sequenceCounter++;
                         }
@@ -108,6 +110,9 @@ fetch(url, {
                 }
                 else if (match.includes(false)) {
                     alert('Please match chosen tests and sequence!');
+                }
+                else if ((new Set(isArranged)).size !== isArranged.length) {
+                    alert("Please correct sequence order!");
                 }
                 else if (checkboxCounter > 0) {
                     if (sequenceCounter === checkboxCounter || sequenceCounter === 0) {
