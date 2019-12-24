@@ -77,9 +77,10 @@ class Model {
         let sql = "INSERT INTO test VALUES (''" + ", '" + type + "')";
         return this.queryFunction(sql, "");
     }
-    savePosition(PID,username){
-        let sql = "UPDATE candidate SET PID = ? WHERE username = ? ";
-        return this.queryFunction(sql, [PID,username]);
+
+    savePosition(PID, email) {
+        let sql = "UPDATE candidate SET PID = ? WHERE email = ? ";
+        return this.queryFunction(sql, [PID, email]);
     }
     viewPositionCand() {
         let sql = "SELECT PID, title, description, salary  FROM position where available = '1'";
@@ -104,15 +105,16 @@ class Model {
         let sql = "SELECT * FROM candidate where approved is null";
         return this.queryFunction(sql, "");
     }
-    alterApproval(str, len){
-        let regex = RegExp('"([\\w@.]*)":"([01])"','g');
-        let array;
-        let email = [];
-        let values = [];
-        while ((array = regex.exec(str)) !== null) {
-            email.push(array[1]);
-            values.push(array[2]);
-        }
+
+    alterApproval(email, values, len) {
+        // let regex = RegExp('"([\\w@.]*)":"([01])"','g');
+        // let array;
+        // let email = [];
+        // let values = [];
+        // while ((array = regex.exec(str)) !== null) {
+        //     email.push(array[1]);
+        //     values.push(array[2]);
+        // }
         let sql = 'UPDATE candidate SET approved = ? WHERE email = ?';
         let res;
         for(let i = 0; i< len; i++ ){

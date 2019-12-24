@@ -53,7 +53,6 @@ $("#my-form").submit(function (e) {
                                 let email = document.getElementById('email').value;
                                 formData.append("upload", file);
                                 formData.append('email', email);
-
                                 fetch('/upload-cv', {
                                     method: 'POST',
                                     body: formData
@@ -73,8 +72,8 @@ $("#my-form").submit(function (e) {
                                                 console.log("congrats");
                                                 window.location.replace('/');
                                             },
-                                            error: function () {
-
+                                            error: function (err) {
+                                                console.log("Error!: " + err.message);
                                             }
 
                                         })
@@ -94,6 +93,7 @@ $("#my-form").submit(function (e) {
                 }
             },
             error: function (err) {
+                console.log("faaaaaaaaaaaaaaaaaail");
                 alert("Error:" + err.message);
             }
         });

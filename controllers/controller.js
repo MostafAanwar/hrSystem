@@ -220,13 +220,16 @@ class Controller {
   
     getUser(req, res) {
         let email = req.body.email;
-        req.session.email = email;
         let password = req.body.password;
         model.getUser(email, password).then((response) => { //response contains returned data
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
-            req.session.username = jsonResult[0]['username'];
+            if (jsonResult) {
+
+                req.session.username = jsonResult[0]['username'];
+                req.session.email = email;
+            }
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
@@ -241,7 +244,6 @@ class Controller {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
-            req.session.username = jsonResult[0]['username'];
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
@@ -454,7 +456,31 @@ class Controller {
     alterApproval(req,res){
         let len = Object.keys(req.body).length;
         let str = JSON.stringify(req.body);
-        model.alterApproval(str, len).then((response) => {
+        console.log(str);
+        console.log(len);
+
+        let regex = RegExp('"([\\w@.]*)":"([01])"', 'g');
+        let array;
+        let emails = [];
+        let values = [];
+        let rejectionMsg = '<p>We regret to inform you that your application was not accepted for our company.</p>' +
+            '<p>Better luck next time!</p>';
+        let rejctionSubject = 'Deepest apologies...';
+        let acceptanceMsg = '<h3>Congratulations!</h3><p>Your application has been accepted!</p>' +
+            '<p>Please wait for an email with your examination link!</p>';
+        let acceptanceSubject = 'Congratulations!';
+        while ((array = regex.exec(str)) !== null) {
+            emails.push(array[1]);
+            values.push(array[2]);
+            console.log(emails[emails.length - 1]); //TODO length of array
+            if (values[values.length - 1] == 0) {
+                mainController.sendEmail(emails[emails.length - 1], rejctionSubject, rejectionMsg);
+            }
+            else if (values[values.length - 1] == 1) {
+                mainController.sendEmail(emails[emails.length - 1], acceptanceSubject, acceptanceMsg);
+            }
+        }
+        model.alterApproval(emails, values, len).then((response) => {
             res.contentType('json');
             res.send({
                 data: response.result
@@ -541,7 +567,8 @@ class Controller {
             let msg = "<p>Please follow the link below to take your exam.</p>" +
                 "<p>Clicking the link will not automatically start your exam.</p>" +
                 "Click <a href='http://localhost:3000/get-exam'>here</a> to take your exam";
-            mainController.sendEmail(email, msg);
+            let subject = 'Examination link';
+            mainController.sendEmail(email, subject, msg);
 
         }).catch((err) => {
             return console.error("Error! " + err.message);
@@ -585,7 +612,7 @@ class Controller {
         });
     }
 
-    sendEmail(destination, msg) {
+    sendEmail(destination, subject, msg) {
         let transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,
@@ -598,7 +625,7 @@ class Controller {
         let message = {
             from: 'exam.mailer19@gmail.com',
             to: destination, //TODO get user/hr email
-            subject: "Examination Link",
+            subject: subject,
             html: msg,
             // html: "<p>Please follow the link below to take your exam.</p>" +
             //     "<p>Clicking the link will not automatically start your exam.</p>" +
@@ -681,7 +708,7 @@ class Controller {
         });
     }
     viewTests(req,res){
-        let email = req.session.email;
+        let email = req.body.email;
         model.viewTests(email).then((response) => {
             res.contentType('json');
             res.send({

@@ -4,13 +4,14 @@ fetch(sessionUrl, {
     mode: "cors",
     method: "POST"
 })
-    .then(res => {
-        return res.json()
+    .then(session => {
+        return session.json()
     })
-    .then(res => {
-        let welcomeMessage = "Welcome " + res['name'];
+    .then(session => {
+        console.log(session);
+        console.log(session['username']);
+        let welcomeMessage = "Welcome " + session['username'];
         document.getElementById("head").innerHTML = welcomeMessage;
-    });
 
 let url = "http://localhost:3000/position-cand";
 
@@ -111,13 +112,13 @@ fetch(url, {
                     url: "/apply-pos",
                     type: "post",
                     data: {
-                        PID: PID
+                        PID: PID,
+                        email: session['email']
                     },
                     dataType: 'json',
                     success: function (res) {
-                        if (res.data['affectedRows'] === 1) {
-                            console.log("Deletion success!");
-                            location.reload();
+                        if (res['affectedRows'] === 1) {
+                            $('.apply').attr("disabled", true);
                         }
                     },
                     error: function (err) {
@@ -128,4 +129,5 @@ fetch(url, {
 
             });
         });
+    });
     });

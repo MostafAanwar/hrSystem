@@ -52,7 +52,7 @@ $.ajax({
                         async: false,
                         dataType: 'json',
                         success: function (res2) {
-                            console.log(res2);
+                            console.log("AAAAA" + res2[0]);
                             let ansArrayText = [];
                             let ansArrayID =[];
                             ansArrayText.push(res2[0]["textA"]);
