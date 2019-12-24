@@ -170,8 +170,7 @@ class Model {
         return this.queryFunction(sql, [C_email]);
     }
 
-    viewTests(candidateEmail) {
-        // let candidateEmail ="habibaesmail@yahoo.com"; // TODO get Email from LINK of exam
+    viewTests(candidateEmail){
         let sql = "SELECT * from candidate_exam where (C_email = ? AND test_score IS NULL)";
         return this.queryFunction(sql, [candidateEmail]);
     }
@@ -223,8 +222,11 @@ class Model {
         let sql = 'UPDATE candidate_exam SET test_score = ? WHERE (TID = ? AND C_email = ?)';
         return this.queryFunction(sql, [test_score, TID, C_email]);
     }
-
-    createExam(checkbox, sequence, email, deadline, HRMail) {
+    saveTotalScore(C_email,test_score){
+        let sql = 'UPDATE candidate SET score = score + ? WHERE email = ?';
+        return this.queryFunction(sql,[test_score, C_email]);
+    }
+    createExam(checkbox, sequence, email, deadline, HRMail){
         let res ;
         let len = checkbox.length;
         console.log(sequence);

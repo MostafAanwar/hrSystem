@@ -100,7 +100,6 @@ class Controller {
             res.end();
         });
     }
-
     addTestPage(req, res) {
         let path = Path.join(__dirname, "../views/add-test-page.html");
         fs.readFile(path, function (err, html) {
@@ -112,6 +111,18 @@ class Controller {
             res.end();
         });
     }
+    viewDetailsPage(req,res){
+        let path = Path.join(__dirname, "../views/test-details.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+
     editPositionPage(req, res) {
         let path = Path.join(__dirname, "../views/edit-position.html");
         fs.readFile(path, function (err, html) {
@@ -215,9 +226,6 @@ class Controller {
         });
     }
 
-  
-  
-  
     getUser(req, res) {
         let email = req.body.email;
         let password = req.body.password;
@@ -281,6 +289,34 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+    getAllQuestions(req, res) {
+        let TID = req.body.TID;
+        model.getAllQuestions(TID).then((response) => { //response contains returned data
+            res.contentType('json');
+            console.log(response.result);
+            res.send(response.result);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    getAllAnswers(req, res) {
+        let QID = req.body.QID;
+        model.getAllAnswers(QID).then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
 
     viewPositions(req, res) {
         model.viewPositions().then((response) => {
@@ -520,7 +556,7 @@ class Controller {
         });
     }
 
-    getDetailedTests(req, res) {
+    getDetailedTests(req,res){
         let C_email = req.body.email;
         model.getDetailedTests(C_email).then((response) => {
             console.log(response.result);
@@ -708,8 +744,7 @@ class Controller {
         });
     }
     viewTests(req,res){
-        let email = req.body.email;
-        model.viewTests(email).then((response) => {
+        model.viewTests(req.session.email).then((response) => {
             res.contentType('json');
             res.send({
                 data: response.result
@@ -750,6 +785,18 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+    addQuestionPage(req,res){
+        let path = Path.join(__dirname, "../views/question-add-page.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+
     getQuestions(req, res){
         let test_id = req.body.TID;
         console.log(test_id);
