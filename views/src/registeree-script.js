@@ -1,3 +1,17 @@
+let sessionUrl = "http://localhost:3000/session";
+
+fetch(sessionUrl, {
+    mode: "cors",
+    method: "POST"
+})
+    .then(res => {
+        return res.json()
+    })
+    .then(res => {
+        let welcomeMessage = "Welcome " + res['name'];
+        document.getElementById("head").innerHTML = welcomeMessage;
+    });
+
 let url = "http://localhost:3000/get-reg";
 
 fetch(url, {
@@ -75,7 +89,7 @@ fetch(url, {
             let text1 = document.createTextNode(res.data[i]['email']);
             let td2 = document.createElement('td');
             td2.className = ('column2');
-            let text2 = document.createTextNode(res.data[i]['username']);
+            let text2 = document.createTextNode(res.data[i]['email']);
             let td3 = document.createElement('td');
             td3.className = ('column3');
             let text3 = document.createTextNode(res.data[i]['telephone']);

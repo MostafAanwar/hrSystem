@@ -1,3 +1,17 @@
+let sessionUrl = "http://localhost:3000/session";
+
+fetch(sessionUrl, {
+    mode: "cors",
+    method: "POST"
+})
+    .then(res => {
+        return res.json()
+    })
+    .then(res => {
+        let welcomeMessage = "Welcome " + res['name'];
+        document.getElementById("head").innerHTML = welcomeMessage;
+    });
+
 let url = "http://localhost:3000/get-app";
 
 fetch(url, {
@@ -34,16 +48,22 @@ fetch(url, {
         let th5 = document.createElement('th');
         th5.className = ('column5');
 
+        let th6 = document.createElement('th');
+        th6.className = ('column6');
+
 
         let text1 = document.createTextNode('Email');
         let text2 = document.createTextNode('Name');
         let text3 = document.createTextNode('Telephone');
-        let text4 = document.createTextNode("CV");
+        let text4 = document.createTextNode("Position");
+        let text5 = document.createTextNode("CV");
+
 
         th1.appendChild(text1);
         th2.appendChild(text2);
         th3.appendChild(text3);
         th4.appendChild(text4);
+        th5.appendChild(text5);
 
 
         tr.appendChild(th1);
@@ -51,6 +71,7 @@ fetch(url, {
         tr.appendChild(th3);
         tr.appendChild(th4);
         tr.appendChild(th5);
+        tr.appendChild(th6);
 
         thead.appendChild(tr);
         table.appendChild(thead);
@@ -70,11 +91,14 @@ fetch(url, {
             let text1 = document.createTextNode(res.data[i]['email']);
             let td2 = document.createElement('td');
             td2.className = ('column2');
-            let text2 = document.createTextNode(res.data[i]['username']);
+            let text2 = document.createTextNode(res.data[i]['email']);
             let td3 = document.createElement('td');
             td3.className = ('column3');
             let text3 = document.createTextNode(res.data[i]['telephone']);
 
+            let td4 = document.createElement('td');
+            td3.className = ('column4');
+            let text4 = document.createTextNode(res.data[i]['title']);
 
             let cvLink = document.createElement('a');
             cvLink.id = (res.data[i]['cv']);
@@ -96,10 +120,14 @@ fetch(url, {
             td2.appendChild(text2);
             td3.appendChild(text3);
 
+            td4.appendChild(text4);
+
 
             tr.appendChild(td1);
             tr.appendChild(td2);
             tr.appendChild(td3);
+
+            tr.appendChild(td4);
 
             tr.appendChild(cvLink);
             tr.appendChild(create);
@@ -130,7 +158,7 @@ fetch(url, {
 
             $('.create-exam').on('click', function () {
                 let email = this.id;
-                window.location.replace('/create-exam-page?email =' + email);
+                window.location.replace('/create-exam-page?email=' + email);
             });
 
 

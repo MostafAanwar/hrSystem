@@ -8,9 +8,9 @@ $(".txtb input").on("focus", function () {
 });
 //Makes sure that there are no empty fields
 function checkEmptyFields() {
-    let username = document.forms["my-form"]["username"].value;
+    let email = document.forms["my-form"]["email"].value;
     let password = document.forms["my-form"]["password"].value;
-    if (username === "" || password === "") {
+    if (email === "" || password === "") {
         $('#validationtext').append("<p align='center'>Cannot have empty fields!</p>");
         return false;
     }
@@ -22,7 +22,7 @@ $('#my-form').submit(function (e) {
     e.preventDefault();
     let pageURL = window.location.href;
     let url = pageURL.substr(pageURL.lastIndexOf('/'));
-    console.log(url);
+    console.log("my urk: " + url);
     ajaxValidation(url);
 
 });
@@ -34,9 +34,10 @@ function ajaxValidation(sentURL){
     if(sentURL === '/login-hr'){
         url = '/get-hr';
     }
-    else if(sentURL === '/'){
+    else if (sentURL === '/' || sentURL.includes('redirect')) {
         url = '/get-user';
     }
+
     if (initValidation) {
         $.ajax({
             url: url, //url that will get data from DB
@@ -49,7 +50,10 @@ function ajaxValidation(sentURL){
                         window.location.replace('/hr-index');
                     }
                     if(sentURL === '/'){
-                        window.location.replace('/user-home')
+                        window.location.replace('/home-page');
+                    }
+                    else if (sentURL.includes('redirect')) {
+                        window.location.replace('/get-exam');
                     }
                 }
                 else {
