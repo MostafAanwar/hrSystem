@@ -6,7 +6,7 @@ const routes = Router();
 routes.post("/", Controller.init);
 routes.get("/login-hr", Controller.loginHR);
 routes.get("/sign-up", Controller.signUp);
-routes.get("/home-page",Controller.userHomePage);
+routes.get("/user-home",Controller.userHomePage);
 routes.get("/hr-index", Controller.HRHomePage);
 routes.get("/get-positions", Controller.GetPositionPage);
 routes.get("/add-pos-page", Controller.addPositionPage);
@@ -29,6 +29,7 @@ routes.get("/add-test-page", Controller.addTestPage);
 routes.post("/session", Controller.getSession);
 routes.get("/positions",Controller.viewPositions);
 routes.post("/get-hr", Controller.getHR);
+
 routes.post('/get-user', Controller.getUser);
 routes.get("/get-all-hr", Controller.getAllHR);
 routes.post("/delete-pos",Controller.deletePosition);

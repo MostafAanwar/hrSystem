@@ -305,7 +305,7 @@ class Controller {
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); 
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -879,6 +879,7 @@ class Controller {
             res.end();
         });
     }
+
 }
 const mainController = new Controller();
 export default mainController;
