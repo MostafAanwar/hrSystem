@@ -1,3 +1,17 @@
+let sessionUrl = "http://localhost:3000/session";
+
+fetch(sessionUrl, {
+    mode: "cors",
+    method: "POST"
+})
+    .then(res => {
+        return res.json()
+    })
+    .then(res => {
+        let welcomeMessage = "Welcome " + res['name'];
+        document.getElementById("head").innerHTML = welcomeMessage;
+    });
+
 let url = "http://localhost:3000/all-tests";
 
 fetch(url, {
@@ -30,7 +44,6 @@ fetch(url, {
 
         let text1 = document.createTextNode('Test ID');
         let text2 = document.createTextNode('Test Type');
-
 
 
         th1.appendChild(text1);
@@ -100,9 +113,10 @@ fetch(url, {
                     },
                     dataType: 'json',
                     success: function (res) {
-                        if (res['affectedRows'] === 1) {
+                        console.log(res);
+                        if (res['affectedRows'] >= 1) {
                             console.log("Deletion success!");
-                            $('#' + TID +'').remove();
+                            $('#' + TID + '').remove();
                         }
                     },
                     error: function (err) {

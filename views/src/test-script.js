@@ -1,3 +1,17 @@
+let sessionUrl = "http://localhost:3000/session";
+
+fetch(sessionUrl, {
+    mode: "cors",
+    method: "POST"
+})
+    .then(res => {
+        return res.json()
+    })
+    .then(res => {
+        let welcomeMessage = "Welcome " + res['name'];
+        document.getElementById("head").innerHTML = welcomeMessage;
+    });
+
 let url_string = window.location.href;
 let url = new URL(url_string);
 let tid = url.searchParams.get("TID");
@@ -158,25 +172,25 @@ $.ajax({
             e.preventDefault();
             let TID = this.id;
             $.ajax({
-                        url: "/save-score", //url that will get data from DB
-                        type: 'post',
-                        data: {
-                            TID: TID,
-                            email: "habibaesmail@yahoo.com",
-                            test_score: testScore
-                        }, //form data
-                        dataType: 'json',
-                        success: function (res) { ///logic for checking
-                            if (res['affectedRows'] === 1) {
-                                console.log("Saved");
-                                window.location.replace('/get-exam');
-                            }
-                        },
-                        error: function (err) {
-                            alert("Error:" + err.message);
-                        }
-                    });
-                })
+                url: "/save-score", //url that will get data from DB
+                type: 'post',
+                data: {
+                    TID: TID,
+                    email: "habibaesmail@yahoo.com",
+                    test_score: testScore
+                }, //form data
+                dataType: 'json',
+                success: function (res) { ///logic for checking
+                    if (res['affectedRows'] === 1) {
+                        console.log("Saved");
+                        window.location.replace('/get-exam');
+                    }
+                },
+                error: function (err) {
+                    alert("Error:" + err.message);
+                }
+            });
+        })
     },
     error: function (err) {
         alert("Error:" + err.message);

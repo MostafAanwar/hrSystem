@@ -1,6 +1,6 @@
-let url = "http://localhost:3000/session";
+let sessionUrl = "http://localhost:3000/session";
 
-fetch(url, {
+fetch(sessionUrl, {
     mode: "cors",
     method: "POST"
 })
@@ -8,6 +8,6 @@ fetch(url, {
         return res.json()
     })
     .then(res => {
-        let welcomeMessage = "Welcome "+res['name'];
+        let welcomeMessage = "Welcome " + res['name'];
         document.getElementById("head").innerHTML = welcomeMessage;
     });

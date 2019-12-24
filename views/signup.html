@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<form action="/" class="login-form" method="POST" id="my-form">
+<form action="/" class="login-form" method="POST" id="my-form" enctype="multipart/form-data">
     <h1>Signup</h1>
     <div class ='txtb'>
         <input type="text" name="name">
@@ -19,8 +19,8 @@
     </div>
 
     <div class="txtb">
-        <input type="text" name="username">
-        <span data-placeholder="Username"></span>
+        <input type="text" name="email" id="email">
+        <span data-placeholder="Email"></span>
     </div>
 
     <div class="txtb">
@@ -31,7 +31,7 @@
         <input type="text" name="telephone">
         <span data-placeholder="telephone"></span>
     </div>
-    <input type="button" class="" value="Upload CV"> <!-- TODO CLASS NAME -->
+    <input type="file" name="upload" id="upload" value="Upload CV" >
 
     <div id="validationtext"></div>
     <input type="submit" class="logbtn" value="Sign Up">
