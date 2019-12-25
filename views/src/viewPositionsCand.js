@@ -116,7 +116,6 @@ fetch(url, {
                     dataType: 'json',
                     success: function (res) {
                         if (res.data['affectedRows'] === 1) {
-                            console.log("Deletion success!");
                             location.reload();
                         }
                     },

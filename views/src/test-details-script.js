@@ -13,6 +13,7 @@ $.ajax({
         console.log(testInfo);
         document.getElementById("heading").innerHTML = testInfo[0]["type"] + " Exam";
         let dataTable = document.createElement("table");
+        dataTable.id = "test-table";
         $.ajax({
             url: "/get-all-questions",
             type: "post",
@@ -31,11 +32,11 @@ $.ajax({
                     let qText = document.createTextNode(res[i]['text']);
                     let editButton = document.createElement('button');
                     let editText = document.createTextNode('Edit');
-                    editButton.className = ('edit');
+                    editButton.className = ('editQ');
                     editButton.id = res[i]['QID'];
                     let deleteButton = document.createElement('button');
                     let deleteText = document.createTextNode('Delete');
-                    deleteButton.className = ('delete');
+                    deleteButton.className = ('deleteQ');
                     deleteButton.id = res[i]['QID'];
                     let addAnsButton = document.createElement('button');
                     let addAnsText = document.createTextNode('Add Answer');
@@ -99,40 +100,9 @@ $.ajax({
         $(document).ready(function () {
 
             $(".deleteQ").on("click", function () {
-                let PID = this.id;
-                $.ajax({
-                    url: "/delete-question",
-                    type: "post",
-                    data: {
-                        PID: PID
-                    },
-                    dataType: 'json',
-                    success: function (res) {
-                        if (res['affectedRows'] === 1) {
-                            console.log("Deletion success!");
-                            $('#' + PID +'').remove();
-                        }
-                    },
-                    error: function (err) {
-                        alert("Error:" + err.message);
-                    }
-
-                });
-
-            });
-
-            $('#addQ').on('click', function () {
-                window.location.replace('/add-question-page');
-            });
-
-            $('.editQ').on('click', function () {
-                let PID = this.id;
-                window.location.replace('/edit-question-page?id=' + QID);
-            });
-            $(".deleteA").on("click", function () {
                 let QID = this.id;
                 $.ajax({
-                    url: "/delete-answer",
+                    url: "/delete-question",
                     type: "post",
                     data: {
                         QID: QID
@@ -152,8 +122,40 @@ $.ajax({
 
             });
 
+            $('#addQ').on('click', function () {
+                window.location.replace('/add-question-page?TID=' + tid);
+            });
+
+            $('.editQ').on('click', function () {
+                let QID = this.id;
+                window.location.replace('/edit-question-page?id=' + QID);
+            });
+            $(".deleteA").on("click", function () {
+                let AID = this.id;
+                $.ajax({
+                    url: "/delete-answer",
+                    type: "post",
+                    data: {
+                        AID: AID
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res['affectedRows'] === 1) {
+                            console.log("Deletion success!");
+                            $('#' + AID +'').remove();
+                        }
+                    },
+                    error: function (err) {
+                        alert("Error:" + err.message);
+                    }
+
+                });
+
+            });
+
             $('.addA').on('click', function () {
-                window.location.replace('/add-answer-page');
+                let QID = this.id;
+                window.location.replace('/add-answer-page?id=' +QID);
             });
 
             $('.editA').on('click', function () {
@@ -164,7 +166,7 @@ $.ajax({
 
             $('#search').on('keyup', function () {
                 let searchString = $(this).val().toLowerCase();
-                $('#pos-table tr').filter(function () {
+                $('#test-table tr').filter(function () {
                     $(this).toggle($(this).text().toLowerCase().indexOf(searchString) > -1);
                 });
             });
