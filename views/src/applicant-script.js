@@ -24,6 +24,7 @@ fetch(url, {
     })
     .then(res => {
         console.log(res.data);
+
         let div1 = document.createElement('div');
         div1.className = "limiter";
         let div2 = document.createElement('div');
@@ -82,88 +83,89 @@ fetch(url, {
 
         let tbody = document.createElement('tbody');
         tbody.id = ("app-table");
-        for (let i = 0; i < res.data.length; i++) {
-            console.log(res.data.length);
-            let tr = document.createElement('tr');
-            tr.id = res.data[i]['email'];
-            let td1 = document.createElement('td');
-            td1.className = ('column1');
-            let text1 = document.createTextNode(res.data[i]['email']);
-            let td2 = document.createElement('td');
-            td2.className = ('column2');
-            let text2 = document.createTextNode(res.data[i]['email']);
-            let td3 = document.createElement('td');
-            td3.className = ('column3');
-            let text3 = document.createTextNode(res.data[i]['telephone']);
+        if (res.data) {
+            for (let i = 0; i < res.data.length; i++) {
+                console.log(res.data.length);
+                let tr = document.createElement('tr');
+                tr.id = res.data[i]['email'];
+                let td1 = document.createElement('td');
+                td1.className = ('column1');
+                let text1 = document.createTextNode(res.data[i]['email']);
+                let td2 = document.createElement('td');
+                td2.className = ('column2');
+                let text2 = document.createTextNode(res.data[i]['email']);
+                let td3 = document.createElement('td');
+                td3.className = ('column3');
+                let text3 = document.createTextNode(res.data[i]['telephone']);
 
-            let td4 = document.createElement('td');
-            td3.className = ('column4');
-            let text4 = document.createTextNode(res.data[i]['title']);
+                let td4 = document.createElement('td');
+                td3.className = ('column4');
+                let text4 = document.createTextNode(res.data[i]['title']);
 
-            let cvLink = document.createElement('a');
-            cvLink.id = (res.data[i]['cv']);
-            let url = res.data[i]['cv'];
-            cvLink.setAttribute('href', '/get-cv?file=' + url);
-            cvLink.setAttribute('download', '');
-            cvLink.innerHTML = "View";
-            cvLink.className = ('cv');
-            document.body.appendChild(cvLink);
+                let cvLink = document.createElement('a');
+                cvLink.id = (res.data[i]['cv']);
+                let url = res.data[i]['cv'];
+                cvLink.setAttribute('href', '/get-cv?file=' + url);
+                cvLink.setAttribute('download', '');
+                cvLink.innerHTML = "View";
+                cvLink.className = ('cv');
+                document.body.appendChild(cvLink);
 
-            let create = document.createElement('input');
-            create.setAttribute('type', 'button');
-            create.setAttribute('id', res.data[i]['email']);
-            create.setAttribute('class', 'create-exam');
-            create.setAttribute('value', 'Create Exam');
-
-
-            td1.appendChild(text1);
-            td2.appendChild(text2);
-            td3.appendChild(text3);
-
-            td4.appendChild(text4);
+                let create = document.createElement('input');
+                create.setAttribute('type', 'button');
+                create.setAttribute('id', res.data[i]['email']);
+                create.setAttribute('class', 'create-exam');
+                create.setAttribute('value', 'Create Exam');
 
 
-            tr.appendChild(td1);
-            tr.appendChild(td2);
-            tr.appendChild(td3);
+                td1.appendChild(text1);
+                td2.appendChild(text2);
+                td3.appendChild(text3);
 
-            tr.appendChild(td4);
-
-            tr.appendChild(cvLink);
-            tr.appendChild(create);
+                td4.appendChild(text4);
 
 
-            table.appendChild(tr);
-            tbody.appendChild(tr);
-        }
+                tr.appendChild(td1);
+                tr.appendChild(td2);
+                tr.appendChild(td3);
+
+                tr.appendChild(td4);
+
+                tr.appendChild(cvLink);
+                tr.appendChild(create);
 
 
-        table.appendChild(tbody);
-        div1.appendChild(div2);
-        div2.appendChild(div3);
-        div3.appendChild(div4);
-        div4.appendChild(form);
-        form.appendChild(table);
+                table.appendChild(tr);
+                tbody.appendChild(tr);
+            }
 
-        document.body.appendChild(div1);
 
-        $(document).ready(function () {
+            table.appendChild(tbody);
+            div1.appendChild(div2);
+            div2.appendChild(div3);
+            div3.appendChild(div4);
+            div4.appendChild(form);
+            form.appendChild(table);
 
-            $('#search').on('keyup', function () {
-                let searchString = $(this).val().toLowerCase();
-                $('#app-table tr').filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(searchString) > -1);
+            document.body.appendChild(div1);
+
+            $(document).ready(function () {
+
+                $('#search').on('keyup', function () {
+                    let searchString = $(this).val().toLowerCase();
+                    $('#app-table tr').filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(searchString) > -1);
+                    });
                 });
-            });
 
-            $('.create-exam').on('click', function () {
-                let email = this.id;
-                window.location.replace('/create-exam-page?email=' + email);
-            });
+                $('.create-exam').on('click', function () {
+                    let email = this.id;
+                    window.location.replace('/create-exam-page?email=' + email);
+                });
 
 
-        }); //end on ready
-
+            }); //end on ready
+        }
     });
 // });
 
