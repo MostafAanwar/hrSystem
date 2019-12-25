@@ -944,7 +944,8 @@ class Controller {
             res.end();
         });
     }
-    addQuestion(req,res){
+
+    addQuestion(req, res) {
         let text = req.body.text;
         let TID = req.body.TID;
         model.addQuestion(text, TID).then((response) => {
@@ -959,7 +960,8 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    deleteQuestion(req,res) {
+
+    deleteQuestion(req, res) {
         let QID = req.body.QID;
         model.deleteQuestion(QID).then((response) => {
             res.contentType('json');
@@ -973,7 +975,8 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    deleteAnswer(req,res){
+
+    deleteAnswer(req, res) {
         let AID = req.body.AID;
         model.deleteAnswer(AID).then((response) => {
             res.contentType('json');
@@ -987,7 +990,8 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    editQuestionPage(req,res){
+
+    editQuestionPage(req, res) {
         let path = Path.join(__dirname, "../views/edit-question.html");
         fs.readFile(path, function (err, html) {
             if (err) {
@@ -998,10 +1002,11 @@ class Controller {
             res.end();
         });
     }
-    editQuestion(req,res){
+
+    editQuestion(req, res) {
         let QID = req.body.QID;
         let text = req.body.text;
-        model.editQuestion(QID,text).then((response) => {
+        model.editQuestion(QID, text).then((response) => {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
@@ -1013,10 +1018,11 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    editAnswer(req,res){
+
+    editAnswer(req, res) {
         let AID = req.body.AID;
         let textA = req.body.textA;
-        model.editAnswer(AID,textA).then((response) => {
+        model.editAnswer(AID, textA).then((response) => {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
@@ -1028,7 +1034,8 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    getQuestion(res,req){
+
+    getQuestion(res, req) {
         let QID = req.body.QID;
         model.getQuestion(QID).then((response) => {
             res.contentType('json');
@@ -1042,8 +1049,8 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    getAnswer(res,req){
-        console.log(req);
+
+    getAnswer(req, res) {
         let AID = req.body.AID;
         model.getAnswer(AID).then((response) => {
             res.contentType('json');
@@ -1057,7 +1064,8 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    addAnswerPage(req,res){
+
+    addAnswerPage(req, res) {
         let path = Path.join(__dirname, "../views/add-answer-page.html");
         fs.readFile(path, function (err, html) {
             if (err) {
@@ -1068,7 +1076,8 @@ class Controller {
             res.end();
         });
     }
-    editAnswerPage(req,res){
+
+    editAnswerPage(req, res) {
         let path = Path.join(__dirname, "../views/edit-answer-page.html");
         fs.readFile(path, function (err, html) {
             if (err) {
@@ -1079,14 +1088,15 @@ class Controller {
             res.end();
         });
     }
-    editAnswer(req,res){
+
+    editAnswer(req, res) {
         let AID = req.body.AID;
         let textA = req.body.textA;
         let correct = req.body.correct;
         if (correct === "") {
             correct = 0;
         }
-        model.editAnswer(AID,correct,textA).then((response) => {
+        model.editAnswer(AID, correct, textA).then((response) => {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
@@ -1098,14 +1108,15 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    addAnswer(req,res){
+
+    addAnswer(req, res) {
         let textA = req.body.textA;
         let correct = req.body.correct;
         let QID = req.body.QID;
         if (correct === "") {
             correct = 0;
         }
-        model.addAnswer(QID,textA,correct).then((response) => {
+        model.addAnswer(QID, textA, correct).then((response) => {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
