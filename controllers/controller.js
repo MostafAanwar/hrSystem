@@ -612,7 +612,7 @@ class Controller {
         let deadline = req.body.deadline;
         let HRMail = req.session.email;
         console.log(checkbox);
-        sequence = sequence.filter(item => item);
+        sequence = sequence.split('').filter(item => item);
         model.createExam(checkbox, sequence, email, deadline, HRMail).then((response) => {
             res.contentType('json');
             res.send({

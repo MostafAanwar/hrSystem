@@ -111,8 +111,19 @@ fetch(url, {
                 dataType: 'json',
                 success: function (res) {
                     if (res.data[0]['PID'] != null) {
-                        $('#msg').text('Your application is pending approval...');
-                        $('.apply').attr("disabled", true);
+                        if(res.data[0]['approved'] == null) {
+
+                            $('#msg').text('Your application is pending approval...');
+                            $('.apply').attr("disabled", true);
+                        }
+                        else if (res.data[0]['approved'] == 1){
+                            $('#msg').text('Check your email for exam..');
+                            $('.apply').attr("disabled", true);
+                        }
+                        else {
+                            $('#msg').text('Sorry your application is rejected...');
+                            $('.apply').attr("disabled", true);
+                        }
                     }
                 },
                 error: function (err) {

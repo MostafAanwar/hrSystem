@@ -13,7 +13,7 @@ fetch(sessionUrl, {
         console.log('ddd');
         console.log(res);
         console.log(res['username']);
-        if (res['username'].length != 0) {
+        if (res['username'] == null) {
             let url_string = window.location.href;
             let redirectPage = url_string.substr(url_string.lastIndexOf('/') + 1);
             console.log(url_string);

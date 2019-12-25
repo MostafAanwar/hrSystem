@@ -253,7 +253,7 @@ class Model {
     }
 
     isApplied(email) {
-        let sql = 'SELECT PID FROM candidate WHERE email = ?';
+        let sql = 'SELECT PID,approved FROM candidate WHERE email = ?';
         return this.queryFunction(sql, [email]);
     }
     saveTotalScore(C_email,test_score){
