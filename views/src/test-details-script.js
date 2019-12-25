@@ -45,7 +45,7 @@ $.ajax({
                     td.appendChild(qText);
                     editButton.appendChild(editText); //
                     deleteButton.appendChild(deleteText);
-                    addAnsButton.appendChild(addAnsText)
+                    addAnsButton.appendChild(addAnsText);
                     tr.appendChild(td);
                     tr.appendChild(editButton); //
                     tr.appendChild(deleteButton);
@@ -140,7 +140,7 @@ $.ajax({
                     success: function (res) {
                         if (res['affectedRows'] === 1) {
                             console.log("Deletion success!");
-                            $('#' + AID +'').remove();
+                            $('#' + AID + '').remove();
                         }
                     },
                     error: function (err) {
@@ -153,7 +153,7 @@ $.ajax({
 
             $('.addA').on('click', function () {
                 let QID = this.id;
-                window.location.replace('/add-answer-page?id=' +QID);
+                window.location.replace('/add-answer-page?id=' + QID);
             });
 
             $('.editA').on('click', function () {

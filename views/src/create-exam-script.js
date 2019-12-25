@@ -87,6 +87,7 @@ fetch(url, {
                 let sequenceCounter = 0;
                 let match = [];
                 let previousID;
+                let isArranged = [];
                 $('#exam-form').find('input').each(function () {
                     if ($(this).is(':checkbox')) {
                         if ($(this).prop('checked')) {
@@ -96,6 +97,7 @@ fetch(url, {
                     }
                     if ($(this).attr('type') === 'number') {
                         if ($(this).val()) {
+                            isArranged.push($(this).val());
                             match.push($(this)[0].id === previousID);
                             sequenceCounter++;
                         }
@@ -109,6 +111,9 @@ fetch(url, {
                 else if (match.includes(false)) {
                     alert('Please match chosen tests and sequence!');
                 }
+                else if ((new Set(isArranged)).size !== isArranged.length) {
+                    alert("Please correct sequence order!");
+                }
                 else if (checkboxCounter > 0) {
                     if (sequenceCounter === checkboxCounter || sequenceCounter === 0) {
                         let pageURL = window.location.href;
@@ -121,8 +126,7 @@ fetch(url, {
                             dataType: 'json',
                             success: function (res) {
                                 if (res.data['affectedRows'] === 1) {
-                                    window.location.replace('/home-page'); //TODO change home page view to dynamically match user status
-
+                                    window.location.replace('/hr-index'); //TODO change home page view to dynamically match user status
                                 }
                             },
                             error: function (err) {

@@ -4,13 +4,14 @@ fetch(sessionUrl, {
     mode: "cors",
     method: "POST"
 })
-    .then(res => {
-        return res.json()
+    .then(session => {
+        return session.json()
     })
-    .then(res => {
-        let welcomeMessage = "Welcome " + res['name'];
+    .then(session => {
+        console.log(session);
+        console.log(session['username']);
+        let welcomeMessage = "Welcome " + session['username'];
         document.getElementById("head").innerHTML = welcomeMessage;
-    });
 
 let url = "http://localhost:3000/position-cand";
 
@@ -104,6 +105,22 @@ fetch(url, {
         document.body.appendChild(div1);
 
         $(document).ready(function () {
+            $.ajax({
+                url: '/is-applied',
+                type: 'post',
+                dataType: 'json',
+                success: function (res) {
+                    if (res.data) {
+                        $('#msg').text('Your application is pending approval...');
+                        $('.apply').attr("disabled", true);
+                    }
+                },
+                error: function (err) {
+                    alert("Error:" + err.message);
+                }
+
+            });
+
             $('.apply').on('click', function () {
                 let PID = this.id;
                 console.log(PID);
@@ -111,12 +128,14 @@ fetch(url, {
                     url: "/apply-pos",
                     type: "post",
                     data: {
-                        PID: PID
+                        PID: PID,
+                        email: session['email']
                     },
                     dataType: 'json',
                     success: function (res) {
-                        if (res.data['affectedRows'] === 1) {
-                            location.reload();
+                        if (res['affectedRows'] === 1) {
+                            $('#msg').text('Your application is pending approval...');
+                            $('.apply').attr("disabled", true);
                         }
                     },
                     error: function (err) {
@@ -126,5 +145,7 @@ fetch(url, {
                 });
 
             });
+
         });
+    });
     });

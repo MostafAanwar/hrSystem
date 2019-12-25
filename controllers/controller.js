@@ -227,12 +227,16 @@ class Controller {
 
     getUser(req, res) {
         let email = req.body.email;
-        req.session.email = req.body.username;
         let password = req.body.password;
         model.getUser(email, password).then((response) => { //response contains returned data
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
+            if (jsonResult) {
+
+                req.session.username = jsonResult[0]['username'];
+                req.session.email = email;
+            }
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
@@ -352,7 +356,7 @@ class Controller {
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -420,7 +424,7 @@ class Controller {
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -453,7 +457,7 @@ class Controller {
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -481,7 +485,7 @@ class Controller {
             });
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -489,14 +493,38 @@ class Controller {
     alterApproval(req,res){
         let len = Object.keys(req.body).length;
         let str = JSON.stringify(req.body);
-        model.alterApproval(str, len).then((response) => {
+        console.log(str);
+        console.log(len);
+
+        let regex = RegExp('"([\\w@.]*)":"([01])"', 'g');
+        let array;
+        let emails = [];
+        let values = [];
+        let rejectionMsg = '<p>We regret to inform you that your application was not accepted for our company.</p>' +
+            '<p>Better luck next time!</p>';
+        let rejctionSubject = 'Deepest apologies...';
+        let acceptanceMsg = '<h3>Congratulations!</h3><p>Your application has been accepted!</p>' +
+            '<p>Please wait for an email with your examination link!</p>';
+        let acceptanceSubject = 'Congratulations!';
+        while ((array = regex.exec(str)) !== null) {
+            emails.push(array[1]);
+            values.push(array[2]);
+            console.log(emails[emails.length - 1]); //TODO length of array
+            if (values[values.length - 1] == 0) {
+                mainController.sendEmail(emails[emails.length - 1], rejctionSubject, rejectionMsg);
+            }
+            else if (values[values.length - 1] == 1) {
+                mainController.sendEmail(emails[emails.length - 1], acceptanceSubject, acceptanceMsg);
+            }
+        }
+        model.alterApproval(emails, values, len).then((response) => {
             res.contentType('json');
             res.send({
                 data: response.result
             });
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -509,7 +537,7 @@ class Controller {
             });
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -553,18 +581,15 @@ class Controller {
             });
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
     }
-    createExam(req, res){
-        let email = req.body.email;
-        let checkbox = req.body.checkbox;
-        let sequence = req.body.sequence;
-        let deadline = req.body.deadline;
-        sequence = sequence.filter(item => item);
-        model.createExam(checkbox, sequence, email,deadline).then((response) => {
+
+    isApplied(req, res) {
+        let email = req.session.email;
+        model.isApplied(email).then((response) => {
             res.contentType('json');
             res.send({
                 data: response.result
@@ -572,7 +597,31 @@ class Controller {
             return response.connection; //returned on next then
         }).then((con) => {
             model.disconnect(con);
-            mainController.sendEmail(email);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
+    createExam(req, res){
+        let email = req.body.email;
+        let checkbox = req.body.checkbox;
+        let sequence = req.body.sequence;
+        let deadline = req.body.deadline;
+        let HRMail = req.session.email;
+        sequence = sequence.filter(item => item);
+        model.createExam(checkbox, sequence, email, deadline, HRMail).then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+            let msg = "<p>Please follow the link below to take your exam.</p>" +
+                "<p>Clicking the link will not automatically start your exam.</p>" +
+                "Click <a href='http://localhost:3000/get-exam'>here</a> to take your exam";
+            let subject = 'Examination link';
+            mainController.sendEmail(email, subject, msg);
 
         }).catch((err) => {
             return console.error("Error! " + err.message);
@@ -616,7 +665,7 @@ class Controller {
         });
     }
 
-    sendEmail(destination){
+    sendEmail(destination, subject, msg) {
         let transporter = nodemailer.createTransport({
             host: "smtp.gmail.com",
             port: 465,
@@ -629,10 +678,11 @@ class Controller {
         let message = {
             from: 'exam.mailer19@gmail.com',
             to: destination, //TODO get user/hr email
-            subject: "Examination Link",
-            html: "<p>Please follow the link below to take your exam.</p>" +
-                "<p>Clicking the link will not automatically start your exam.</p>" +
-                "Click <a href='http://localhost:3000/get-exam'>here</a> to take your exam"
+            subject: subject,
+            html: msg,
+            // html: "<p>Please follow the link below to take your exam.</p>" +
+            //     "<p>Clicking the link will not automatically start your exam.</p>" +
+            //     "Click <a href='http://localhost:3000/get-exam'>here</a> to take your exam"
         };
         console.log("mess" + message);
         transporter.sendMail(message, function (err, info) {
@@ -718,7 +768,7 @@ class Controller {
             });
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con); //TODO
+            model.disconnect(con);
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -935,7 +985,8 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    editQuestionPage(req,res){
+
+    editQuestionPage(req, res) {
         let path = Path.join(__dirname, "../views/edit-question.html");
         fs.readFile(path, function (err, html) {
             if (err) {
@@ -961,7 +1012,8 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    editAnswer(req,res){
+
+    editAnswer(req, res) {
         let AID = req.body.AID;
         let textA = req.body.textA;
         let correct = req.body.correct;
@@ -1023,7 +1075,8 @@ class Controller {
             res.end();
         });
     }
-    editAnswerPage(req,res){
+
+    editAnswerPage(req, res) {
         let path = Path.join(__dirname, "../views/edit-answer-page.html");
         fs.readFile(path, function (err, html) {
             if (err) {
@@ -1034,7 +1087,25 @@ class Controller {
             res.end();
         });
     }
-
+    // editAnswer(req,res){
+    //     let AID = req.body.AID;
+    //     let textA = req.body.textA;
+    //     let correct = req.body.correct;
+    //     if (correct === "") {
+    //         correct = 0;
+    //     }
+    //     model.editAnswer(AID,correct,textA).then((response) => {
+    //         res.contentType('json');
+    //         let stringResult = JSON.stringify(response.result);
+    //         let jsonResult = JSON.parse(stringResult);
+    //         res.send(jsonResult);
+    //         return response.connection; //returned on next then
+    //     }).then((con) => {
+    //         model.disconnect(con);
+    //     }).catch((err) => {
+    //         return console.error("Error! " + err.message);
+    //     });
+    // }
     addAnswer(req,res){
         let textA = req.body.textA;
         let correct = req.body.correct;
@@ -1042,7 +1113,7 @@ class Controller {
         if (correct === "") {
             correct = 0;
         }
-        model.addAnswer(QID,textA,correct).then((response) => {
+        model.addAnswer(QID, textA, correct).then((response) => {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);

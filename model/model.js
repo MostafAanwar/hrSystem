@@ -104,15 +104,16 @@ class Model {
         let sql = "SELECT * FROM candidate where approved is null";
         return this.queryFunction(sql, "");
     }
-    alterApproval(str, len){
-        let regex = RegExp('"([\\w@.]*)":"([01])"','g');
-        let array;
-        let email = [];
-        let values = [];
-        while ((array = regex.exec(str)) !== null) {
-            email.push(array[1]);
-            values.push(array[2]);
-        }
+
+    alterApproval(email, values, len) {
+        // let regex = RegExp('"([\\w@.]*)":"([01])"','g');
+        // let array;
+        // let email = [];
+        // let values = [];
+        // while ((array = regex.exec(str)) !== null) {
+        //     email.push(array[1]);
+        //     values.push(array[2]);
+        // }
         let sql = 'UPDATE candidate SET approved = ? WHERE email = ?';
         let res;
         for(let i = 0; i< len; i++ ){
@@ -121,8 +122,13 @@ class Model {
         return res;
     }
     getApplicants(){
-        let sql = "SELECT email, username, telephone, cv, position.title FROM candidate INNER JOIN position ON candidate.PID = position.PID WHERE approved = '1'";
-            // 'SELECT * FROM candidate WHERE approved = "1"';
+        let sql = "SELECT email, username, telephone, cv, position.title " +
+            "FROM candidate " +
+            "JOIN position ON candidate.PID = position.PID " +
+            "WHERE candidate.approved = '1' " +
+            "AND NOT EXISTS(SELECT candidate_exam.c_email " +
+            "FROM candidate_exam " +
+            "WHERE candidate_exam.C_email = candidate.email)";
         return this.queryFunction(sql, "");
     }
 
@@ -167,6 +173,7 @@ class Model {
             'group by question.text';
         return this.queryFunction(sql, [C_email]);
     }
+
     viewTests(candidateEmail){
         let sql = "SELECT * from candidate_exam where (C_email = ? AND test_score IS NULL)";
         return this.queryFunction(sql, [candidateEmail]);
@@ -219,11 +226,16 @@ class Model {
         let sql = 'UPDATE candidate_exam SET test_score = ? WHERE (TID = ? AND C_email = ?)';
         return this.queryFunction(sql, [test_score, TID, C_email]);
     }
+
+    isApplied(email) {
+        let sql = 'SELECT PID FROM candidate WHERE email = ?';
+        return this.queryFunction(sql, [email]);
+    }
     saveTotalScore(C_email,test_score){
         let sql = 'UPDATE candidate SET score = score + ? WHERE email = ?';
         return this.queryFunction(sql,[test_score, C_email]);
     }
-    createExam(checkbox, sequence, email,deadline){
+    createExam(checkbox, sequence, email, deadline, HRMail){
         let res ;
         let len = checkbox.length;
         console.log(sequence);
@@ -234,37 +246,41 @@ class Model {
         }
         for(let i = 0; i< len; i++ ){
             if(isEmpty){
-                sql = "INSERT INTO candidate_exam VALUES ('" + email + "', '" + "" + "', '" + deadline + "','" + checkbox[i] + "','" + "')";
+                sql = "INSERT INTO candidate_exam VALUES ('" + email + "', '" + "" + "', '" + deadline + "','" + checkbox[i] + "','" + HRMail + "','" + "')";
             }
             else{
-                sql = "INSERT INTO candidate_exam VALUES ('" + email + "', '" + "" + "', '" + deadline + "','" + checkbox[i] + "','" + sequence[i] + "')";
+                sql = "INSERT INTO candidate_exam VALUES ('" + email + "', '" + "" + "', '" + deadline + "','" + checkbox[i] + "','" + sequence[i] + HRMail + "','" + "')";
             }
             res = this.queryFunction(sql, "");
         }
         return res;
     }
-    addQuestion(text,TID){
+
+    addQuestion(text, TID) {
         let sql = "INSERT INTO question VALUES (''" + ", '" + text + "', '" + TID + "')";
         return this.queryFunction(sql, "");
     }
-    deleteQuestion(QID){
+
+    deleteQuestion(QID) {
         let sql = "DELETE FROM answer,question\n" +
             "USING question JOIN answer\n" +
             "WHERE answer.QID = question.QID\n" +
             "  AND question.QID = ?";
-        return this.queryFunction(sql,[QID]);
+        return this.queryFunction(sql, [QID]);
     }
-    deleteAnswer(AID){
+
+    deleteAnswer(AID) {
         let sql = "Delete from answer where answer.AID = ?";
-        return this.queryFunction(sql,[AID]);
+        return this.queryFunction(sql, [AID]);
     }
-    editQuestion(QID,text){
+
+    editQuestion(QID, text) {
         let sql = "UPDATE question SET text = ? where question.QID = ?";
-        return this.queryFunction(sql,[text,QID]);
+        return this.queryFunction(sql, [text, QID]);
     }
-    editAnswer(AID,textA,correct){
+    editAnswer(AID, correct, textA) {
         let sql = "UPDATE answer SET textA = ?, correct= ?  where answer.AID = ?";
-        return this.queryFunction(sql,[textA,correct,AID]);
+        return this.queryFunction(sql, [textA, correct, AID]);
     }
     getQuestion(QID){
         let sql = "SELECT text from question where question.QID = ?";

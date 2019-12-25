@@ -4,13 +4,12 @@ fetch(sessionUrl, {
     mode: "cors",
     method: "POST"
 })
-    .then(res => {
-        return res.json()
+    .then(session => {
+        return session.json()
     })
-    .then(res => {
-        let welcomeMessage = "Welcome " + res['name'];
+    .then(session => {
+        let welcomeMessage = "Welcome " + session['username'];
         document.getElementById("head").innerHTML = welcomeMessage;
-    });
 
 let url_string = window.location.href;
 let url = new URL(url_string);
@@ -53,7 +52,7 @@ $.ajax({
                         async: false,
                         dataType: 'json',
                         success: function (res2) {
-                            console.log(res2);
+                            console.log("AAAAA" + res2[0]);
                             let ansArrayText = [];
                             let ansArrayID =[];
                             ansArrayText.push(res2[0]["textA"]);
@@ -150,7 +149,7 @@ $.ajax({
                         data: {
                             AID: radios[i].id,
                             QID: this.id,
-                            email: "habibaesmail@yahoo.com"
+                            email: session['email']
                         }, //form data
                         dataType: 'json',
                         async: false,
@@ -197,3 +196,4 @@ $.ajax({
     }
 
 });
+    });

@@ -3,7 +3,7 @@ import Controller from "../controllers/controller";
 const routes = Router();
 
 //Page links
-routes.get("/", Controller.init);
+routes.post("/", Controller.init);
 routes.get("/login-hr", Controller.loginHR);
 routes.get("/sign-up", Controller.signUp);
 routes.get("/home-page",Controller.userHomePage);
@@ -69,6 +69,7 @@ routes.post("/create-exam", Controller.createExam);
 routes.post("/add-user", Controller.addUser);
 routes.post("/user-exist", Controller.isSignedUp);
 routes.post("/add-test", Controller.addTest);
+routes.post('/is-applied', Controller.isApplied);
 routes.post("/delete-question", Controller.deleteQuestion);
 routes.post("/delete-answer", Controller.deleteAnswer);
 routes.post("/edit-question", Controller.editQuestion);
