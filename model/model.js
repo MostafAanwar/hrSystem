@@ -256,7 +256,41 @@ class Model {
         }
         return res;
     }
-
+    addQuestion(text,TID){
+        let sql = "INSERT INTO question VALUES (''" + ", '" + text + "', '" + TID + "')";
+        return this.queryFunction(sql, "");
+    }
+    deleteQuestion(QID){
+        let sql = "DELETE FROM answer,question\n" +
+            "USING question JOIN answer\n" +
+            "WHERE answer.QID = question.QID\n" +
+            "  AND question.QID = ?";
+        return this.queryFunction(sql,[QID]);
+    }
+    deleteAnswer(AID){
+        let sql = "Delete from answer where answer.AID = ?";
+        return this.queryFunction(sql,[AID]);
+    }
+    editQuestion(QID,text){
+        let sql = "UPDATE question SET text = ? where question.QID = ?";
+        return this.queryFunction(sql,[text,QID]);
+    }
+    editAnswer(AID,correct,textA){
+        let sql = "UPDATE answer SET textA = ?, correct= ?  where answer.AID = ?";
+        return this.queryFunction(sql,[textA,correct,AID]);
+    }
+    getQuestion(QID){
+        let sql = "SELECT text where question.QID = ?";
+        return this.queryFunction(sql,[QID]);
+    }
+    getAnswer(AID){
+        let sql = "SELECT * where answer.AID = ?";
+        return this.queryFunction(sql,[AID]);
+    }
+    addAnswer(QID,textA,correct){
+        let sql = "INSERT INTO answer VALUES (''" + ", '" + QID + "', '" + textA + "' , '"+correct+"')";
+        return this.queryFunction(sql, "");
+    }
 }
 
 const mainModel = new Model();
