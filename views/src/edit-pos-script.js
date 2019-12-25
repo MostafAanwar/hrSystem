@@ -12,13 +12,13 @@ fetch(sessionUrl, {
         document.getElementById("head").innerHTML = welcomeMessage;
     });
 
-$(document).ready( function () {
+$(document).ready(function () {
     let pageURL = window.location.href;
     let PID = pageURL.substr(pageURL.lastIndexOf('=') + 1);
     $.ajax({
         url: "/get-pos",
         type: "post",
-        data:{
+        data: {
             PID: PID
         },
         dataType: 'json',
@@ -40,28 +40,38 @@ $(document).ready( function () {
 $("#edit-pos-form").submit(function (e) {
     let pageURL = window.location.href;
     let PID = pageURL.substr(pageURL.lastIndexOf('=') + 1);
+
     e.preventDefault();
-    $.ajax({
-        url: "/edit-pos", //url that will get data from DB
-        type: 'post',
-        data: {
-            PID: PID,
-            title: $('#title').val(),
-            description:$('#description').val() ,
-            available: $('#available').prop('checked'),
-            salary: $('#salary').val()
-        }, //form data
-        dataType: 'json',
-        success: function (res) { ///logic for checking
-            if(res['affectedRows'] === 1){
-                console.log("Succesfully edited position " + PID);
-                window.location.replace('/get-positions');
-            }
-        },
-        error: function (err) {
-            alert("Error:" + err.message);
+    let flag = true;
+    $("#edit-pos-form").find('input').each(function () {
+        if (!$(this).val()) {
+            flag = false;
+            alert('Fill all fields!');
         }
     });
+    if (flag) {
+        $.ajax({
+            url: "/edit-pos", //url that will get data from DB
+            type: 'post',
+            data: {
+                PID: PID,
+                title: $('#title').val(),
+                description: $('#description').val(),
+                available: $('#available').prop('checked'),
+                salary: $('#salary').val()
+            }, //form data
+            dataType: 'json',
+            success: function (res) { ///logic for checking
+                if (res['affectedRows'] === 1) {
+                    console.log("Succesfully edited position " + PID);
+                    window.location.replace('/get-positions');
+                }
+            },
+            error: function (err) {
+                alert("Error:" + err.message);
+            }
+        });
+    }
 
 });
 

@@ -29,7 +29,7 @@ routes.get("/edit-answer-page", Controller.editAnswerPage);
 routes.get("/add-answer-page", Controller.addAnswerPage);
 routes.post("/add-answer", Controller.addAnswer);
 routes.get("/deadline", Controller.deadlinePage);
-
+routes.get('/logout', Controller.logout);
 //Data
 routes.post("/session", Controller.getSession);
 routes.get("/positions",Controller.viewPositions);

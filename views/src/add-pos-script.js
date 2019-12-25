@@ -13,10 +13,14 @@ fetch(sessionURL, {
 
 $("#new-pos-form").submit(function (e) {
     e.preventDefault();
-    if (!$('input:text'.val)) {
-        alert("Fill all fields!");
-    }
-    else {
+    let flag = true;
+    $("#new-pos-form").find('input').each(function () {
+        if (!$(this).val()) {
+            flag = false;
+            alert('Fill all fields!');
+        }
+    });
+    if (flag) {
         $.ajax({
             url: "/add-pos", //url that will get data from DB
             type: 'post',
@@ -33,5 +37,4 @@ $("#new-pos-form").submit(function (e) {
             }
         });
     }
-
 });

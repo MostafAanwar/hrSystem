@@ -232,7 +232,9 @@ class Controller {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
-            if (jsonResult) {
+
+            if (jsonResult.length != 0) {
+                console.log(req.session);
                 req.session.username = jsonResult[0]['username'];
                 req.session.email = email;
             }
@@ -267,8 +269,8 @@ class Controller {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
-            if(jsonResult){
-            req.session.name = jsonResult[0]['name'];
+            if (jsonResult) {
+                req.session.name = jsonResult[0]['name'];
             }
             res.send(jsonResult);
             return response.connection; //returned on next then
@@ -609,6 +611,7 @@ class Controller {
         let sequence = req.body.sequence;
         let deadline = req.body.deadline;
         let HRMail = req.session.email;
+        console.log(checkbox);
         sequence = sequence.filter(item => item);
         model.createExam(checkbox, sequence, email, deadline, HRMail).then((response) => {
             res.contentType('json');
@@ -749,7 +752,23 @@ class Controller {
     }
 
 
+    logout(req, res) {
+        console.log(req.session);
+        console.log(req.session['email']);
+        req.session.destroy();
+        // console.log(req.session['email']);
+        console.log(req.session);
+        let path = Path.join(__dirname, "../views/index.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
 
+    }
     getExamPage(req, res) {
         let path = Path.join(__dirname, "../views/exam-page.html");
         fs.readFile(path, function (err, html) {
@@ -762,7 +781,9 @@ class Controller {
         });
     }
     viewTests(req,res){
-        model.viewTests(req.session.email).then((response) => {
+        let email = req.body.email;
+        console.log(email);
+        model.viewTests(email).then((response) => {
             res.contentType('json');
             res.send({
                 data: response.result
@@ -924,12 +945,13 @@ class Controller {
             return console.error("Error: " + err.message);
         });
     }
-    saveTestScore(req,res){
+
+    saveTestScore(req, res) {
         let C_email = req.body.email;
         let TID = req.body.TID;
         let test_score = req.body.test_score;
         console.log("testing");
-        model.saveTestScore(C_email,TID,test_score).then((response) => {
+        model.saveTestScore(C_email, TID, test_score).then((response) => {
             console.log(response.result);
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
@@ -1052,7 +1074,7 @@ class Controller {
     editQuestion(req, res) {
         let QID = req.body.QID;
         let text = req.body.text;
-        model.editQuestion(QID,text).then((response) => {
+        model.editQuestion(QID, text).then((response) => {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
@@ -1075,7 +1097,7 @@ class Controller {
         else {
             correct = '0';
         }
-        model.editAnswer(AID,correct,textA).then((response) => {
+        model.editAnswer(AID, correct, textA).then((response) => {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
@@ -1087,7 +1109,8 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    getQuestion(req,res){
+
+    getQuestion(req, res) {
         let QID = req.body.QID;
         model.getQuestion(QID).then((response) => {
             res.contentType('json');
@@ -1101,7 +1124,8 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    getAnswer(req,res){
+
+    getAnswer(req, res) {
         console.log(req);
         let AID = req.body.AID;
         model.getAnswer(AID).then((response) => {
@@ -1140,6 +1164,7 @@ class Controller {
             res.end();
         });
     }
+
     // editAnswer(req,res){
     //     let AID = req.body.AID;
     //     let textA = req.body.textA;
@@ -1159,7 +1184,7 @@ class Controller {
     //         return console.error("Error! " + err.message);
     //     });
     // }
-    addAnswer(req,res){
+    addAnswer(req, res) {
         let textA = req.body.textA;
         let correct = req.body.correct;
         let QID = req.body.QID;
