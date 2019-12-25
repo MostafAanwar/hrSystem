@@ -868,7 +868,6 @@ class Controller {
         console.log("testing");
         model.saveTestScore(C_email,TID,test_score).then((response) => {
             console.log(response.result);
-            console.log("GWA");
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
@@ -965,7 +964,14 @@ class Controller {
     editAnswer(req,res){
         let AID = req.body.AID;
         let textA = req.body.textA;
-        model.editAnswer(AID,textA).then((response) => {
+        let correct = req.body.correct;
+        if (correct === 'true') {
+            correct = '1';
+        }
+        else {
+            correct = '0';
+        }
+        model.editAnswer(AID,textA,correct).then((response) => {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
@@ -977,7 +983,7 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    getQuestion(res,req){
+    getQuestion(req,res){
         let QID = req.body.QID;
         model.getQuestion(QID).then((response) => {
             res.contentType('json');
@@ -991,7 +997,7 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    getAnswer(res,req){
+    getAnswer(req,res){
         console.log(req);
         let AID = req.body.AID;
         model.getAnswer(AID).then((response) => {
@@ -1028,25 +1034,7 @@ class Controller {
             res.end();
         });
     }
-    editAnswer(req,res){
-        let AID = req.body.AID;
-        let textA = req.body.textA;
-        let correct = req.body.correct;
-        if (correct === "") {
-            correct = 0;
-        }
-        model.editAnswer(AID,correct,textA).then((response) => {
-            res.contentType('json');
-            let stringResult = JSON.stringify(response.result);
-            let jsonResult = JSON.parse(stringResult);
-            res.send(jsonResult);
-            return response.connection; //returned on next then
-        }).then((con) => {
-            model.disconnect(con);
-        }).catch((err) => {
-            return console.error("Error! " + err.message);
-        });
-    }
+
     addAnswer(req,res){
         let textA = req.body.textA;
         let correct = req.body.correct;

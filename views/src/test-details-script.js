@@ -109,10 +109,8 @@ $.ajax({
                     },
                     dataType: 'json',
                     success: function (res) {
-                        if (res['affectedRows'] === 1) {
-                            console.log("Deletion success!");
-                            $('#' + QID +'').remove();
-                        }
+
+                            window.location.reload();
                     },
                     error: function (err) {
                         alert("Error:" + err.message);
