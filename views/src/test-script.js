@@ -175,7 +175,7 @@ $.ajax({
                 type: 'post',
                 data: {
                     TID: TID,
-                    email: "habibaesmail@yahoo.com",
+                    email: session['email'],
                     test_score: testScore
                 }, //form data
                 dataType: 'json',

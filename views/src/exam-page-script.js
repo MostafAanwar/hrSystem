@@ -39,7 +39,7 @@ fetch(sessionUrl, {
                 if (res1.data.length == 0) {
                     window.location.replace('/success');
                 }
-                if (res1.data[0]['sequence'] != null) {
+                else if (res1.data[0]['sequence'] != null) {
                     res1.data.sort(function (a, b) {
                         console.log(a.sequence);
                         console.log(b.sequence);
@@ -48,7 +48,20 @@ fetch(sessionUrl, {
                         else return -1;
                     });
                     console.log(res1.data);
+
                 }
+                let deadline = new Date(res1.data[0]['deadline']);
+                let now = new Date();
+                console.log(now);
+                console.log(deadline);
+                if (now > deadline) {
+                    // window.location.replace('/deadline'); //TODO NEW PAGEE
+                }
+
+                // console.log(d);
+                // console.log(d.getUTCHours()); // Hours
+                // console.log(d.getUTCMinutes());
+                // console.log(d.getUTCSeconds());
                 for (let i = 0; i < res1.data.length; i++) {
                     $.ajax({
                         url: "/test-type",
@@ -75,6 +88,8 @@ fetch(sessionUrl, {
                     if (res1.data[i]['sequence'] != null)
                         break;
                 }
+
+
                 $(".button").on("click", function () {
 
                     let TID = this.id;
@@ -87,4 +102,6 @@ fetch(sessionUrl, {
             }
 
         });
+
     });
+

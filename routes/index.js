@@ -28,6 +28,7 @@ routes.get("/edit-question-page", Controller.editQuestionPage);
 routes.get("/edit-answer-page", Controller.editAnswerPage);
 routes.get("/add-answer-page", Controller.addAnswerPage);
 routes.post("/add-answer", Controller.addAnswer);
+routes.get("/deadline", Controller.deadlinePage);
 
 //Data
 routes.post("/session", Controller.getSession);

@@ -22,22 +22,22 @@ $("#new-question-form").submit(function (e) {
             alert("nddoi");
         }
     });
-            $.ajax({
-                url: "/add-question", //url that will get data from DB
-                type: 'post',
-                data: {
-                    text: $("textarea").val(),
-                    TID: tid
-                },
-                dataType: 'json',
-                success: function (res) { ///logic for checking
-                    if (res['affectedRows'] === 1) {
-                        console.log("Added new question!");
-                        window.location.replace('/test-details?TID=' + tid);
-                    }
-                },
-                error: function (err) {
-                    alert("Error:" + err.message);
-                }
-            });
+    $.ajax({
+        url: "/add-question", //url that will get data from DB
+        type: 'post',
+        data: {
+            text: $("textarea").val(),
+            TID: tid
+        },
+        dataType: 'json',
+        success: function (res) { ///logic for checking
+            if (res['affectedRows'] === 1) {
+                console.log("Added new question!");
+                window.location.replace('/test-details?TID=' + tid);
+            }
+        },
+        error: function (err) {
+            alert("Error:" + err.message);
+        }
+    });
 });

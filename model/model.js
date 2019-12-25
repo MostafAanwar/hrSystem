@@ -133,6 +133,14 @@ class Model {
         return this.queryFunction(sql, "");
     }
 
+    getExaminee(email) {
+        let sql = 'SELECT HR_email, score, username, test_score, type ' +
+            ' FROM candidate_exam' +
+            ' INNER JOIN candidate on candidate.email = candidate_exam.C_email' +
+            ' INNER JOIN test on candidate_exam.TID = test.TID' +
+            '  WHERE C_email = ?';
+        return this.queryFunction(sql, [email]);
+    }
     addUser(email, name, password, telephone){
         let sql = "INSERT INTO candidate VALUES ('" + email + "', '" + name + "', '" + telephone + "', '" + "" + "', '" + "" +  "', '" + password + "', '" + "" + "', '"  + "" + "')";
         return this.queryFunction(sql, "");
@@ -178,6 +186,15 @@ class Model {
     viewTests(candidateEmail){
         let sql = "SELECT * from candidate_exam where (C_email = ? AND test_score IS NULL)";
         return this.queryFunction(sql, [candidateEmail]);
+    }
+
+    solvedAllTests(email) {
+        let sql = "SELECT C_email, HR_email \n" +
+            "FROM candidate_exam \n" +
+            "WHERE " +
+            "test_score IS NULL AND " +
+            "C_email = ?";
+        return this.queryFunction(sql, [email]);
     }
     getQuestions(TID){
         let sql = "SELECT * FROM question where TID = ? ORDER BY RAND() LIMIT 5";
@@ -279,17 +296,20 @@ class Model {
         let sql = "UPDATE question SET text = ? where question.QID = ?";
         return this.queryFunction(sql, [text, QID]);
     }
-    editAnswer(AID,textA,correct){
+
+    editAnswer(AID, textA, correct) {
         let sql = "UPDATE answer SET textA = ?, correct= ?  where answer.AID = ?";
-        return this.queryFunction(sql,[textA,correct,AID]);
+        return this.queryFunction(sql, [textA, correct, AID]);
     }
-    getQuestion(QID){
+
+    getQuestion(QID) {
         let sql = "SELECT text FROM question where question.QID = ?";
-        return this.queryFunction(sql,[QID]);
+        return this.queryFunction(sql, [QID]);
     }
-    getAnswer(AID){
+
+    getAnswer(AID) {
         let sql = "SELECT * FROM answer where answer.AID = ?";
-        return this.queryFunction(sql,[AID]);
+        return this.queryFunction(sql, [AID]);
     }
 
     addAnswer(QID, textA, correct) {

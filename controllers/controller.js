@@ -814,6 +814,18 @@ class Controller {
         });
     }
 
+    deadlinePage(req, res) {
+        let path = Path.join(__dirname, "../views/deadline.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+
     getQuestions(req, res){
         let test_id = req.body.TID;
         console.log(test_id);
@@ -911,18 +923,58 @@ class Controller {
             return console.error("Error: " + err.message);
         });
     }
-    saveTestScore(req,res){
+
+    solvedAllTests(req, res) {
+
+    }
+
+    saveTestScore(req, res) {
         let C_email = req.body.email;
         let TID = req.body.TID;
         let test_score = req.body.test_score;
         console.log("testing");
-        model.saveTestScore(C_email,TID,test_score).then((response) => {
-            console.log(response.result);
+        model.saveTestScore(C_email, TID, test_score).then((response) => {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
             model.saveTotalScore(C_email, test_score).then((response1) => {
+
+                model.solvedAllTests(C_email).then((response2) => {
+                    if (response2.result.length == 0) { //ALL TESTS TAKEN
+                        model.getExaminee(C_email).then((response3) => {
+                            // response3.contentType('json');
+                            let stringResult = JSON.stringify(response3.result);
+                            let jsonResult = JSON.parse(stringResult);
+                            let receipents = [];
+                            let testName = [];
+                            let t_score = [];
+                            receipents.push(jsonResult[0]['HR_email']);
+                            receipents.push(C_email);
+                            console.log(jsonResult[0]['HR_email']);
+                            let totalScore = jsonResult[0]['score'];
+                            let name = jsonResult[0]['username'];
+                            let msg = "<p>" + name + "'s score is " + totalScore + "</p>";
+                            for (let i = 0; i < jsonResult.length; i++) {
+                                testName.push(jsonResult[i]['type']);
+                                t_score.push(jsonResult[0]['test_score']);
+                                msg += "<p>" + testName[i] + " " + t_score[i] + "</p>";
+
+                            }
+                            let subject = 'Exam score';
+                            mainController.sendEmail(receipents, subject, msg);
+
+                        });
+
+                    }
+                });
+
+
+                // if(response2.result){
+                //     if(response2.result.)
+                //     mainController.sendEmail()
+                // }
             });
+
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
@@ -1027,7 +1079,7 @@ class Controller {
         else {
             correct = '0';
         }
-        model.editAnswer(AID,textA,correct).then((response) => {
+        model.editAnswer(AID, textA, correct).then((response) => {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
@@ -1039,7 +1091,8 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    getQuestion(req,res){
+
+    getQuestion(req, res) {
         let QID = req.body.QID;
         model.getQuestion(QID).then((response) => {
             res.contentType('json');
@@ -1053,7 +1106,8 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
-    getAnswer(req,res){
+
+    getAnswer(req, res) {
         console.log(req);
         let AID = req.body.AID;
         model.getAnswer(AID).then((response) => {
@@ -1093,7 +1147,7 @@ class Controller {
         });
     }
 
-    addAnswer(req,res){
+    addAnswer(req, res) {
         let textA = req.body.textA;
         let correct = req.body.correct;
         let QID = req.body.QID;
