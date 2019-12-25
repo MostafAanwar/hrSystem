@@ -110,7 +110,7 @@ $.ajax({
                     dataType: 'json',
                     success: function (res) {
 
-                        window.location.reload();
+                            window.location.reload();
                     },
                     error: function (err) {
                         alert("Error:" + err.message);

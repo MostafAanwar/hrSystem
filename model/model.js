@@ -296,20 +296,17 @@ class Model {
         let sql = "UPDATE question SET text = ? where question.QID = ?";
         return this.queryFunction(sql, [text, QID]);
     }
-
-    editAnswer(AID, textA, correct) {
+    editAnswer(AID, correct, textA) {
         let sql = "UPDATE answer SET textA = ?, correct= ?  where answer.AID = ?";
         return this.queryFunction(sql, [textA, correct, AID]);
     }
-
-    getQuestion(QID) {
+    getQuestion(QID){
         let sql = "SELECT text FROM question where question.QID = ?";
-        return this.queryFunction(sql, [QID]);
+        return this.queryFunction(sql,[QID]);
     }
-
-    getAnswer(AID) {
+    getAnswer(AID){
         let sql = "SELECT * FROM answer where answer.AID = ?";
-        return this.queryFunction(sql, [AID]);
+        return this.queryFunction(sql,[AID]);
     }
 
     addAnswer(QID, textA, correct) {

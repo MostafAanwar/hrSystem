@@ -110,7 +110,7 @@ fetch(url, {
                 type: 'post',
                 dataType: 'json',
                 success: function (res) {
-                    if (res.data) {
+                    if (res.data[0]['PID']!= null) {
                         $('#msg').text('Your application is pending approval...');
                         $('.apply').attr("disabled", true);
                     }
