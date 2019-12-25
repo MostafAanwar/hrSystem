@@ -233,7 +233,6 @@ class Controller {
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
             if (jsonResult) {
-
                 req.session.username = jsonResult[0]['username'];
                 req.session.email = email;
             }
@@ -251,7 +250,6 @@ class Controller {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
-            req.session.username = jsonResult[0]['username'];
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
@@ -262,13 +260,15 @@ class Controller {
     }
     getHR(req, res) {
         let email = req.body.email;
-        req.session.email = req.body.username;
+        req.session.email = email;
         let password = req.body.password;
         model.getHR(email, password).then((response) => { //response contains returned data
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
+            if(jsonResult){
             req.session.name = jsonResult[0]['name'];
+            }
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
@@ -1023,7 +1023,7 @@ class Controller {
         else {
             correct = '0';
         }
-        model.editAnswer(AID,textA,correct).then((response) => {
+        model.editAnswer(AID,correct,textA).then((response) => {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);

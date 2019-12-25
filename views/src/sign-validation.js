@@ -33,7 +33,6 @@ function checkEmptyFields() {
 
 $("#my-form").submit(function (e) {
     e.preventDefault();
-    console.log(document.getElementById('upload').files[0].name);
     if (checkEmptyFields() && validateEmailFormat()) {
         $.ajax({
             url: "/user-exist", //url that will get data from DB

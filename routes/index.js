@@ -22,7 +22,7 @@ routes.get("/view-test", Controller.viewTestPage);
 routes.get("/success", Controller.viewEndPage);
 routes.get("/tests", Controller.viewAllTestsPage);
 routes.get("/test-details", Controller.viewDetailsPage);
-routes.get("/get-position-cand", Controller.GetPosCandPage);
+// routes.get("/get-position-cand", Controller.GetPosCandPage);
 routes.get("/add-test-page", Controller.addTestPage);
 routes.get("/edit-question-page", Controller.editQuestionPage);
 routes.get("/edit-answer-page", Controller.editAnswerPage);
