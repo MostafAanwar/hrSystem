@@ -93,7 +93,7 @@ fetch(url, {
                 let text1 = document.createTextNode(res.data[i]['email']);
                 let td2 = document.createElement('td');
                 td2.className = ('column2');
-                let text2 = document.createTextNode(res.data[i]['email']);
+                let text2 = document.createTextNode(res.data[i]['username']);
                 let td3 = document.createElement('td');
                 td3.className = ('column3');
                 let text3 = document.createTextNode(res.data[i]['telephone']);

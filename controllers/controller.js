@@ -612,7 +612,8 @@ class Controller {
         let deadline = req.body.deadline;
         let HRMail = req.session.email;
         console.log(checkbox);
-        sequence = sequence.split('').filter(item => item);
+        // sequence = sequence.split('').filter(item => item);
+        sequence = sequence.filter(item => item);
         model.createExam(checkbox, sequence, email, deadline, HRMail).then((response) => {
             res.contentType('json');
             res.send({
@@ -757,7 +758,7 @@ class Controller {
         console.log(req.session['email']);
         req.session.destroy();
         // console.log(req.session['email']);
-        console.log(req.session);
+        // console.log(req.session);
         let path = Path.join(__dirname, "../views/index.html");
         fs.readFile(path, function (err, html) {
             if (err) {
@@ -975,9 +976,8 @@ class Controller {
                             let msg = "<p>" + name + "'s score is " + totalScore + "</p>";
                             for (let i = 0; i < jsonResult.length; i++) {
                                 testName.push(jsonResult[i]['type']);
-                                t_score.push(jsonResult[0]['test_score']);
+                                t_score.push(jsonResult[i]['test_score']);
                                 msg += "<p>" + testName[i] + " " + t_score[i] + "</p>";
-
                             }
                             let subject = 'Exam score';
                             mainController.sendEmail(receipents, subject, msg);
