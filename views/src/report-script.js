@@ -4,11 +4,11 @@ fetch(sessionUrl, {
     mode: "cors",
     method: "POST"
 })
-    .then(res => {
-        return res.json()
+    .then(session => {
+        return session.json()
     })
-    .then(res => {
-        let welcomeMessage = "Welcome " + res['name'];
+    .then(session => {
+        let welcomeMessage = "Welcome " + session['name'];
         document.getElementById("head").innerHTML = welcomeMessage;
     });
 let url_string = window.location.href;
@@ -28,21 +28,29 @@ $.ajax({
         let dataPlacer = document.createElement('div');
         for (let i = 0; i < res.length; i++) {
             let typePlacer = document.createElement('div');
-            if (res[i]['type'] != res[res.length - 1]['type']) { //handle last element
-                if (res[i]['type'] != res[i + 1]['type']) {
-                    let testHeader = document.createElement('div');
-                    let testType = document.createTextNode(res[i]['type'] + ": " + res[i]['test_score']);
-                    testHeader.appendChild(testType);
-                    typePlacer.appendChild(testHeader);
+            if(res.length != 1) { //IF ONLY ONE TEST
+                if (res[i]['type'] != res[res.length - 1]['type']) { //handle last element
+                    if (res[i]['type'] != res[i + 1]['type']) {
+                        let testHeader = document.createElement('div');
+                        let testType = document.createTextNode(res[i]['type'] + ": " + res[i]['test_score']);
+                        testHeader.appendChild(testType);
+                        typePlacer.appendChild(testHeader);
+                    }
+                }
+                else {
+                    if (res[i]['type'] != res[i - 1]['type']) {
+                        let testHeader = document.createElement('div');
+                        let testType = document.createTextNode(res[i]['type'] + ": " + res[i]['test_score']);
+                        testHeader.appendChild(testType);
+                        typePlacer.appendChild(testHeader);
+                    }
                 }
             }
             else {
-                if (res[i]['type'] != res[i - 1]['type']) {
-                    let testHeader = document.createElement('div');
-                    let testType = document.createTextNode(res[i]['type'] + ": " + res[i]['test_score']);
-                    testHeader.appendChild(testType);
-                    typePlacer.appendChild(testHeader);
-                }
+                let testHeader = document.createElement('div');
+                let testType = document.createTextNode(res[0]['type'] + ": " + res[0]['test_score']);
+                testHeader.appendChild(testType);
+                typePlacer.appendChild(testHeader);
             }
             let qHeader = document.createElement('div');
             let testQuestion = document.createTextNode(res[i]['text']);

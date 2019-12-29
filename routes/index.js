@@ -21,10 +21,15 @@ routes.get("/get-exam", Controller.getExamPage);
 routes.get("/view-test", Controller.viewTestPage);
 routes.get("/success", Controller.viewEndPage);
 routes.get("/tests", Controller.viewAllTestsPage);
-routes.get("/get-position-cand", Controller.GetPosCandPage);
+routes.get("/test-details", Controller.viewDetailsPage);
+// routes.get("/get-position-cand", Controller.GetPosCandPage);
 routes.get("/add-test-page", Controller.addTestPage);
-
-
+routes.get("/edit-question-page", Controller.editQuestionPage);
+routes.get("/edit-answer-page", Controller.editAnswerPage);
+routes.get("/add-answer-page", Controller.addAnswerPage);
+routes.post("/add-answer", Controller.addAnswer);
+routes.get("/deadline", Controller.deadlinePage);
+routes.get('/logout', Controller.logout);
 //Data
 routes.post("/session", Controller.getSession);
 routes.get("/positions",Controller.viewPositions);
@@ -51,6 +56,11 @@ routes.post("/exam", Controller.viewTests);
 routes.get("/all-tests", Controller.getAllTests);
 routes.get("/test-details", Controller.getDetailedTests);
 routes.post("/delete-test", Controller.deleteTest);
+routes.post("/delete-test", Controller.deleteTest);
+routes.post("/get-all-questions", Controller.getAllQuestions);
+routes.post("/get-all-answers", Controller.getAllAnswers);
+routes.get("/add-question-page", Controller.addQuestionPage);
+routes.post("/add-question", Controller.addQuestion);
 routes.post("/test-type", Controller.getTestType);
 routes.post("/test-page" ,Controller.getQuestions);
 routes.post("/test-page-c-answer", Controller.getCAnswer);
@@ -61,6 +71,14 @@ routes.post("/create-exam", Controller.createExam);
 routes.post("/add-user", Controller.addUser);
 routes.post("/user-exist", Controller.isSignedUp);
 routes.post("/add-test", Controller.addTest);
+routes.post('/is-applied', Controller.isApplied);
+routes.post("/delete-question", Controller.deleteQuestion);
+routes.post("/delete-answer", Controller.deleteAnswer);
+routes.post("/edit-question", Controller.editQuestion);
+routes.post("/edit-answer", Controller.editAnswer);
+routes.post("/get-question", Controller.getQuestion);
+routes.post("/get-answer", Controller.getAnswer);
+
 
 
 //functions

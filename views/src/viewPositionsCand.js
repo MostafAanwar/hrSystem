@@ -105,6 +105,33 @@ fetch(url, {
         document.body.appendChild(div1);
 
         $(document).ready(function () {
+            $.ajax({
+                url: '/is-applied',
+                type: 'post',
+                dataType: 'json',
+                success: function (res) {
+                    if (res.data[0]['PID'] != null) {
+                        if(res.data[0]['approved'] == null) {
+
+                            $('#msg').text('Your application is pending approval...');
+                            $('.apply').attr("disabled", true);
+                        }
+                        else if (res.data[0]['approved'] == 1){
+                            $('#msg').text('Check your email for exam..');
+                            $('.apply').attr("disabled", true);
+                        }
+                        else {
+                            $('#msg').text('Sorry your application is rejected...');
+                            $('.apply').attr("disabled", true);
+                        }
+                    }
+                },
+                error: function (err) {
+                    alert("Error:" + err.message);
+                }
+
+            });
+
             $('.apply').on('click', function () {
                 let PID = this.id;
                 console.log(PID);
@@ -118,6 +145,7 @@ fetch(url, {
                     dataType: 'json',
                     success: function (res) {
                         if (res['affectedRows'] === 1) {
+                            $('#msg').text('Your application is pending approval...');
                             $('.apply').attr("disabled", true);
                         }
                     },
@@ -128,6 +156,7 @@ fetch(url, {
                 });
 
             });
+
         });
     });
     });

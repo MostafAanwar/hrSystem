@@ -18,9 +18,9 @@ class Controller {
             if (err) {
                 throw err;
             }
-            // res.writeHeader(200, {"Content-Type": "text/html"});
-            // res.write(html);
-            // res.end();
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
         });
     }
 
@@ -28,7 +28,6 @@ class Controller {
         res.contentType('json');
         let stringResult = JSON.stringify(req.session);
         let jsonResult = JSON.parse(stringResult);
-        console.log("json res: " + jsonResult);
         res.send(jsonResult);
     }
     loginHR(req, res) {
@@ -100,7 +99,6 @@ class Controller {
             res.end();
         });
     }
-
     addTestPage(req, res) {
         let path = Path.join(__dirname, "../views/add-test-page.html");
         fs.readFile(path, function (err, html) {
@@ -112,6 +110,18 @@ class Controller {
             res.end();
         });
     }
+    viewDetailsPage(req,res){
+        let path = Path.join(__dirname, "../views/test-details.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+
     editPositionPage(req, res) {
         let path = Path.join(__dirname, "../views/edit-position.html");
         fs.readFile(path, function (err, html) {
@@ -215,9 +225,6 @@ class Controller {
         });
     }
 
-  
-  
-  
     getUser(req, res) {
         let email = req.body.email;
         let password = req.body.password;
@@ -225,8 +232,9 @@ class Controller {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
-            if (jsonResult) {
 
+            if (jsonResult.length != 0) {
+                console.log(req.session);
                 req.session.username = jsonResult[0]['username'];
                 req.session.email = email;
             }
@@ -252,15 +260,18 @@ class Controller {
             return console.error("Error: " + err.message);
         });
     }
+
     getHR(req, res) {
         let email = req.body.email;
-        req.session.email = req.body.username;
+        req.session.email = email;
         let password = req.body.password;
         model.getHR(email, password).then((response) => { //response contains returned data
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
-            req.session.name = jsonResult[0]['name'];
+            if (jsonResult) {
+                req.session.name = jsonResult[0]['name'];
+            }
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
@@ -281,6 +292,34 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+    getAllQuestions(req, res) {
+        let TID = req.body.TID;
+        model.getAllQuestions(TID).then((response) => { //response contains returned data
+            res.contentType('json');
+            console.log(response.result);
+            res.send(response.result);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+    getAllAnswers(req, res) {
+        let QID = req.body.QID;
+        model.getAllAnswers(QID).then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
 
     viewPositions(req, res) {
         model.viewPositions().then((response) => {
@@ -297,6 +336,7 @@ class Controller {
     }
 
     getPosition(req, res) {
+        console.log(req);
         let PID = req.body.PID;
         model.getPosition(PID).then((response) => {
             res.contentType('json');
@@ -305,7 +345,7 @@ class Controller {
             res.send(jsonResult);
             return response.connection; //returned on next then
         }).then((con) => {
-            model.disconnect(con);
+            model.disconnect(con); 
         }).catch((err) => {
             return console.error("Error! " + err.message);
         });
@@ -412,7 +452,7 @@ class Controller {
 
     applyPosition(req, res) {
         let PID = req.body.PID;
-        let email = req.body.email;
+        let email = req.session.email;
         model.savePosition(PID, email).then((response) => {
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
@@ -520,7 +560,7 @@ class Controller {
         });
     }
 
-    getDetailedTests(req, res) {
+    getDetailedTests(req,res){
         let C_email = req.body.email;
         model.getDetailedTests(C_email).then((response) => {
             console.log(response.result);
@@ -549,12 +589,30 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+
+    isApplied(req, res) {
+        let email = req.session.email;
+        model.isApplied(email).then((response) => {
+            res.contentType('json');
+            res.send({
+                data: response.result
+            });
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
     createExam(req, res){
         let email = req.body.email;
         let checkbox = req.body.checkbox;
         let sequence = req.body.sequence;
         let deadline = req.body.deadline;
         let HRMail = req.session.email;
+        console.log(checkbox);
+        // sequence = sequence.split('').filter(item => item);
         sequence = sequence.filter(item => item);
         model.createExam(checkbox, sequence, email, deadline, HRMail).then((response) => {
             res.contentType('json');
@@ -695,7 +753,23 @@ class Controller {
     }
 
 
+    logout(req, res) {
+        console.log(req.session);
+        console.log(req.session['email']);
+        req.session.destroy();
+        // console.log(req.session['email']);
+        // console.log(req.session);
+        let path = Path.join(__dirname, "../views/index.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
 
+    }
     getExamPage(req, res) {
         let path = Path.join(__dirname, "../views/exam-page.html");
         fs.readFile(path, function (err, html) {
@@ -709,6 +783,7 @@ class Controller {
     }
     viewTests(req,res){
         let email = req.body.email;
+        console.log(email);
         model.viewTests(email).then((response) => {
             res.contentType('json');
             res.send({
@@ -750,6 +825,30 @@ class Controller {
             return console.error("Error! " + err.message);
         });
     }
+    addQuestionPage(req,res){
+        let path = Path.join(__dirname, "../views/question-add-page.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+
+    deadlinePage(req, res) {
+        let path = Path.join(__dirname, "../views/deadline.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+
     getQuestions(req, res){
         let test_id = req.body.TID;
         console.log(test_id);
@@ -847,18 +946,52 @@ class Controller {
             return console.error("Error: " + err.message);
         });
     }
-    saveTestScore(req,res){
+
+    saveTestScore(req, res) {
         let C_email = req.body.email;
         let TID = req.body.TID;
         let test_score = req.body.test_score;
         console.log("testing");
-        model.saveTestScore(C_email,TID,test_score).then((response) => {
+        model.saveTestScore(C_email, TID, test_score).then((response) => {
             console.log(response.result);
-            console.log("GWA");
             res.contentType('json');
             let stringResult = JSON.stringify(response.result);
             let jsonResult = JSON.parse(stringResult);
             model.saveTotalScore(C_email, test_score).then((response1) => {
+
+                model.solvedAllTests(C_email).then((response2) => {
+                    if (response2.result.length == 0) { //ALL TESTS TAKEN
+                        model.getExaminee(C_email).then((response3) => {
+                            // response3.contentType('json');
+                            let stringResult = JSON.stringify(response3.result);
+                            let jsonResult = JSON.parse(stringResult);
+                            let receipents = [];
+                            let testName = [];
+                            let t_score = [];
+                            receipents.push(jsonResult[0]['HR_email']);
+                            receipents.push(C_email);
+                            console.log(jsonResult[0]['HR_email']);
+                            let totalScore = jsonResult[0]['score'];
+                            let name = jsonResult[0]['username'];
+                            let msg = "<p>" + name + "'s score is " + totalScore + "</p>";
+                            for (let i = 0; i < jsonResult.length; i++) {
+                                testName.push(jsonResult[i]['type']);
+                                t_score.push(jsonResult[i]['test_score']);
+                                msg += "<p>" + testName[i] + " " + t_score[i] + "</p>";
+                            }
+                            let subject = 'Exam score';
+                            mainController.sendEmail(receipents, subject, msg);
+
+                        });
+
+                    }
+                });
+
+
+                // if(response2.result){
+                //     if(response2.result.)
+                //     mainController.sendEmail()
+                // }
             });
             res.send(jsonResult);
             return response.connection; //returned on next then
@@ -880,6 +1013,196 @@ class Controller {
         });
     }
 
+    addQuestion(req, res) {
+        let text = req.body.text;
+        let TID = req.body.TID;
+        model.addQuestion(text, TID).then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
+    deleteQuestion(req, res) {
+        let QID = req.body.QID;
+        model.deleteQuestion(QID).then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
+    deleteAnswer(req, res) {
+        let AID = req.body.AID;
+        model.deleteAnswer(AID).then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
+    editQuestionPage(req, res) {
+        let path = Path.join(__dirname, "../views/edit-question.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+
+    editQuestion(req, res) {
+        let QID = req.body.QID;
+        let text = req.body.text;
+        model.editQuestion(QID, text).then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
+    editAnswer(req, res) {
+        let AID = req.body.AID;
+        let textA = req.body.textA;
+        let correct = req.body.correct;
+        if (correct === 'true') {
+            correct = '1';
+        }
+        else {
+            correct = '0';
+        }
+        model.editAnswer(AID, correct, textA).then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
+    getQuestion(req, res) {
+        let QID = req.body.QID;
+        model.getQuestion(QID).then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
+    getAnswer(req, res) {
+        console.log(req);
+        let AID = req.body.AID;
+        model.getAnswer(AID).then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con);
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
+
+    addAnswerPage(req, res) {
+        let path = Path.join(__dirname, "../views/add-answer-page.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+
+    editAnswerPage(req, res) {
+        let path = Path.join(__dirname, "../views/edit-answer-page.html");
+        fs.readFile(path, function (err, html) {
+            if (err) {
+                throw err;
+            }
+            res.writeHeader(200, {"Content-Type": "text/html"});
+            res.write(html);
+            res.end();
+        });
+    }
+
+    // editAnswer(req,res){
+    //     let AID = req.body.AID;
+    //     let textA = req.body.textA;
+    //     let correct = req.body.correct;
+    //     if (correct === "") {
+    //         correct = 0;
+    //     }
+    //     model.editAnswer(AID,correct,textA).then((response) => {
+    //         res.contentType('json');
+    //         let stringResult = JSON.stringify(response.result);
+    //         let jsonResult = JSON.parse(stringResult);
+    //         res.send(jsonResult);
+    //         return response.connection; //returned on next then
+    //     }).then((con) => {
+    //         model.disconnect(con);
+    //     }).catch((err) => {
+    //         return console.error("Error! " + err.message);
+    //     });
+    // }
+    addAnswer(req, res) {
+        let textA = req.body.textA;
+        let correct = req.body.correct;
+        let QID = req.body.QID;
+        if (correct === "") {
+            correct = 0;
+        }
+        model.addAnswer(QID, textA, correct).then((response) => {
+            res.contentType('json');
+            let stringResult = JSON.stringify(response.result);
+            let jsonResult = JSON.parse(stringResult);
+            res.send(jsonResult);
+            return response.connection; //returned on next then
+        }).then((con) => {
+            model.disconnect(con); //TODO
+        }).catch((err) => {
+            return console.error("Error! " + err.message);
+        });
+    }
 }
 const mainController = new Controller();
 export default mainController;

@@ -83,55 +83,73 @@ fetch(url, {
                 }
             });
             $('#save').on('click', function () {
-                let checkboxCounter = 0;
-                let sequenceCounter = 0;
-                let match = [];
-                let previousID;
-                $('#exam-form').find('input').each(function () {
-                    if ($(this).is(':checkbox')) {
-                        if ($(this).prop('checked')) {
-                            previousID = $(this)[0].id;
-                            checkboxCounter++;
-                        }
-                    }
-                    if ($(this).attr('type') === 'number') {
-                        if ($(this).val()) {
-                            match.push($(this)[0].id === previousID);
-                            sequenceCounter++;
-                        }
-                    }
-
-                });
-                console.log(match);
-                if (checkboxCounter === 0) {
-                    alert("Please select at least one value");
+                let flag = true;
+                let today = new Date(Date.now()).toLocaleDateString();
+                let datePicked = document.getElementById('deadline').value;
+                if (Date.parse(today) > Date.parse(datePicked)) {
+                    alert('Please select a correct date');
+                    flag = false;
                 }
-                else if (match.includes(false)) {
-                    alert('Please match chosen tests and sequence!');
+                else if (!datePicked) {
+                    alert("Pick a date!");
+                    flag = false;
                 }
-                else if (checkboxCounter > 0) {
-                    if (sequenceCounter === checkboxCounter || sequenceCounter === 0) {
-                        let pageURL = window.location.href;
-                        let email = pageURL.substr(pageURL.lastIndexOf('=') + 1);
-                        console.log($('#exam-form').serialize());
-                        $.ajax({
-                            url: "/create-exam",
-                            type: "post",
-                            data: $('#exam-form').serialize() + '&email=' + email,
-                            dataType: 'json',
-                            success: function (res) {
-                                if (res.data['affectedRows'] === 1) {
-                                    window.location.replace('/hr-index'); //TODO change home page view to dynamically match user status
-                                }
-                            },
-                            error: function (err) {
-                                alert("Error:" + err.message);
+                if (flag) {
+                    let checkboxCounter = 0;
+                    let sequenceCounter = 0;
+                    let match = [];
+                    let previousID;
+                    let isArranged = [];
+                    $('#exam-form').find('input').each(function () {
+                        if ($(this).is(':checkbox')) {
+                            if ($(this).prop('checked')) {
+                                previousID = $(this)[0].id;
+                                checkboxCounter++;
                             }
+                        }
+                        if ($(this).attr('type') === 'number') {
+                            if ($(this).val()) {
+                                isArranged.push($(this).val());
+                                match.push($(this)[0].id === previousID);
+                                sequenceCounter++;
+                            }
+                        }
 
-                        });
+                    });
+                    console.log(match);
+                    if (checkboxCounter === 0) {
+                        alert("Please select at least one value");
                     }
-                    else if (sequenceCounter < checkboxCounter) {
-                        alert('Please choose a sequence for every chosen test!');
+                    else if (match.includes(false)) {
+                        alert('Please match chosen tests and sequence!');
+                    }
+                    else if ((new Set(isArranged)).size !== isArranged.length) {
+                        alert("Please correct sequence order!");
+                    }
+                    else if (checkboxCounter > 0) {
+                        if (sequenceCounter === checkboxCounter || sequenceCounter === 0) {
+                            let pageURL = window.location.href;
+                            let email = pageURL.substr(pageURL.lastIndexOf('=') + 1);
+                            console.log($('#exam-form').serialize());
+                            $.ajax({
+                                url: "/create-exam",
+                                type: "post",
+                                data: $('#exam-form').serialize() + '&email=' + email,
+                                dataType: 'json',
+                                success: function (res) {
+                                    if (res.data['affectedRows'] === 1) {
+                                        window.location.replace('/hr-index');
+                                    }
+                                },
+                                error: function (err) {
+                                    alert("Error:" + err.message);
+                                }
+
+                            });
+                        }
+                        else if (sequenceCounter < checkboxCounter) {
+                            alert('Please choose a sequence for every chosen test!');
+                        }
                     }
                 }
             });

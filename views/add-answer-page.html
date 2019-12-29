@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
+    <title>Add Position</title>
+</head>
+<body>
+
+<form action="/" method="POST" id="new-ans-form">
+    <p align="right" id="head"></p>
+    <h1>Add new</h1>
+
+    Answer text: <input type="text" name="text" id="text">
+    <br>
+
+
+    Correct? <input type="checkbox" name="correct" value="1" id="correct">
+    <br>
+
+    <div id="validationtext"></div>
+    <input type="submit" value="Add Answer">
+</form>
+<script src="src/add-answer-script.js"></script>
+</body>
+</html>

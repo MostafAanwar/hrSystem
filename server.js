@@ -27,7 +27,6 @@ const upload = multer({
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true})); //CHANGED VALUE
 
-
 app.use(cookieParser());
 app.use(cors());
 app.use(session({secret: 'sessionID'}));
