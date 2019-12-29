@@ -2,29 +2,47 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href= "./stylesheet/addstyle.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
     <title>Add Position</title>
 </head>
 <body>
-<form action="/" method="POST" id="new-pos-form">
-    <p align="right" id="head"></p>
-    <h1>Add new</h1>
+<div class="container-contact100">
+    <div class="wrap-contact100">
+        <form class="contact100-form">
+				<span class="contact100-form-title">
+					Add position
+				</span>
 
-    Position Title: <input type="text" name="title" id="title">
-    <br>
+            <div class="wrap-input100" >
+                <span class="label-input100">Position Title</span>
+                <input class="input100" type="text" name="name" placeholder="Enter Position Title">
+                <span class="focus-input100"></span>
+            </div>
 
-    Description: <textarea name="description" id="description" ></textarea>
-    <br>
+            <div class="wrap-input100" >
+                <span class="label-input100">Salary</span>
+                <input class="input100" type="number" name="email" placeholder="Salary">
+                <span class="focus-input100"></span>
+            </div>
 
-    Salary: <input type="text" name="salary" id="salary">
-    <br>
+            <div class="wrap-input100">
+                <span class="label-input100">Description</span>
+                <textarea class="input100" name="message" placeholder="Position Description here..."></textarea>
+                <span class="focus-input100"></span>
+            </div>
 
-    Available? <input type="checkbox" name="available" value="1" id="available">
-    <br>
-
-    <div id="validationtext"></div>
-    <input type="submit" value="Add Position">
-</form>
-    <script src="src/add-pos-script.js"></script>
+            <div class="container-contact100-form-btn">
+                <div class="wrap-contact100-form-btn">
+                    <div class="contact100-form-bgbtn"></div>
+                    <button class="contact100-form-btn">
+							<span>Add position</span>
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<script src="src/add-pos-script.js"></script>
 </body>
 </html>

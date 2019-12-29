@@ -4,15 +4,16 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <link rel="stylesheet" type="text/css" href= "./stylesheet/view.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" charset="utf-8"></script>
     <title>Registrees</title>
 </head>
 <body>
-<p align="right" id="head"></p>
-<a href="/hr-index">
-    <button>Home</button>
-</a>
-<input type="text" placeholder="Search.." id="search">
+<p align="right">Welcome, HR</p>
+<form>
+    <input type="search" id= "search" placeholder="Search a position">
+</form>
+<button onclick="window.location.href='/hr-index'" class="crudbtn" >Home</button>
 <script src="src/registeree-script.js"></script>
 </body>
 </html>
