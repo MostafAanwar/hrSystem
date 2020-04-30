@@ -21,7 +21,7 @@
     "express-fileupload": "^1.1.6",
     "express-session": "^1.17.0",
     "formidable": "^1.2.1",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "lodash": "latest",
     "mime": "latest",
     "morgan": "^1.9.1",
